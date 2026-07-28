@@ -1,0 +1,6 @@
+{
+  "name": "ProjectPlanner AI",
+  "description": "Enterprise AI-Powered Project Planning, PMO Governance, Resource Allocation, EVM Financials, Risk & Portfolio Management Platform",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
