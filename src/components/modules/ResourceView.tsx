@@ -7,18 +7,29 @@ export const ResourceView: React.FC = () => {
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* Header */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex items-center justify-between">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+      <div
+        className="hero-banner animate-fadeIn"
+        style={{ padding: "24px 28px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "16px" }}
+      >
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+            <span
+              className="badge-violet"
+              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+            >
               Module 6
             </span>
-            <span className="text-xs text-slate-400">Enterprise Resource & Capacity Optimization</span>
+            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>Enterprise Resource & Capacity Optimization</span>
           </div>
-          <h1 className="text-2xl font-bold text-white">Resource Management & Capacity Planning</h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
+            Resource Management & Capacity Planning
+          </h1>
+          <p style={{ fontSize: "var(--text-base)", color: "rgba(255,255,255,0.65)", maxWidth: "580px", lineHeight: 1.6 }}>
             Analyze skill gaps, utilization heatmaps, hourly cost rates, and resolve resource allocation conflicts.
           </p>
+        </div>
+        <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
+          
         </div>
       </div>
 
@@ -32,7 +43,7 @@ export const ResourceView: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-slate-800 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+              <tr className="border-b border-slate-800 text-[var(--text-muted)] font-bold uppercase tracking-wider text-[10px]">
                 <th className="p-3">Team Member</th>
                 <th className="p-3">Role & Dept</th>
                 <th className="p-3">Hourly Rate</th>
@@ -52,33 +63,33 @@ export const ResourceView: React.FC = () => {
                       <img src={usr.avatar} alt={usr.name} className="w-7 h-7 rounded-full object-cover border border-slate-700" />
                       <div>
                         <div>{usr.name}</div>
-                        <div className="text-[10px] text-slate-400 font-normal">{usr.email}</div>
+                        <div className="text-[10px] text-[var(--text-muted)] font-normal">{usr.email}</div>
                       </div>
                     </td>
-                    <td className="p-3 text-slate-300">
+                    <td className="p-3 text-[var(--text-muted)]">
                       <div>{usr.role}</div>
-                      <div className="text-[10px] text-slate-500">{usr.department}</div>
+                      <div className="text-[10px] text-[var(--text-secondary)]">{usr.department}</div>
                     </td>
                     <td className="p-3 font-mono text-emerald-400">${usr.costRate}/hr</td>
                     <td className="p-3 font-mono">
                       <span className={`px-2 py-0.5 rounded font-bold ${
-                        util > 100 ? "bg-rose-500/20 text-rose-300 border border-rose-500/30" : "bg-emerald-500/20 text-emerald-300"
+                        util > 100 ? "bg-rose-500/20 text-rose-300 border border-rose-500/30" : "bg-[var(--green-dim)]0/20 text-emerald-300"
                       }`}>
                         {util}%
                       </span>
                     </td>
                     <td className="p-3 font-mono">
-                      <span className="bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded font-bold">
+                      <span className="bg-[var(--accent-glow)]0/20 text-indigo-300 px-2 py-0.5 rounded font-bold">
                         {Math.min(util, 100)}%
                       </span>
                     </td>
                     <td className="p-3 font-mono">
-                      <span className="bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded font-bold">
+                      <span className="bg-[var(--accent-glow)]0/20 text-indigo-300 px-2 py-0.5 rounded font-bold">
                         85%
                       </span>
                     </td>
                     <td className="p-3 font-mono">
-                      <span className="bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded font-bold">
+                      <span className="bg-[var(--accent-glow)]0/20 text-indigo-300 px-2 py-0.5 rounded font-bold">
                         75%
                       </span>
                     </td>
@@ -88,7 +99,7 @@ export const ResourceView: React.FC = () => {
                           <AlertCircle className="w-3 h-3" /> Over-Allocated
                         </span>
                       ) : (
-                        <span className="text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded border border-emerald-500/30 w-max block">
+                        <span className="text-[10px] bg-[var(--green-dim)]0/20 text-emerald-300 font-bold px-2 py-0.5 rounded border border-emerald-500/30 w-max block">
                           Balanced
                         </span>
                       )}
@@ -114,13 +125,13 @@ export const ResourceView: React.FC = () => {
               <div className="flex items-center justify-between">
                 <span className="font-bold text-white">{item.skill}</span>
                 <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                  item.gap.includes("Gap") ? "bg-amber-500/20 text-amber-300" : "bg-emerald-500/20 text-emerald-300"
+                  item.gap.includes("Gap") ? "bg-[var(--amber-dim)]0/20 text-amber-300" : "bg-[var(--green-dim)]0/20 text-emerald-300"
                 }`}>
                   {item.gap}
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400">Demand Level: <strong className="text-slate-200">{item.demand}</strong></p>
-              <p className="text-[11px] text-slate-400">Available Qualified FTEs: <strong className="text-indigo-400">{item.availableCount}</strong></p>
+              <p className="text-[11px] text-[var(--text-muted)]">Demand Level: <strong className="text-slate-200">{item.demand}</strong></p>
+              <p className="text-[11px] text-[var(--text-muted)]">Available Qualified FTEs: <strong className="text-indigo-400">{item.availableCount}</strong></p>
             </div>
           ))}
         </div>

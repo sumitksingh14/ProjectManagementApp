@@ -1,6 +1,6 @@
 import React from "react";
 import { useProject } from "../../context/ProjectContext";
-import { Layers, TrendingUp, DollarSign, ArrowRight, ShieldCheck } from "lucide-react";
+import { Layers, TrendingUp, DollarSign, ArrowRight, ShieldCheck, Briefcase } from "lucide-react";
 
 export const PortfolioView: React.FC = () => {
   const { activePortfolio, activeProject, setActiveProjectById } = useProject();
@@ -13,79 +13,112 @@ export const PortfolioView: React.FC = () => {
   const projectList = activePortfolio?.projects || [];
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6 text-slate-900">
-      {/* Header */}
-      <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm flex items-center justify-between">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-200">
+    <div className="animate-fadeIn" style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "24px", fontFamily: "Inter, sans-serif" }}>
+      {/* ── Hero Banner ──────────────────────────────────────────────────────── */}
+      <div
+        className="hero-banner animate-fadeIn"
+        style={{ padding: "24px 28px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "16px" }}
+      >
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+            <span
+              className="badge-violet"
+              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+            >
               Module 18 & 20
             </span>
-            <span className="text-xs text-slate-500">Enterprise PMO Portfolio Management</span>
+            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>Enterprise PMO Portfolio Management</span>
           </div>
-          <h1 className="text-xl font-bold text-slate-800">{portfolioName}</h1>
-          <p className="text-xs text-slate-500 mt-1">{portfolioDesc}</p>
+          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
+            <Briefcase className="w-8 h-8 text-[var(--accent)]" />
+            {portfolioName}
+          </h1>
+          <p style={{ fontSize: "var(--text-base)", color: "rgba(255,255,255,0.65)", maxWidth: "580px", lineHeight: 1.6 }}>
+            {portfolioDesc}
+          </p>
+        </div>
+        <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
+          <Briefcase style={{ width: "32px", height: "32px", color: "#fff" }} />
         </div>
       </div>
 
       {/* Portfolio KPI Bar */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-        <div className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm space-y-1">
-          <span className="text-slate-500 font-medium">Total Portfolio Investment</span>
-          <div className="text-2xl font-bold text-slate-800 font-mono">${portfolioBudget}M</div>
-          <p className="text-[10px] text-slate-500">Owner: {portfolioOwner}</p>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div className="glass-card p-5 space-y-2">
+          <div className="flex items-center gap-2 mb-1">
+            <DollarSign className="w-4 h-4 text-[var(--cyan)]" />
+            <span className="section-label">Total Portfolio Investment</span>
+          </div>
+          <div className="kpi-value">${portfolioBudget}M</div>
+          <p className="helper-text">Owner: {portfolioOwner}</p>
         </div>
 
-        <div className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm space-y-1">
-          <span className="text-slate-500 font-medium">Strategic Alignment Score</span>
-          <div className="text-2xl font-bold text-emerald-600 font-mono">{alignmentScore} / 100</div>
-          <p className="text-[10px] text-slate-500">Corporate Strategy Focus 2026</p>
+        <div className="glass-card p-5 space-y-2">
+          <div className="flex items-center gap-2 mb-1">
+            <TrendingUp className="w-4 h-4 text-[var(--green)]" />
+            <span className="section-label">Strategic Alignment Score</span>
+          </div>
+          <div className="kpi-value text-[var(--green)]">{alignmentScore} / 100</div>
+          <p className="helper-text">Corporate Strategy Focus 2026</p>
         </div>
 
-        <div className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm space-y-1">
-          <span className="text-slate-500 font-medium">Active Projects in Portfolio</span>
-          <div className="text-2xl font-bold text-indigo-600 font-mono">{projectList.length} Projects</div>
-          <p className="text-[10px] text-slate-500">Active PMO Supervision</p>
+        <div className="glass-card p-5 space-y-2">
+          <div className="flex items-center gap-2 mb-1">
+            <Layers className="w-4 h-4 text-[var(--accent)]" />
+            <span className="section-label">Active Projects</span>
+          </div>
+          <div className="kpi-value">{projectList.length}</div>
+          <p className="helper-text">Active PMO Supervision</p>
         </div>
       </div>
 
       {/* Portfolio Projects Cards */}
-      <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-4">
-        <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider">Portfolio Projects Roster</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+      <div className="glass-card p-6 space-y-5">
+        <div className="flex items-center gap-2 mb-2 border-b border-[var(--border)] pb-3">
+          <ShieldCheck className="w-5 h-5 text-[var(--accent)]" />
+          <h3 className="section-label">Portfolio Projects Roster</h3>
+        </div>
+        
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
           {projectList.map((p) => {
-            const isCurrent = p.id === activeProject.id;
+            const isCurrent = p.id === activeProject?.id;
+            const healthBadge = p.health?.overallHealth === "Red" ? "badge-red" :
+                                p.health?.overallHealth === "Amber" ? "badge-amber" : "badge-green";
+
             return (
               <div
                 key={p.id}
                 onClick={() => setActiveProjectById(p.id)}
-                className={`p-5 rounded-xl border transition-all cursor-pointer space-y-3 ${
+                className={`glass-card p-5 transition-all cursor-pointer space-y-4 group ${
                   isCurrent
-                    ? "bg-indigo-50 border-indigo-300 shadow-sm"
-                    : "bg-slate-50/50 border-slate-200 hover:bg-slate-100/50"
+                    ? "border-[var(--accent)] shadow-[0_0_15px_var(--accent-glow)] scale-[1.01]"
+                    : "hover:border-[var(--accent-border)] hover:bg-[var(--bg-card-hover)]"
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-[10px] bg-indigo-100 text-indigo-700 font-bold px-2 py-0.5 rounded border border-indigo-200">
-                    {p.code}
-                  </span>
-                  <span className="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded border border-emerald-200">
-                    Health: {p.health?.overallHealth || "Green"}
-                  </span>
+                  <span className="badge-cyan font-mono">{p.code}</span>
+                  <span className={healthBadge}>Health: {p.health?.overallHealth || "Green"}</span>
                 </div>
 
                 <div>
-                  <h4 className="font-bold text-slate-800 text-sm">{p.name}</h4>
-                  <p className="text-[11px] text-slate-500 line-clamp-2 mt-1">{p.intake?.strategicObjective || ""}</p>
+                  <h4 className="card-heading group-hover:text-[var(--accent)] transition-colors">{p.name}</h4>
+                  <p className="body-text text-sm line-clamp-2 mt-1">{p.intake?.strategicObjective || "No strategic objective defined."}</p>
                 </div>
 
-                <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                  <div className="flex gap-3 font-mono">
-                    <span>CPI: <strong className="text-indigo-600">{p.evm?.CPI || 1.0}</strong></span>
-                    <span>SPI: <strong className="text-indigo-600">{p.evm?.SPI || 1.0}</strong></span>
+                <div className="pt-3 border-t border-[var(--border)] flex items-center justify-between">
+                  <div className="flex gap-4 font-mono text-sm text-[var(--text-primary)]">
+                    <span className="flex items-center gap-1">
+                      <span className="text-[var(--text-muted)]">CPI:</span> 
+                      <strong className={p.evm?.CPI < 1 ? "text-[var(--pink)]" : "text-[var(--green)]"}>{p.evm?.CPI || 1.0}</strong>
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <span className="text-[var(--text-muted)]">SPI:</span> 
+                      <strong className={p.evm?.SPI < 1 ? "text-[var(--pink)]" : "text-[var(--green)]"}>{p.evm?.SPI || 1.0}</strong>
+                    </span>
                   </div>
-                  <span className="text-indigo-600 font-bold flex items-center gap-1">
-                    {isCurrent ? "Active Project" : "Switch View"} <ArrowRight className="w-3.5 h-3.5" />
+                  <span className={`flex items-center gap-1 font-semibold text-sm ${isCurrent ? "text-[var(--accent)]" : "text-[var(--text-muted)] group-hover:text-[var(--accent)] transition-colors"}`}>
+                    {isCurrent ? "Active Project" : "Switch View"} 
+                    <ArrowRight className={`w-4 h-4 ${isCurrent ? "" : "opacity-50 group-hover:opacity-100"} transition-all group-hover:translate-x-1`} />
                   </span>
                 </div>
               </div>

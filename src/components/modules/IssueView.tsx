@@ -48,27 +48,30 @@ export const IssueView: React.FC = () => {
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* Header */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex items-center justify-between">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+      <div
+        className="hero-banner animate-fadeIn"
+        style={{ padding: "24px 28px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "16px" }}
+      >
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+            <span
+              className="badge-violet"
+              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+            >
               Module 11
             </span>
-            <span className="text-xs text-slate-400">Issue Management & Aging Analytics</span>
+            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>Issue Management & Aging Analytics</span>
           </div>
-          <h1 className="text-2xl font-bold text-white">Issue Register & Escalation</h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
+            Issue Register & Escalation
+          </h1>
+          <p style={{ fontSize: "var(--text-base)", color: "rgba(255,255,255,0.65)", maxWidth: "580px", lineHeight: 1.6 }}>
             Track active impediments, issue aging, owner assignments, and resolution SLAs.
           </p>
         </div>
-
-        <button
-          onClick={() => setShowForm(!showForm)}
-          className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-lg shadow-indigo-600/30 flex items-center gap-2 transition-all"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Report Issue</span>
-        </button>
+        <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
+          <Plus style={{ width: "32px", height: "32px", color: "#fff" }} />
+        </div>
       </div>
 
       {/* Add Issue Modal */}
@@ -77,7 +80,7 @@ export const IssueView: React.FC = () => {
           <h3 className="text-sm font-bold text-white">Report New Issue</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-slate-400 mb-1">Priority</label>
+              <label className="block text-[var(--text-muted)] mb-1">Priority</label>
               <select
                 value={newIss.priority}
                 onChange={(e) => setNewIss({ ...newIss, priority: e.target.value as any })}
@@ -90,7 +93,7 @@ export const IssueView: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="block text-slate-400 mb-1">Severity</label>
+              <label className="block text-[var(--text-muted)] mb-1">Severity</label>
               <select
                 value={newIss.severity}
                 onChange={(e) => setNewIss({ ...newIss, severity: e.target.value as any })}
@@ -102,7 +105,7 @@ export const IssueView: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="block text-slate-400 mb-1">Assigned Owner</label>
+              <label className="block text-[var(--text-muted)] mb-1">Assigned Owner</label>
               <input
                 type="text"
                 value={newIss.owner}
@@ -112,7 +115,7 @@ export const IssueView: React.FC = () => {
             </div>
           </div>
           <div>
-            <label className="block text-slate-400 mb-1">Issue Description *</label>
+            <label className="block text-[var(--text-muted)] mb-1">Issue Description *</label>
             <textarea
               required
               rows={2}
@@ -122,10 +125,10 @@ export const IssueView: React.FC = () => {
             />
           </div>
           <div className="flex justify-end gap-2 pt-2">
-            <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg">
+            <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 bg-slate-800 text-[var(--text-muted)] rounded-lg">
               Cancel
             </button>
-            <button type="submit" className="px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg">
+            <button type="submit" className="px-4 py-2 bg-[var(--accent)] text-white font-bold rounded-lg">
               Save Issue
             </button>
           </div>
@@ -138,7 +141,7 @@ export const IssueView: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-slate-800 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+              <tr className="border-b border-slate-800 text-[var(--text-muted)] font-bold uppercase tracking-wider text-[10px]">
                 <th className="p-3">Issue ID</th>
                 <th className="p-3">Description</th>
                 <th className="p-3">Priority / Severity</th>
@@ -157,7 +160,7 @@ export const IssueView: React.FC = () => {
                     <span className="text-amber-300 font-medium">{iss.severity}</span>
                   </td>
                   <td className="p-3 font-mono font-bold text-slate-200">{iss.daysOpen} Days</td>
-                  <td className="p-3 text-slate-300">{iss.owner}</td>
+                  <td className="p-3 text-[var(--text-muted)]">{iss.owner}</td>
                   <td className="p-3">
                     <span className="text-[10px] bg-rose-500/20 text-rose-300 font-bold px-2.5 py-1 rounded-full border border-rose-500/30">
                       {iss.status}

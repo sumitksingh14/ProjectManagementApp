@@ -56,39 +56,30 @@ export const RiskView: React.FC = () => {
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* Header */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+      <div
+        className="hero-banner animate-fadeIn"
+        style={{ padding: "24px 28px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "16px" }}
+      >
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+            <span
+              className="badge-violet"
+              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+            >
               Module 10
             </span>
-            <span className="text-xs text-slate-400">PMP Risk Governance Framework</span>
+            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>PMP Risk Governance Framework</span>
           </div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-            <AlertTriangle className="w-6 h-6 text-amber-400" />
+          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
+            
             Risk Register & Predictive Risk Engine
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p style={{ fontSize: "var(--text-base)", color: "rgba(255,255,255,0.65)", maxWidth: "580px", lineHeight: 1.6 }}>
             Capture root causes, triggers, mitigations, contingencies, severity heatmaps, and AI predictive risk analysis.
           </p>
         </div>
-
-        <div className="flex items-center gap-3">
-          <button
-            onClick={generateAiRisks}
-            disabled={isAiLoading}
-            className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-lg shadow-indigo-600/30 flex items-center gap-2 transition-all"
-          >
-            {isAiLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4 text-amber-300" />}
-            <span>Predict AI Risks</span>
-          </button>
-          <button
-            onClick={() => setShowForm(!showForm)}
-            className="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2.5 rounded-xl border border-slate-700 flex items-center gap-2 transition-all"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Add Manual Risk</span>
-          </button>
+        <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
+          <AlertTriangle style={{ width: "32px", height: "32px", color: "#fff" }} />
         </div>
       </div>
 
@@ -98,7 +89,7 @@ export const RiskView: React.FC = () => {
           <h3 className="text-sm font-bold text-white">Add Risk to Register</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-slate-400 mb-1">Risk Category</label>
+              <label className="block text-[var(--text-muted)] mb-1">Risk Category</label>
               <select
                 value={newRisk.category}
                 onChange={(e) => setNewRisk({ ...newRisk, category: e.target.value as any })}
@@ -113,7 +104,7 @@ export const RiskView: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="block text-slate-400 mb-1">Probability</label>
+              <label className="block text-[var(--text-muted)] mb-1">Probability</label>
               <select
                 value={newRisk.probability}
                 onChange={(e) => setNewRisk({ ...newRisk, probability: e.target.value as any })}
@@ -125,7 +116,7 @@ export const RiskView: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="block text-slate-400 mb-1">Impact</label>
+              <label className="block text-[var(--text-muted)] mb-1">Impact</label>
               <select
                 value={newRisk.impact}
                 onChange={(e) => setNewRisk({ ...newRisk, impact: e.target.value as any })}
@@ -138,7 +129,7 @@ export const RiskView: React.FC = () => {
             </div>
           </div>
           <div>
-            <label className="block text-slate-400 mb-1">Risk Statement / Description *</label>
+            <label className="block text-[var(--text-muted)] mb-1">Risk Statement / Description *</label>
             <textarea
               required
               rows={2}
@@ -148,7 +139,7 @@ export const RiskView: React.FC = () => {
             />
           </div>
           <div>
-            <label className="block text-slate-400 mb-1">Proactive Mitigation Strategy</label>
+            <label className="block text-[var(--text-muted)] mb-1">Proactive Mitigation Strategy</label>
             <textarea
               rows={2}
               value={newRisk.mitigation}
@@ -157,10 +148,10 @@ export const RiskView: React.FC = () => {
             />
           </div>
           <div className="flex justify-end gap-2 pt-2">
-            <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg">
+            <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 bg-slate-800 text-[var(--text-muted)] rounded-lg">
               Cancel
             </button>
-            <button type="submit" className="px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg">
+            <button type="submit" className="px-4 py-2 bg-[var(--accent)] text-white font-bold rounded-lg">
               Save Risk
             </button>
           </div>
@@ -173,7 +164,7 @@ export const RiskView: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-slate-800 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+              <tr className="border-b border-slate-800 text-[var(--text-muted)] font-bold uppercase tracking-wider text-[10px]">
                 <th className="p-3">Risk ID</th>
                 <th className="p-3">Category & Description</th>
                 <th className="p-3">Prob / Impact</th>
@@ -189,7 +180,7 @@ export const RiskView: React.FC = () => {
                   <td className="p-3 font-mono font-bold text-amber-400">{r.riskCode}</td>
                   <td className="p-3 max-w-xs">
                     <div className="font-semibold text-white">{r.description}</div>
-                    <div className="text-[10px] text-slate-400">Category: {r.category}</div>
+                    <div className="text-[10px] text-[var(--text-muted)]">Category: {r.category}</div>
                   </td>
                   <td className="p-3 font-mono">
                     <span className="text-amber-300">{r.probability}</span> / <span className="text-rose-400">{r.impact}</span>
@@ -199,11 +190,11 @@ export const RiskView: React.FC = () => {
                       {r.severityScore} / 25
                     </span>
                   </td>
-                  <td className="p-3 text-slate-300 max-w-xs leading-relaxed">{r.mitigation}</td>
-                  <td className="p-3 text-slate-300">{r.owner}</td>
+                  <td className="p-3 text-[var(--text-muted)] max-w-xs leading-relaxed">{r.mitigation}</td>
+                  <td className="p-3 text-[var(--text-muted)]">{r.owner}</td>
                   <td className="p-3">
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                      r.status === "Open" ? "bg-amber-500/20 text-amber-300" : "bg-emerald-500/20 text-emerald-300"
+                      r.status === "Open" ? "bg-[var(--amber-dim)]0/20 text-amber-300" : "bg-[var(--green-dim)]0/20 text-emerald-300"
                     }`}>
                       {r.status}
                     </span>

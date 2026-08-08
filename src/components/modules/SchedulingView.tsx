@@ -14,49 +14,29 @@ export const SchedulingView: React.FC = () => {
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* Header */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex items-center justify-between">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+      <div
+        className="hero-banner animate-fadeIn"
+        style={{ padding: "24px 28px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "16px" }}
+      >
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+            <span
+              className="badge-violet"
+              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+            >
               Module 5
             </span>
-            <span className="text-xs text-slate-400">Enterprise Scheduling Engine</span>
+            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>Enterprise Scheduling Engine</span>
           </div>
-          <h1 className="text-2xl font-bold text-white">Scheduling & Gantt Engine</h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
+            Scheduling & Gantt Engine
+          </h1>
+          <p style={{ fontSize: "var(--text-base)", color: "rgba(255,255,255,0.65)", maxWidth: "580px", lineHeight: 1.6 }}>
             Critical Path Method (CPM), milestone forecasting, baseline variance comparison, and interactive Kanban.
           </p>
         </div>
-
-        {/* View Switcher */}
-        <div className="flex bg-slate-800/80 p-1 rounded-xl border border-slate-700 text-xs">
-          <button
-            onClick={() => setViewMode("gantt")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-all ${
-              viewMode === "gantt" ? "bg-indigo-600 text-white shadow" : "text-slate-400 hover:text-white"
-            }`}
-          >
-            <AlignLeft className="w-4 h-4" />
-            <span>Gantt Timeline</span>
-          </button>
-          <button
-            onClick={() => setViewMode("kanban")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-all ${
-              viewMode === "kanban" ? "bg-indigo-600 text-white shadow" : "text-slate-400 hover:text-white"
-            }`}
-          >
-            <Kanban className="w-4 h-4" />
-            <span>Kanban Board</span>
-          </button>
-          <button
-            onClick={() => setViewMode("milestones")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-all ${
-              viewMode === "milestones" ? "bg-indigo-600 text-white shadow" : "text-slate-400 hover:text-white"
-            }`}
-          >
-            <Flag className="w-4 h-4" />
-            <span>Milestones</span>
-          </button>
+        <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
+          <AlignLeft style={{ width: "32px", height: "32px", color: "#fff" }} />
         </div>
       </div>
 
@@ -70,7 +50,7 @@ export const SchedulingView: React.FC = () => {
                 <span className="w-2.5 h-2.5 rounded-full bg-rose-500"></span> Critical Path
               </span>
               <span className="flex items-center gap-1 text-indigo-400 font-bold">
-                <span className="w-2.5 h-2.5 rounded-full bg-indigo-500"></span> Standard Task
+                <span className="w-2.5 h-2.5 rounded-full bg-[var(--accent-glow)]0"></span> Standard Task
               </span>
             </div>
           </div>
@@ -82,9 +62,9 @@ export const SchedulingView: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <span className="font-mono text-indigo-400 font-bold">{t.wbsCode}</span>
                     <span className="font-semibold text-white">{t.title}</span>
-                    <span className="text-[10px] text-slate-400">({t.assignedTo})</span>
+                    <span className="text-[10px] text-[var(--text-muted)]">({t.assignedTo})</span>
                   </div>
-                  <span className="text-slate-400 font-mono text-[11px]">{t.progressPercent}% Complete ({t.durationDays}d)</span>
+                  <span className="text-[var(--text-muted)] font-mono text-[11px]">{t.progressPercent}% Complete ({t.durationDays}d)</span>
                 </div>
 
                 {/* Visual Gantt Bar */}
@@ -112,7 +92,7 @@ export const SchedulingView: React.FC = () => {
               <div key={status} className="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3">
                 <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                   <h3 className="text-xs font-bold text-white uppercase tracking-wider">{status}</h3>
-                  <span className="text-xs font-mono bg-slate-800 text-slate-300 px-2 py-0.5 rounded-full">
+                  <span className="text-xs font-mono bg-slate-800 text-[var(--text-muted)] px-2 py-0.5 rounded-full">
                     {tasksInCol.length}
                   </span>
                 </div>
@@ -129,7 +109,7 @@ export const SchedulingView: React.FC = () => {
                         )}
                       </div>
                       <p className="font-bold text-white">{t.title}</p>
-                      <div className="flex items-center justify-between text-[10px] text-slate-400">
+                      <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)]">
                         <span>Assigned: {t.assignedTo}</span>
                         <span>{t.effortDays} Days</span>
                       </div>
@@ -149,21 +129,21 @@ export const SchedulingView: React.FC = () => {
             {allTasks.filter((t) => t.isMilestone).map((m) => (
               <div key={m.id} className="bg-slate-800/60 p-4 rounded-xl border border-slate-700/60 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-amber-500/20 text-amber-300">
+                  <div className="p-2 rounded-lg bg-[var(--amber-dim)]0/20 text-amber-300">
                     <Flag className="w-5 h-5" />
                   </div>
                   <div>
                     <p className="font-bold text-white">{m.title}</p>
-                    <p className="text-[10px] text-slate-400">Deliverable: {m.deliverableName}</p>
+                    <p className="text-[10px] text-[var(--text-muted)]">Deliverable: {m.deliverableName}</p>
                   </div>
                 </div>
                 <div className="text-right">
                   <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${
-                    m.status === "Completed" ? "bg-emerald-500/20 text-emerald-400" : "bg-amber-500/20 text-amber-300"
+                    m.status === "Completed" ? "bg-[var(--green-dim)]0/20 text-emerald-400" : "bg-[var(--amber-dim)]0/20 text-amber-300"
                   }`}>
                     {m.status}
                   </span>
-                  <p className="text-[10px] text-slate-400 mt-1 font-mono">End: {m.endDate}</p>
+                  <p className="text-[10px] text-[var(--text-muted)] mt-1 font-mono">End: {m.endDate}</p>
                 </div>
               </div>
             ))}

@@ -40,11 +40,11 @@ const defaultClosureStatus: ClosureStatus = {
 };
 
 const deliverableStatusColor: Record<ProjectDeliverable["status"], string> = {
-  "Not Started": "bg-slate-100 text-slate-600 border-slate-300",
+  "Not Started": "bg-[var(--bg-card-hover)] text-[var(--text-secondary)] border-[var(--border)]",
   "In Progress": "bg-blue-100 text-blue-700 border-blue-300",
-  "Submitted": "bg-amber-100 text-amber-700 border-amber-300",
-  "Accepted": "bg-emerald-100 text-emerald-700 border-emerald-300",
-  "Rejected": "bg-red-100 text-red-700 border-red-300"
+  "Submitted": "bg-amber-100 text-[var(--amber)] border-amber-300",
+  "Accepted": "bg-[var(--green-dim)] text-[var(--green)] border-emerald-300",
+  "Rejected": "bg-red-100 text-[var(--pink)] border-red-300"
 };
 
 const lessonCategoryIcons: Record<string, React.ReactNode> = {
@@ -118,41 +118,51 @@ export const ClosureView: React.FC = () => {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6 text-slate-900">
+    <div className="animate-fadeIn" style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "24px", fontFamily: "Inter, sans-serif" }}>
       {/* Header */}
-      <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 shadow-xl text-white flex flex-col md:flex-row justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-slate-500/30 text-slate-200 border border-slate-400/30">Project Closure</span>
+      <div
+        className="hero-banner animate-fadeIn"
+        style={{ padding: "24px 28px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "16px" }}
+      >
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+            <span
+              className="badge-violet"
+              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+            >
+              Project Closure
+            </span>
+            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>Enterprise PMO</span>
           </div>
-          <h1 className="text-2xl font-bold">Project Closure & Lessons Learned</h1>
-          <p className="text-sm text-slate-300 mt-1">Manage deliverable acceptance, capture lessons, and complete the formal closure process.</p>
+          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
+            Project Closure & Lessons Learned
+          </h1>
+          <p style={{ fontSize: "var(--text-base)", color: "rgba(255,255,255,0.65)", maxWidth: "580px", lineHeight: 1.6 }}>
+            Manage deliverable acceptance, capture lessons, and complete the formal closure process.
+          </p>
         </div>
-        <div className="flex flex-col items-end gap-2">
-          <div className="text-center">
-            <div className={`text-3xl font-extrabold font-mono ${closureReadiness === 100 ? "text-emerald-400" : closureReadiness >= 60 ? "text-amber-400" : "text-slate-400"}`}>{closureReadiness}%</div>
-            <div className="text-xs text-slate-400">Closure Readiness</div>
-          </div>
+        <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
+          
         </div>
       </div>
 
       {/* KPI bar */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {[
-          { label: "Deliverables Accepted", value: `${acceptedDeliverables}/${deliverables.length}`, color: acceptedDeliverables === deliverables.length ? "text-emerald-600" : "text-amber-600" },
-          { label: "Lessons Captured", value: lessons.length, color: "text-indigo-600" },
-          { label: "Closure Checklist", value: `${checklistDone}/${closureChecklist.length}`, color: checklistDone === closureChecklist.length ? "text-emerald-600" : "text-slate-700" },
-          { label: "Project Phase", value: closureStatus.phase, color: "text-slate-800" }
+          { label: "Deliverables Accepted", value: `${acceptedDeliverables}/${deliverables.length}`, color: acceptedDeliverables === deliverables.length ? "text-[var(--green)]" : "text-[var(--amber)]" },
+          { label: "Lessons Captured", value: lessons.length, color: "text-[var(--accent)]" },
+          { label: "Closure Checklist", value: `${checklistDone}/${closureChecklist.length}`, color: checklistDone === closureChecklist.length ? "text-[var(--green)]" : "text-[var(--text-primary)]" },
+          { label: "Project Phase", value: closureStatus.phase, color: "text-[var(--text-primary)]" }
         ].map((kpi, i) => (
-          <div key={i} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
-            <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wide">{kpi.label}</p>
+          <div key={i} className="glass-card rounded-xl p-4 shadow-sm">
+            <p className="text-[10px] text-[var(--text-secondary)] uppercase font-bold tracking-wide">{kpi.label}</p>
             <div className={`text-xl font-extrabold mt-1 ${kpi.color}`}>{kpi.value}</div>
           </div>
         ))}
       </div>
 
       {/* Tab Nav */}
-      <div className="flex bg-white border border-slate-200 rounded-xl p-1 text-xs gap-1 w-max shadow-sm">
+      <div className="flex glass-card rounded-xl p-1 text-xs gap-1 w-max shadow-sm">
         {[
           { id: "deliverables", label: "Deliverable Sign-offs", icon: <CheckCircle2 className="w-3.5 h-3.5" /> },
           { id: "lessons", label: "Lessons Learned", icon: <Lightbulb className="w-3.5 h-3.5" /> },
@@ -161,7 +171,7 @@ export const ClosureView: React.FC = () => {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-lg font-bold transition-all ${activeTab === tab.id ? "bg-indigo-600 text-white shadow" : "text-slate-500 hover:text-slate-800"}`}
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-lg font-bold transition-all ${activeTab === tab.id ? "bg-[var(--accent)] text-white shadow" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"}`}
           >
             {tab.icon} {tab.label}
           </button>
@@ -172,21 +182,21 @@ export const ClosureView: React.FC = () => {
       {activeTab === "deliverables" && (
         <div className="space-y-3">
           {deliverables.map(del => (
-            <div key={del.id} className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+            <div key={del.id} className="glass-card rounded-xl p-5 shadow-sm">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-[10px] bg-indigo-50 text-indigo-700 border border-indigo-200 px-2 py-0.5 rounded font-bold">{del.phase}</span>
-                    <span className="font-bold text-slate-800 text-sm">{del.title}</span>
+                    <span className="text-[10px] bg-[var(--accent-glow)] text-[var(--accent)] border border-[var(--accent-border)] px-2 py-0.5 rounded font-bold">{del.phase}</span>
+                    <span className="font-bold text-[var(--text-primary)] text-sm">{del.title}</span>
                   </div>
-                  <p className="text-xs text-slate-500 mb-2">{del.description}</p>
+                  <p className="text-xs text-[var(--text-secondary)] mb-2">{del.description}</p>
                   <div className="flex flex-wrap gap-1">
                     {del.acceptanceCriteria.map((ac, i) => (
-                      <span key={i} className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">✓ {ac}</span>
+                      <span key={i} className="text-[10px] bg-[var(--bg-card-hover)] text-[var(--text-secondary)] px-2 py-0.5 rounded-full">✓ {ac}</span>
                     ))}
                   </div>
                   {del.signedOffBy && (
-                    <div className="mt-2 text-[10px] text-emerald-700 font-bold">
+                    <div className="mt-2 text-[10px] text-[var(--green)] font-bold">
                       Signed off by: {del.signedOffBy} on {del.signOffDate}
                     </div>
                   )}
@@ -198,13 +208,13 @@ export const ClosureView: React.FC = () => {
                       <button
                         key={s}
                         onClick={() => updateDeliverableStatus(del.id, s)}
-                        className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all ${s === "Accepted" ? "border-emerald-300 text-emerald-700 hover:bg-emerald-50" : "border-red-300 text-red-700 hover:bg-red-50"}`}
+                        className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all ${s === "Accepted" ? "border-emerald-300 text-[var(--green)] hover:bg-[var(--green-dim)]" : "border-red-300 text-[var(--pink)] hover:bg-[var(--pink-dim)]"}`}
                       >
                         {s === "Accepted" ? "Accept ✓" : "Reject ✗"}
                       </button>
                     ))}
                   </div>
-                  <div className="text-[10px] text-slate-400">Owner: {del.owner} | Due: {del.dueDate}</div>
+                  <div className="text-[10px] text-[var(--text-muted)]">Owner: {del.owner} | Due: {del.dueDate}</div>
                 </div>
               </div>
             </div>
@@ -216,13 +226,13 @@ export const ClosureView: React.FC = () => {
       {activeTab === "lessons" && (
         <div className="space-y-3">
           <div className="flex justify-end">
-            <button onClick={() => setShowLessonForm(!showLessonForm)} className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition-all">
+            <button onClick={() => setShowLessonForm(!showLessonForm)} className="flex items-center gap-2 bg-[var(--accent)] hover:bg-[var(--accent-2)] text-white text-xs font-bold px-4 py-2 rounded-lg transition-all">
               <PlusCircle className="w-4 h-4" /> Add Lesson
             </button>
           </div>
           {showLessonForm && (
-            <div className="bg-white border border-indigo-200 rounded-xl p-5 shadow-sm space-y-4">
-              <h3 className="text-sm font-bold text-slate-800">Capture New Lesson</h3>
+            <div className="bg-[var(--bg-card)] border border-[var(--accent-border)] rounded-xl p-5 shadow-sm space-y-4">
+              <h3 className="text-sm font-bold text-[var(--text-primary)]">Capture New Lesson</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                 {[
                   { label: "Title *", key: "title", type: "text" },
@@ -232,63 +242,63 @@ export const ClosureView: React.FC = () => {
                   { label: "Recommendation", key: "recommendation", type: "text" }
                 ].map(f => (
                   <div key={f.key}>
-                    <label className="block text-slate-600 font-bold mb-1">{f.label}</label>
+                    <label className="block text-[var(--text-secondary)] font-bold mb-1">{f.label}</label>
                     <input type={f.type} placeholder={f.placeholder} value={(newLesson as any)[f.key] || ""}
                       onChange={e => setNewLesson(p => ({ ...p, [f.key]: e.target.value }))}
-                      className="w-full border border-slate-200 rounded-lg px-3 py-2 text-slate-800 outline-none focus:ring-2 focus:ring-indigo-500" />
+                      className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-[var(--text-primary)] outline-none focus:ring-2 focus:ring-indigo-500" />
                   </div>
                 ))}
                 <div>
-                  <label className="block text-slate-600 font-bold mb-1 text-xs">Category</label>
+                  <label className="block text-[var(--text-secondary)] font-bold mb-1 text-xs">Category</label>
                   <select value={newLesson.category || "Process"} onChange={e => setNewLesson(p => ({ ...p, category: e.target.value as LessonsLearned["category"] }))}
-                    className="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 outline-none">
+                    className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-xs text-[var(--text-primary)] outline-none">
                     {["Technical", "Process", "People", "Risk", "Communication", "Governance", "Vendor"].map(c => <option key={c}>{c}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-slate-600 font-bold mb-1 text-xs">Impact</label>
+                  <label className="block text-[var(--text-secondary)] font-bold mb-1 text-xs">Impact</label>
                   <select value={newLesson.impact || "Medium"} onChange={e => setNewLesson(p => ({ ...p, impact: e.target.value as LessonsLearned["impact"] }))}
-                    className="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 outline-none">
+                    className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-xs text-[var(--text-primary)] outline-none">
                     {["High", "Medium", "Low"].map(c => <option key={c}>{c}</option>)}
                   </select>
                 </div>
               </div>
               <div className="flex gap-3">
-                <button onClick={addLesson} className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-lg">Save Lesson</button>
-                <button onClick={() => setShowLessonForm(false)} className="text-slate-500 text-xs font-bold px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-50">Cancel</button>
+                <button onClick={addLesson} className="bg-[var(--accent)] hover:bg-[var(--accent-2)] text-white text-xs font-bold px-4 py-2 rounded-lg">Save Lesson</button>
+                <button onClick={() => setShowLessonForm(false)} className="text-[var(--text-secondary)] text-xs font-bold px-4 py-2 rounded-lg border border-[var(--border)] hover:bg-[var(--bg-card)]">Cancel</button>
               </div>
             </div>
           )}
           {lessons.map(lesson => {
             const isEx = expandedLesson === lesson.id;
             return (
-              <div key={lesson.id} className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-                <div className="flex items-center justify-between p-4 cursor-pointer hover:bg-slate-50" onClick={() => setExpandedLesson(isEx ? null : lesson.id)}>
+              <div key={lesson.id} className="glass-card rounded-xl shadow-sm overflow-hidden">
+                <div className="flex items-center justify-between p-4 cursor-pointer hover:bg-[var(--bg-card)]" onClick={() => setExpandedLesson(isEx ? null : lesson.id)}>
                   <div className="flex items-center gap-3">
-                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center border ${lesson.impact === "High" ? "bg-red-50 border-red-200 text-red-600" : lesson.impact === "Medium" ? "bg-amber-50 border-amber-200 text-amber-600" : "bg-slate-50 border-slate-200 text-slate-600"}`}>
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center border ${lesson.impact === "High" ? "bg-[var(--pink-dim)] border-red-200 text-[var(--pink)]" : lesson.impact === "Medium" ? "bg-[var(--amber-dim)] border-amber-200 text-[var(--amber)]" : "bg-[var(--bg-card)] border-[var(--border)] text-[var(--text-secondary)]"}`}>
                       {lessonCategoryIcons[lesson.category] || <FileText className="w-3.5 h-3.5" />}
                     </div>
                     <div>
-                      <div className="text-sm font-bold text-slate-800">{lesson.title}</div>
-                      <div className="text-[10px] text-slate-500">{lesson.category} · {lesson.phase} · Captured by: {lesson.capturedBy}</div>
+                      <div className="text-sm font-bold text-[var(--text-primary)]">{lesson.title}</div>
+                      <div className="text-[10px] text-[var(--text-secondary)]">{lesson.category} · {lesson.phase} · Captured by: {lesson.capturedBy}</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className={`text-[10px] font-bold px-2.5 py-1 rounded border ${lesson.impact === "High" ? "bg-red-100 text-red-700 border-red-300" : lesson.impact === "Medium" ? "bg-amber-100 text-amber-700 border-amber-300" : "bg-slate-100 text-slate-600 border-slate-300"}`}>{lesson.impact} Impact</span>
-                    <span className="text-[10px] bg-indigo-100 text-indigo-700 border border-indigo-200 font-bold px-2.5 py-1 rounded">{lesson.status}</span>
-                    {isEx ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                    <span className={`text-[10px] font-bold px-2.5 py-1 rounded border ${lesson.impact === "High" ? "bg-red-100 text-[var(--pink)] border-red-300" : lesson.impact === "Medium" ? "bg-amber-100 text-[var(--amber)] border-amber-300" : "bg-[var(--bg-card-hover)] text-[var(--text-secondary)] border-[var(--border)]"}`}>{lesson.impact} Impact</span>
+                    <span className="text-[10px] bg-indigo-100 text-[var(--accent)] border border-[var(--accent-border)] font-bold px-2.5 py-1 rounded">{lesson.status}</span>
+                    {isEx ? <ChevronUp className="w-4 h-4 text-[var(--text-muted)]" /> : <ChevronDown className="w-4 h-4 text-[var(--text-muted)]" />}
                   </div>
                 </div>
                 {isEx && (
-                  <div className="border-t border-slate-100 p-4 bg-slate-50/50 space-y-2">
+                  <div className="border-t border-[var(--border)] p-4 bg-[var(--bg-card)]/50 space-y-2">
                     <div>
-                      <span className="text-[10px] font-bold text-slate-500 uppercase">Description</span>
-                      <p className="text-xs text-slate-700 mt-1">{lesson.description}</p>
+                      <span className="text-[10px] font-bold text-[var(--text-secondary)] uppercase">Description</span>
+                      <p className="text-xs text-[var(--text-primary)] mt-1">{lesson.description}</p>
                     </div>
                     {lesson.recommendation && (
                       <div>
-                        <span className="text-[10px] font-bold text-emerald-600 uppercase">Recommendation</span>
-                        <p className="text-xs text-emerald-800 mt-1 bg-emerald-50 border border-emerald-100 rounded-lg p-2">{lesson.recommendation}</p>
+                        <span className="text-[10px] font-bold text-[var(--green)] uppercase">Recommendation</span>
+                        <p className="text-xs text-emerald-800 mt-1 bg-[var(--green-dim)] border border-emerald-100 rounded-lg p-2">{lesson.recommendation}</p>
                       </div>
                     )}
                   </div>
@@ -301,35 +311,35 @@ export const ClosureView: React.FC = () => {
 
       {/* CLOSURE CHECKLIST */}
       {activeTab === "checklist" && (
-        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-4">
+        <div className="glass-card rounded-xl p-6 shadow-sm space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold text-slate-800">Formal Project Closure Checklist</h3>
-            <span className={`text-xs font-bold px-3 py-1 rounded-full border ${closureReadiness === 100 ? "bg-emerald-100 text-emerald-700 border-emerald-300" : "bg-amber-100 text-amber-700 border-amber-300"}`}>
+            <h3 className="text-sm font-bold text-[var(--text-primary)]">Formal Project Closure Checklist</h3>
+            <span className={`text-xs font-bold px-3 py-1 rounded-full border ${closureReadiness === 100 ? "bg-[var(--green-dim)] text-[var(--green)] border-emerald-300" : "bg-amber-100 text-[var(--amber)] border-amber-300"}`}>
               {checklistDone}/{closureChecklist.length} Complete
             </span>
           </div>
-          <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden mb-4">
-            <div className="h-full rounded-full bg-emerald-500 transition-all" style={{ width: `${closureReadiness}%` }} />
+          <div className="h-2 w-full bg-[var(--bg-card-hover)] rounded-full overflow-hidden mb-4">
+            <div className="h-full rounded-full bg-[var(--green-dim)]0 transition-all" style={{ width: `${closureReadiness}%` }} />
           </div>
           <div className="space-y-3">
             {closureChecklist.map(item => (
               <div
                 key={item.key}
                 onClick={() => toggleChecklistItem(item.key)}
-                className={`flex items-center gap-4 p-4 rounded-xl border cursor-pointer transition-all ${item.done ? "bg-emerald-50 border-emerald-200" : "bg-slate-50 border-slate-200 hover:border-slate-300"}`}
+                className={`flex items-center gap-4 p-4 rounded-xl border cursor-pointer transition-all ${item.done ? "bg-[var(--green-dim)] border-emerald-200" : "bg-[var(--bg-card)] border-[var(--border)] hover:border-[var(--border)]"}`}
               >
                 {item.done
-                  ? <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-                  : <div className="w-5 h-5 rounded-full border-2 border-slate-300 shrink-0" />}
-                <span className={`text-sm font-medium ${item.done ? "text-emerald-800 line-through" : "text-slate-700"}`}>{item.label}</span>
+                  ? <CheckCircle2 className="w-5 h-5 text-[var(--green)] shrink-0" />
+                  : <div className="w-5 h-5 rounded-full border-2 border-[var(--border)] shrink-0" />}
+                <span className={`text-sm font-medium ${item.done ? "text-emerald-800 line-through" : "text-[var(--text-primary)]"}`}>{item.label}</span>
               </div>
             ))}
           </div>
           {closureReadiness === 100 && (
-            <div className="mt-4 p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-center">
-              <CheckCircle2 className="w-8 h-8 text-emerald-600 mx-auto mb-2" />
+            <div className="mt-4 p-4 bg-[var(--green-dim)] border border-emerald-200 rounded-xl text-center">
+              <CheckCircle2 className="w-8 h-8 text-[var(--green)] mx-auto mb-2" />
               <p className="text-sm font-bold text-emerald-800">Project is ready for formal closure!</p>
-              <p className="text-xs text-emerald-600 mt-1">All closure criteria have been met. Notify the PMO to issue the formal project closure certificate.</p>
+              <p className="text-xs text-[var(--green)] mt-1">All closure criteria have been met. Notify the PMO to issue the formal project closure certificate.</p>
             </div>
           )}
         </div>

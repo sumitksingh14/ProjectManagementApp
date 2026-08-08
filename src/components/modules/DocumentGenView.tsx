@@ -118,28 +118,29 @@ ${risks
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* Header */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex items-center justify-between">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+      <div
+        className="hero-banner animate-fadeIn"
+        style={{ padding: "24px 28px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "16px" }}
+      >
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+            <span
+              className="badge-violet"
+              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+            >
               Module 17
             </span>
-            <span className="text-xs text-slate-400">Automated Artifact Generator</span>
+            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>Automated Artifact Generator</span>
           </div>
-          <h1 className="text-2xl font-bold text-white">Automated Document Generator</h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
+            Automated Document Generator
+          </h1>
+          <p style={{ fontSize: "var(--text-base)", color: "rgba(255,255,255,0.65)", maxWidth: "580px", lineHeight: 1.6 }}>
             Instantly generate Project Charters, WBS Dictionaries, Risk Registers, and Executive Decks.
           </p>
         </div>
-
-        <div className="flex items-center gap-2">
-          <button
-            onClick={handleCopy}
-            className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-lg shadow-indigo-600/30 flex items-center gap-2 transition-all"
-          >
-            {copied ? <Check className="w-4 h-4 text-emerald-300" /> : <Copy className="w-4 h-4" />}
-            <span>{copied ? "Copied Markdown!" : "Copy Document"}</span>
-          </button>
+        <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
+          <Check style={{ width: "32px", height: "32px", color: "#fff" }} />
         </div>
       </div>
 
@@ -155,7 +156,7 @@ ${risks
             key={tab.id}
             onClick={() => setDocType(tab.id as any)}
             className={`flex-1 py-2.5 rounded-xl font-bold transition-all ${
-              docType === tab.id ? "bg-indigo-600 text-white shadow-lg shadow-indigo-600/30" : "text-slate-400 hover:text-white"
+              docType === tab.id ? "bg-[var(--accent)] text-white shadow-lg shadow-indigo-600/30" : "text-[var(--text-muted)] hover:text-white"
             }`}
           >
             {tab.label}

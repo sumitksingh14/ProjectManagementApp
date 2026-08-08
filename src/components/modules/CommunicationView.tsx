@@ -53,16 +53,16 @@ const defaultMeetings: MeetingMinutes[] = [
 ];
 
 const priorityConfig: Record<ActionItem["priority"], string> = {
-  High: "bg-red-100 text-red-700 border-red-300",
-  Medium: "bg-amber-100 text-amber-700 border-amber-300",
-  Low: "bg-slate-100 text-slate-600 border-slate-300"
+  High: "bg-red-100 text-[var(--pink)] border-red-300",
+  Medium: "bg-amber-100 text-[var(--amber)] border-amber-300",
+  Low: "bg-[var(--bg-card-hover)] text-[var(--text-secondary)] border-[var(--border)]"
 };
 
 const statusConfig: Record<ActionItem["status"], { color: string; icon: React.ReactNode }> = {
-  Open: { color: "text-slate-700", icon: <Clock className="w-3.5 h-3.5" /> },
+  Open: { color: "text-[var(--text-primary)]", icon: <Clock className="w-3.5 h-3.5" /> },
   "In Progress": { color: "text-blue-700", icon: <AlertCircle className="w-3.5 h-3.5" /> },
-  Completed: { color: "text-emerald-700", icon: <CheckCircle2 className="w-3.5 h-3.5" /> },
-  Cancelled: { color: "text-red-700", icon: <XCircle className="w-3.5 h-3.5" /> }
+  Completed: { color: "text-[var(--green)]", icon: <CheckCircle2 className="w-3.5 h-3.5" /> },
+  Cancelled: { color: "text-[var(--pink)]", icon: <XCircle className="w-3.5 h-3.5" /> }
 };
 
 export const CommunicationView: React.FC = () => {
@@ -109,40 +109,43 @@ export const CommunicationView: React.FC = () => {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6 text-slate-900">
-      {/* Header */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col md:flex-row justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-200">Module 14</span>
-            <span className="text-xs text-slate-500">Communication & Status Reporting</span>
+    <div className="animate-fadeIn" style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "24px", fontFamily: "Inter, sans-serif" }}>
+      {/* ── Hero Banner ──────────────────────────────────────────────────────── */}
+      <div
+        className="hero-banner animate-fadeIn"
+        style={{ padding: "24px 28px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "16px" }}
+      >
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+            <span
+              className="badge-violet"
+              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+            >
+              Module 14
+            </span>
+            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>Communication & Status Reporting</span>
           </div>
-          <h1 className="text-2xl font-bold text-slate-900">Communication Management</h1>
-          <p className="text-xs text-slate-500 mt-1">Action items, meeting minutes, stakeholder status reports, and communication tracking.</p>
+          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
+            Communication Management
+          </h1>
+          <p style={{ fontSize: "var(--text-base)", color: "rgba(255,255,255,0.65)", maxWidth: "580px", lineHeight: 1.6 }}>
+            Action items, meeting minutes, stakeholder status reports, and communication tracking.
+          </p>
         </div>
-        <div className="flex gap-2 flex-wrap">
-          {[
-            { label: "Open Actions", value: openActions, color: "text-amber-700", bg: "bg-amber-50 border-amber-200" },
-            { label: "Overdue", value: overdueActions, color: "text-red-700", bg: "bg-red-50 border-red-200" },
-            { label: "Completed", value: completedActions, color: "text-emerald-700", bg: "bg-emerald-50 border-emerald-200" }
-          ].map((kpi, i) => (
-            <div key={i} className={`border rounded-xl p-3 text-center ${kpi.bg}`}>
-              <div className={`text-xl font-extrabold ${kpi.color}`}>{kpi.value}</div>
-              <div className="text-[10px] font-bold text-slate-500">{kpi.label}</div>
-            </div>
-          ))}
+        <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
+          
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex bg-white border border-slate-200 rounded-xl p-1 text-xs gap-1 shadow-sm w-max">
+      <div className="flex glass-card rounded-xl p-1 text-xs gap-1 shadow-sm w-max">
         {[
           { id: "report", label: "Status Reports", icon: <FileText className="w-3.5 h-3.5" /> },
           { id: "actions", label: "Action Items", icon: <CheckCircle2 className="w-3.5 h-3.5" /> },
           { id: "meetings", label: "Meeting Minutes", icon: <Calendar className="w-3.5 h-3.5" /> }
         ].map(tab => (
           <button key={tab.id} onClick={() => setActiveTab(tab.id as any)}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-lg font-bold transition-all ${activeTab === tab.id ? "bg-indigo-600 text-white shadow" : "text-slate-500 hover:text-slate-800"}`}>
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-lg font-bold transition-all ${activeTab === tab.id ? "bg-[var(--accent)] text-white shadow" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"}`}>
             {tab.icon} {tab.label}
           </button>
         ))}
@@ -154,7 +157,7 @@ export const CommunicationView: React.FC = () => {
           <div className="flex gap-2">
             {[{ id: "weekly", label: "Weekly PMO Status Report" }, { id: "executive", label: "Executive 1-Pager Brief" }].map(r => (
               <button key={r.id} onClick={() => setReportType(r.id as any)}
-                className={`text-xs font-bold px-4 py-2 rounded-lg border transition-all ${reportType === r.id ? "bg-indigo-600 text-white border-indigo-600" : "bg-white text-slate-600 border-slate-200 hover:border-indigo-400"}`}>
+                className={`text-xs font-bold px-4 py-2 rounded-lg border transition-all ${reportType === r.id ? "bg-[var(--accent)] text-white border-indigo-600" : "bg-[var(--bg-card)] text-[var(--text-secondary)] border-[var(--border)] hover:border-indigo-400"}`}>
                 {r.label}
               </button>
             ))}
@@ -164,9 +167,9 @@ export const CommunicationView: React.FC = () => {
               <h3 className="text-sm font-bold text-white uppercase tracking-wider">
                 {reportType === "weekly" ? "Weekly Project Status Summary" : "Executive Steering Brief"} — {activeProject?.name}
               </h3>
-              <span className="text-slate-400 font-mono">Date: {new Date().toLocaleDateString()}</span>
+              <span className="text-[var(--text-muted)] font-mono">Date: {new Date().toLocaleDateString()}</span>
             </div>
-            <div className="space-y-4 text-slate-300 leading-relaxed">
+            <div className="space-y-4 text-[var(--text-muted)] leading-relaxed">
               <div>
                 <span className="font-bold text-white uppercase tracking-wider text-[10px]">Overall Health</span>
                 <div className="flex gap-3 mt-2">
@@ -178,8 +181,8 @@ export const CommunicationView: React.FC = () => {
                     { label: "Risk", val: activeProject?.health?.riskHealth || "Green" }
                   ].map(h => (
                     <div key={h.label} className="text-center">
-                      <div className={`w-6 h-6 rounded-full mx-auto mb-1 ${h.val === "Green" ? "bg-emerald-500" : h.val === "Amber" ? "bg-amber-500" : "bg-red-500"}`} />
-                      <div className="text-[10px] text-slate-400">{h.label}</div>
+                      <div className={`w-6 h-6 rounded-full mx-auto mb-1 ${h.val === "Green" ? "bg-[var(--green-dim)]0" : h.val === "Amber" ? "bg-[var(--amber-dim)]0" : "bg-[var(--pink-dim)]0"}`} />
+                      <div className="text-[10px] text-[var(--text-muted)]">{h.label}</div>
                     </div>
                   ))}
                 </div>
@@ -194,7 +197,7 @@ export const CommunicationView: React.FC = () => {
                     { label: "VAC", value: `$${(activeProject?.evm?.VAC || 0).toLocaleString()}` }
                   ].map(m => (
                     <div key={m.label} className="bg-slate-800/60 rounded-lg p-3 text-center">
-                      <div className="text-[10px] text-slate-400">{m.label}</div>
+                      <div className="text-[10px] text-[var(--text-muted)]">{m.label}</div>
                       <div className="text-lg font-extrabold text-white font-mono">{m.value}</div>
                     </div>
                   ))}
@@ -217,13 +220,13 @@ export const CommunicationView: React.FC = () => {
       {activeTab === "actions" && (
         <div className="space-y-4">
           <div className="flex justify-end">
-            <button onClick={() => setShowAddAction(!showAddAction)} className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-lg">
+            <button onClick={() => setShowAddAction(!showAddAction)} className="flex items-center gap-2 bg-[var(--accent)] hover:bg-[var(--accent-2)] text-white text-xs font-bold px-4 py-2 rounded-lg">
               <PlusCircle className="w-4 h-4" /> Add Action Item
             </button>
           </div>
           {showAddAction && (
-            <div className="bg-white border border-indigo-200 rounded-xl p-5 shadow-sm space-y-4">
-              <h3 className="text-sm font-bold text-slate-800">New Action Item</h3>
+            <div className="bg-[var(--bg-card)] border border-[var(--accent-border)] rounded-xl p-5 shadow-sm space-y-4">
+              <h3 className="text-sm font-bold text-[var(--text-primary)]">New Action Item</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                 {[
                   { label: "Description *", key: "description", type: "text" },
@@ -232,37 +235,37 @@ export const CommunicationView: React.FC = () => {
                   { label: "Source Reference", key: "sourceRef", type: "text" }
                 ].map(f => (
                   <div key={f.key}>
-                    <label className="block text-slate-600 font-bold mb-1">{f.label}</label>
+                    <label className="block text-[var(--text-secondary)] font-bold mb-1">{f.label}</label>
                     <input type={f.type} value={(newAction as any)[f.key] || ""}
                       onChange={e => setNewAction(p => ({ ...p, [f.key]: e.target.value }))}
-                      className="w-full border border-slate-200 rounded-lg px-3 py-2 text-slate-800 outline-none focus:ring-2 focus:ring-indigo-500" />
+                      className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-[var(--text-primary)] outline-none focus:ring-2 focus:ring-indigo-500" />
                   </div>
                 ))}
                 <div>
-                  <label className="block text-slate-600 font-bold mb-1 text-xs">Priority</label>
+                  <label className="block text-[var(--text-secondary)] font-bold mb-1 text-xs">Priority</label>
                   <select value={newAction.priority || "Medium"} onChange={e => setNewAction(p => ({ ...p, priority: e.target.value as ActionItem["priority"] }))}
-                    className="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 outline-none">
+                    className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-xs text-[var(--text-primary)] outline-none">
                     {["High", "Medium", "Low"].map(c => <option key={c}>{c}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-slate-600 font-bold mb-1 text-xs">Source Type</label>
+                  <label className="block text-[var(--text-secondary)] font-bold mb-1 text-xs">Source Type</label>
                   <select value={newAction.sourceType || "Meeting"} onChange={e => setNewAction(p => ({ ...p, sourceType: e.target.value as ActionItem["sourceType"] }))}
-                    className="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 outline-none">
+                    className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-xs text-[var(--text-primary)] outline-none">
                     {["Meeting", "Risk", "Issue", "Change Request", "Steering Committee"].map(c => <option key={c}>{c}</option>)}
                   </select>
                 </div>
               </div>
               <div className="flex gap-3">
-                <button onClick={addAction} className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-lg">Save Action</button>
-                <button onClick={() => setShowAddAction(false)} className="text-slate-500 text-xs font-bold px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-50">Cancel</button>
+                <button onClick={addAction} className="bg-[var(--accent)] hover:bg-[var(--accent-2)] text-white text-xs font-bold px-4 py-2 rounded-lg">Save Action</button>
+                <button onClick={() => setShowAddAction(false)} className="text-[var(--text-secondary)] text-xs font-bold px-4 py-2 rounded-lg border border-[var(--border)] hover:bg-[var(--bg-card)]">Cancel</button>
               </div>
             </div>
           )}
-          <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+          <div className="glass-card rounded-xl shadow-sm overflow-hidden">
             <table className="w-full text-xs border-collapse">
               <thead>
-                <tr className="border-b border-slate-100 text-slate-500 font-bold uppercase text-[10px] tracking-wide bg-slate-50">
+                <tr className="border-b border-[var(--border)] text-[var(--text-secondary)] font-bold uppercase text-[10px] tracking-wide bg-[var(--bg-card)]">
                   <th className="p-3 text-left">Action Item</th>
                   <th className="p-3 text-left">Owner</th>
                   <th className="p-3 text-left">Due Date</th>
@@ -277,19 +280,19 @@ export const CommunicationView: React.FC = () => {
                   const cfg = statusConfig[item.status];
                   const isOverdue = (item.status === "Open" || item.status === "In Progress") && new Date(item.dueDate) < new Date();
                   return (
-                    <tr key={item.id} className={`hover:bg-slate-50 ${isOverdue ? "bg-red-50/30" : ""}`}>
-                      <td className="p-3 font-semibold text-slate-800 max-w-xs">{item.description}</td>
-                      <td className="p-3 text-slate-600">{item.owner}</td>
-                      <td className={`p-3 font-mono ${isOverdue ? "text-red-600 font-bold" : "text-slate-600"}`}>{item.dueDate}{isOverdue && " ⚠️"}</td>
+                    <tr key={item.id} className={`hover:bg-[var(--bg-card)] ${isOverdue ? "bg-[var(--pink-dim)]/30" : ""}`}>
+                      <td className="p-3 font-semibold text-[var(--text-primary)] max-w-xs">{item.description}</td>
+                      <td className="p-3 text-[var(--text-secondary)]">{item.owner}</td>
+                      <td className={`p-3 font-mono ${isOverdue ? "text-[var(--pink)] font-bold" : "text-[var(--text-secondary)]"}`}>{item.dueDate}{isOverdue && " ⚠️"}</td>
                       <td className="p-3 text-center"><span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${priorityConfig[item.priority]}`}>{item.priority}</span></td>
-                      <td className="p-3 text-center"><span className="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded">{item.sourceType}</span></td>
+                      <td className="p-3 text-center"><span className="text-[10px] bg-[var(--bg-card-hover)] text-[var(--text-secondary)] px-2 py-0.5 rounded">{item.sourceType}</span></td>
                       <td className={`p-3 text-center font-bold text-xs ${cfg.color}`}>
                         <span className="flex items-center justify-center gap-1">{cfg.icon} {item.status}</span>
                       </td>
                       <td className="p-3 text-center">
                         <div className="flex justify-center gap-1">
                           {item.status !== "Completed" && (
-                            <button onClick={() => toggleActionStatus(item.id, "Completed")} className="text-[10px] text-emerald-700 font-bold hover:bg-emerald-100 px-2 py-0.5 rounded">Done</button>
+                            <button onClick={() => toggleActionStatus(item.id, "Completed")} className="text-[10px] text-[var(--green)] font-bold hover:bg-[var(--green-dim)] px-2 py-0.5 rounded">Done</button>
                           )}
                           {item.status === "Open" && (
                             <button onClick={() => toggleActionStatus(item.id, "In Progress")} className="text-[10px] text-blue-700 font-bold hover:bg-blue-100 px-2 py-0.5 rounded">Start</button>
@@ -311,40 +314,40 @@ export const CommunicationView: React.FC = () => {
           {meetings.map(meeting => {
             const isEx = expandedMeeting === meeting.id;
             return (
-              <div key={meeting.id} className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-                <div className="flex items-center justify-between p-4 cursor-pointer hover:bg-slate-50" onClick={() => setExpandedMeeting(isEx ? null : meeting.id)}>
+              <div key={meeting.id} className="glass-card rounded-xl shadow-sm overflow-hidden">
+                <div className="flex items-center justify-between p-4 cursor-pointer hover:bg-[var(--bg-card)]" onClick={() => setExpandedMeeting(isEx ? null : meeting.id)}>
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-200 flex items-center justify-center">
-                      <Calendar className="w-4 h-4 text-indigo-600" />
+                    <div className="w-10 h-10 rounded-xl bg-[var(--accent-glow)] border border-[var(--accent-border)] flex items-center justify-center">
+                      <Calendar className="w-4 h-4 text-[var(--accent)]" />
                     </div>
                     <div>
-                      <div className="text-sm font-bold text-slate-800">{meeting.title}</div>
-                      <div className="text-[10px] text-slate-500">{meeting.meetingType} · {meeting.date} · Facilitated by {meeting.facilitator}</div>
+                      <div className="text-sm font-bold text-[var(--text-primary)]">{meeting.title}</div>
+                      <div className="text-[10px] text-[var(--text-secondary)]">{meeting.meetingType} · {meeting.date} · Facilitated by {meeting.facilitator}</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] bg-indigo-50 text-indigo-700 border border-indigo-200 font-bold px-2 py-0.5 rounded">{meeting.attendees.length} Attendees</span>
-                    <span className="text-[10px] bg-amber-50 text-amber-700 border border-amber-200 font-bold px-2 py-0.5 rounded">{meeting.keyDecisions.length} Decisions</span>
-                    {isEx ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                    <span className="text-[10px] bg-[var(--accent-glow)] text-[var(--accent)] border border-[var(--accent-border)] font-bold px-2 py-0.5 rounded">{meeting.attendees.length} Attendees</span>
+                    <span className="text-[10px] bg-[var(--amber-dim)] text-[var(--amber)] border border-amber-200 font-bold px-2 py-0.5 rounded">{meeting.keyDecisions.length} Decisions</span>
+                    {isEx ? <ChevronUp className="w-4 h-4 text-[var(--text-muted)]" /> : <ChevronDown className="w-4 h-4 text-[var(--text-muted)]" />}
                   </div>
                 </div>
                 {isEx && (
-                  <div className="border-t border-slate-100 p-4 bg-slate-50/50 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                  <div className="border-t border-[var(--border)] p-4 bg-[var(--bg-card)]/50 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                     <div>
-                      <span className="font-bold text-slate-500 uppercase text-[10px]">Attendees</span>
-                      <div className="flex flex-wrap gap-1 mt-1">{meeting.attendees.map((a, i) => <span key={i} className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded-full">{a}</span>)}</div>
+                      <span className="font-bold text-[var(--text-secondary)] uppercase text-[10px]">Attendees</span>
+                      <div className="flex flex-wrap gap-1 mt-1">{meeting.attendees.map((a, i) => <span key={i} className="bg-[var(--bg-card-hover)] text-[var(--text-primary)] px-2 py-0.5 rounded-full">{a}</span>)}</div>
                     </div>
                     <div>
-                      <span className="font-bold text-slate-500 uppercase text-[10px]">Agenda</span>
-                      <ul className="mt-1 space-y-0.5 list-disc list-inside text-slate-700">{meeting.agenda.map((a, i) => <li key={i}>{a}</li>)}</ul>
+                      <span className="font-bold text-[var(--text-secondary)] uppercase text-[10px]">Agenda</span>
+                      <ul className="mt-1 space-y-0.5 list-disc list-inside text-[var(--text-primary)]">{meeting.agenda.map((a, i) => <li key={i}>{a}</li>)}</ul>
                     </div>
                     <div>
-                      <span className="font-bold text-emerald-600 uppercase text-[10px]">Key Decisions</span>
-                      <ul className="mt-1 space-y-1">{meeting.keyDecisions.map((d, i) => <li key={i} className="flex items-start gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" /><span className="text-slate-700">{d}</span></li>)}</ul>
+                      <span className="font-bold text-[var(--green)] uppercase text-[10px]">Key Decisions</span>
+                      <ul className="mt-1 space-y-1">{meeting.keyDecisions.map((d, i) => <li key={i} className="flex items-start gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" /><span className="text-[var(--text-primary)]">{d}</span></li>)}</ul>
                     </div>
                     {meeting.nextMeetingDate && (
-                      <div className="bg-indigo-50 border border-indigo-100 rounded-lg p-3">
-                        <span className="font-bold text-indigo-600 uppercase text-[10px]">Next Meeting</span>
+                      <div className="bg-[var(--accent-glow)] border border-indigo-100 rounded-lg p-3">
+                        <span className="font-bold text-[var(--accent)] uppercase text-[10px]">Next Meeting</span>
                         <div className="font-bold text-indigo-800 mt-1">{meeting.nextMeetingDate}</div>
                       </div>
                     )}

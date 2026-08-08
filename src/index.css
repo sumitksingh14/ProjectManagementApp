@@ -48,7 +48,7 @@
   --grad-cyan:     linear-gradient(135deg, #0891B2 0%, #06B6D4 100%);
 
   /* ──────────────────────────────────────────────────────────────────────
-     TYPOGRAPHY SYSTEM — Segoe UI
+     TYPOGRAPHY SYSTEM — Inter
      WCAG 2.1 AA compliant:
        • Normal text ≥ 4.5:1 contrast ratio
        • Large text (≥ 18pt/24px bold) ≥ 3:1 contrast ratio
@@ -56,20 +56,20 @@
        • No text smaller than 11px (7.5pt) in the UI
      ────────────────────────────────────────────────────────────────────── */
 
-  /* Font family — Segoe UI system stack (no external load needed) */
-  --font-family: "Segoe UI", "Segoe UI Variable", system-ui, -apple-system,
+  /* Font family — Inter system stack */
+  --font-family: "Inter", "Segoe UI Variable", "Segoe UI", system-ui, -apple-system,
                  "Helvetica Neue", Arial, sans-serif;
 
   /* Type Scale (rem-based, root = 16px) */
-  --text-xs:    0.6875rem;   /* 11px  — labels, micro badges              */
-  --text-sm:    0.75rem;     /* 12px  — table cells, nav items, sub-labels */
-  --text-base:  0.875rem;    /* 14px  — body / default readable text       */
-  --text-md:    1rem;        /* 16px  — card body, list items              */
-  --text-lg:    1.125rem;    /* 18px  — card headings                      */
-  --text-xl:    1.25rem;     /* 20px  — page section headings              */
-  --text-2xl:   1.5rem;      /* 24px  — module page titles                 */
-  --text-3xl:   1.875rem;    /* 30px  — KPI values (large metrics)         */
-  --text-4xl:   2.25rem;     /* 36px  — hero headings                      */
+  --text-xs:    0.75rem;     /* 12px  — labels, micro badges              */
+  --text-sm:    0.875rem;    /* 14px  — table cells, nav items, sub-labels */
+  --text-base:  1rem;        /* 16px  — body / default readable text       */
+  --text-md:    1.125rem;    /* 18px  — card body, list items              */
+  --text-lg:    1.25rem;     /* 20px  — card headings                      */
+  --text-xl:    1.5rem;      /* 24px  — page section headings              */
+  --text-2xl:   1.875rem;    /* 30px  — module page titles                 */
+  --text-3xl:   2.25rem;     /* 36px  — KPI values (large metrics)         */
+  --text-4xl:   3rem;        /* 48px  — hero headings                      */
 
   /* Font weights */
   --fw-regular:  400;
@@ -271,7 +271,7 @@ button, [role="button"], a {
 /* ─── Status Badges — font-size lifted to 11px minimum ───────────────────────── */
 .badge-green  {
   background: var(--green-dim);  color: var(--green); border: 1px solid rgba(16,185,129,0.25);
-  font-size: var(--text-xs);  /* 11px */
+  font-size: var(--text-xs);  /* 12px */
   font-weight: var(--fw-bold);
   border-radius: 6px;
   padding: 2px 8px;
@@ -351,7 +351,7 @@ button, [role="button"], a {
 /* ─── Section / group labels — 11px minimum for uppercase labels ─────────────── */
 .section-label {
   font-family: var(--font-family);
-  font-size: var(--text-xs);         /* 11px */
+  font-size: var(--text-xs);         /* 12px */
   font-weight: var(--fw-bold);
   letter-spacing: var(--ls-widest);  /* 0.12em */
   text-transform: uppercase;
@@ -388,7 +388,7 @@ button, [role="button"], a {
 /* ─── Table text — 13px minimum for dense data ───────────────────────────────── */
 .table-text {
   font-family: var(--font-family);
-  font-size: 0.8125rem;              /* 13px */
+  font-size: 0.875rem;               /* 14px */
   color: var(--text-secondary);
   line-height: var(--lh-normal);
 }
@@ -404,7 +404,7 @@ button, [role="button"], a {
 /* ─── Tooltip / helper text ──────────────────────────────────────────────────── */
 .helper-text {
   font-family: var(--font-family);
-  font-size: var(--text-xs);         /* 11px */
+  font-size: var(--text-xs);         /* 12px */
   color: var(--text-muted);
   line-height: var(--lh-normal);
 }

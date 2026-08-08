@@ -52,36 +52,39 @@ export const RequirementsView: React.FC = () => {
       case "Must Have":
         return "bg-rose-500/20 text-rose-300 border-rose-500/30";
       case "Should Have":
-        return "bg-amber-500/20 text-amber-300 border-amber-500/30";
+        return "bg-[var(--amber-dim)]0/20 text-amber-300 border-amber-500/30";
       default:
-        return "bg-slate-800 text-slate-400 border-slate-700";
+        return "bg-slate-800 text-[var(--text-muted)] border-slate-700";
     }
   };
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* Header */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex items-center justify-between">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+      <div
+        className="hero-banner animate-fadeIn"
+        style={{ padding: "24px 28px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "16px" }}
+      >
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+            <span
+              className="badge-violet"
+              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+            >
               Module 3
             </span>
-            <span className="text-xs text-slate-400">Requirement Traceability Matrix (RTM)</span>
+            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>Requirement Traceability Matrix (RTM)</span>
           </div>
-          <h1 className="text-2xl font-bold text-white">Requirements Management</h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
+            Requirements Management
+          </h1>
+          <p style={{ fontSize: "var(--text-base)", color: "rgba(255,255,255,0.65)", maxWidth: "580px", lineHeight: 1.6 }}>
             Trace functional & non-functional requirements to WBS execution tasks, acceptance criteria, and UAT signoff.
           </p>
         </div>
-
-        <button
-          onClick={() => setShowForm(!showForm)}
-          className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-lg shadow-indigo-600/30 flex items-center gap-2 transition-all"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Add Requirement</span>
-        </button>
+        <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
+          <Plus style={{ width: "32px", height: "32px", color: "#fff" }} />
+        </div>
       </div>
 
       {/* Add Form Modal */}
@@ -90,7 +93,7 @@ export const RequirementsView: React.FC = () => {
           <h3 className="text-sm font-bold text-white">Create New Requirement</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-slate-400 mb-1">Requirement Code *</label>
+              <label className="block text-[var(--text-muted)] mb-1">Requirement Code *</label>
               <input
                 type="text"
                 required
@@ -100,7 +103,7 @@ export const RequirementsView: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-slate-400 mb-1">Requirement Title *</label>
+              <label className="block text-[var(--text-muted)] mb-1">Requirement Title *</label>
               <input
                 type="text"
                 required
@@ -110,7 +113,7 @@ export const RequirementsView: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-slate-400 mb-1">Type</label>
+              <label className="block text-[var(--text-muted)] mb-1">Type</label>
               <select
                 value={newReq.type}
                 onChange={(e) => setNewReq({ ...newReq, type: e.target.value as any })}
@@ -121,7 +124,7 @@ export const RequirementsView: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="block text-slate-400 mb-1">Priority MoSCoW</label>
+              <label className="block text-[var(--text-muted)] mb-1">Priority MoSCoW</label>
               <select
                 value={newReq.priority}
                 onChange={(e) => setNewReq({ ...newReq, priority: e.target.value as any })}
@@ -134,7 +137,7 @@ export const RequirementsView: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="block text-slate-400 mb-1">Complexity</label>
+              <label className="block text-[var(--text-muted)] mb-1">Complexity</label>
               <select
                 value={newReq.complexity}
                 onChange={(e) => setNewReq({ ...newReq, complexity: e.target.value as any })}
@@ -146,7 +149,7 @@ export const RequirementsView: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="block text-slate-400 mb-1">Business Value (1-10)</label>
+              <label className="block text-[var(--text-muted)] mb-1">Business Value (1-10)</label>
               <input
                 type="number"
                 min={1}
@@ -158,7 +161,7 @@ export const RequirementsView: React.FC = () => {
             </div>
           </div>
           <div>
-            <label className="block text-slate-400 mb-1">Detailed Description</label>
+            <label className="block text-[var(--text-muted)] mb-1">Detailed Description</label>
             <textarea
               rows={2}
               value={newReq.description}
@@ -170,11 +173,11 @@ export const RequirementsView: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowForm(false)}
-              className="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg"
+              className="px-4 py-2 bg-slate-800 text-[var(--text-muted)] rounded-lg"
             >
               Cancel
             </button>
-            <button type="submit" className="px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg">
+            <button type="submit" className="px-4 py-2 bg-[var(--accent)] text-white font-bold rounded-lg">
               Save Requirement
             </button>
           </div>
@@ -191,7 +194,7 @@ export const RequirementsView: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-slate-800 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+              <tr className="border-b border-slate-800 text-[var(--text-muted)] font-bold uppercase tracking-wider text-[10px]">
                 <th className="p-3">Req ID</th>
                 <th className="p-3">Title & Description</th>
                 <th className="p-3">Type & Category</th>
@@ -206,18 +209,18 @@ export const RequirementsView: React.FC = () => {
                   <td className="p-3 font-mono font-bold text-indigo-400">{req.code}</td>
                   <td className="p-3 font-semibold text-white max-w-xs">
                     <div>{req.title}</div>
-                    <div className="text-[10px] text-slate-400 font-normal leading-relaxed">{req.description}</div>
+                    <div className="text-[10px] text-[var(--text-muted)] font-normal leading-relaxed">{req.description}</div>
                   </td>
                   <td className="p-3">
-                    <span className="text-slate-300 font-medium">{req.type}</span>
-                    {req.category && <div className="text-[10px] text-slate-500">{req.category}</div>}
+                    <span className="text-[var(--text-muted)] font-medium">{req.type}</span>
+                    {req.category && <div className="text-[10px] text-[var(--text-secondary)]">{req.category}</div>}
                   </td>
                   <td className="p-3">
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${getPriorityBadge(req.priority)}`}>
                       {req.priority}
                     </span>
                   </td>
-                  <td className="p-3 text-slate-300 text-[11px] max-w-xs">
+                  <td className="p-3 text-[var(--text-muted)] text-[11px] max-w-xs">
                     <ul className="list-disc list-inside space-y-0.5">
                       {req.acceptanceCriteria.map((ac, idx) => (
                         <li key={idx} className="truncate">{ac}</li>
@@ -228,10 +231,10 @@ export const RequirementsView: React.FC = () => {
                     <span
                       className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${
                         req.status === "Verified"
-                          ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
+                          ? "bg-[var(--green-dim)]0/20 text-emerald-300 border border-emerald-500/40"
                           : req.status === "In Development"
-                          ? "bg-indigo-500/20 text-indigo-300 border border-indigo-500/40"
-                          : "bg-slate-800 text-slate-400 border border-slate-700"
+                          ? "bg-[var(--accent-glow)]0/20 text-indigo-300 border border-indigo-500/40"
+                          : "bg-slate-800 text-[var(--text-muted)] border border-slate-700"
                       }`}
                     >
                       {req.status}

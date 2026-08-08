@@ -16,11 +16,11 @@ import {
 import { Benefit } from "../../types";
 
 const statusConfig: Record<Benefit["realizationStatus"], { color: string; label: string }> = {
-  "Not Started": { color: "bg-slate-100 text-slate-600 border-slate-300", label: "Not Started" },
+  "Not Started": { color: "bg-[var(--bg-card-hover)] text-[var(--text-secondary)] border-[var(--border)]", label: "Not Started" },
   "In Progress": { color: "bg-blue-100 text-blue-700 border-blue-300", label: "In Progress" },
-  "Partially Realized": { color: "bg-amber-100 text-amber-700 border-amber-300", label: "Partial" },
-  "Fully Realized": { color: "bg-emerald-100 text-emerald-700 border-emerald-300", label: "Realized ✓" },
-  "Not Achieved": { color: "bg-red-100 text-red-700 border-red-300", label: "Not Achieved" }
+  "Partially Realized": { color: "bg-amber-100 text-[var(--amber)] border-amber-300", label: "Partial" },
+  "Fully Realized": { color: "bg-[var(--green-dim)] text-[var(--green)] border-emerald-300", label: "Realized ✓" },
+  "Not Achieved": { color: "bg-red-100 text-[var(--pink)] border-red-300", label: "Not Achieved" }
 };
 
 const categoryIcons: Record<string, React.ReactNode> = {
@@ -127,53 +127,61 @@ export const BenefitsView: React.FC = () => {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6 text-slate-900">
+    <div className="animate-fadeIn" style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "24px", fontFamily: "Inter, sans-serif" }}>
       {/* Header */}
-      <div className="bg-gradient-to-br from-emerald-800 to-slate-900 rounded-2xl p-6 shadow-xl text-white flex flex-col md:flex-row justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/30 text-emerald-200 border border-emerald-400/30">
+      <div
+        className="hero-banner animate-fadeIn"
+        style={{ padding: "24px 28px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "16px" }}
+      >
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+            <span
+              className="badge-violet"
+              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+            >
               Benefits Realization Management
             </span>
+            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>Enterprise PMO</span>
           </div>
-          <h1 className="text-2xl font-bold">Benefits Realization Tracker</h1>
-          <p className="text-sm text-emerald-100 mt-1">Track expected business benefits vs. actual outcomes and ROI realization.</p>
+          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
+            Benefits Realization Tracker
+          </h1>
+          <p style={{ fontSize: "var(--text-base)", color: "rgba(255,255,255,0.65)", maxWidth: "580px", lineHeight: 1.6 }}>
+            Track expected business benefits vs. actual outcomes and ROI realization.
+          </p>
         </div>
-        <button
-          onClick={() => setShowAddForm(!showAddForm)}
-          className="self-start flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-white text-xs font-bold px-4 py-2 rounded-lg transition-all"
-        >
-          <PlusCircle className="w-4 h-4" /> Add Benefit
-        </button>
+        <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
+          <PlusCircle style={{ width: "32px", height: "32px", color: "#fff" }} />
+        </div>
       </div>
 
       {/* KPI Summary */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         {[
-          { label: "Total Benefits", value: benefits.length, color: "text-slate-800" },
-          { label: "Fully Realized", value: realized, color: "text-emerald-700" },
+          { label: "Total Benefits", value: benefits.length, color: "text-[var(--text-primary)]" },
+          { label: "Fully Realized", value: realized, color: "text-[var(--green)]" },
           { label: "In Progress", value: inProgress, color: "text-blue-700" },
-          { label: "Not Started", value: notStarted, color: "text-slate-500" },
-          { label: "Realization Rate", value: `${realizationRate}%`, color: realizationRate >= 50 ? "text-emerald-700" : "text-amber-700" }
+          { label: "Not Started", value: notStarted, color: "text-[var(--text-secondary)]" },
+          { label: "Realization Rate", value: `${realizationRate}%`, color: realizationRate >= 50 ? "text-[var(--green)]" : "text-[var(--amber)]" }
         ].map((kpi, i) => (
-          <div key={i} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm text-center">
-            <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wide">{kpi.label}</p>
+          <div key={i} className="glass-card rounded-xl p-4 shadow-sm text-center">
+            <p className="text-[10px] text-[var(--text-secondary)] uppercase font-bold tracking-wide">{kpi.label}</p>
             <div className={`text-2xl font-extrabold font-mono mt-1 ${kpi.color}`}>{kpi.value}</div>
           </div>
         ))}
       </div>
 
       {/* Progress Bar */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+      <div className="glass-card rounded-xl p-4 shadow-sm">
         <div className="flex justify-between text-xs mb-2">
-          <span className="font-bold text-slate-700">Overall Benefits Realization Progress</span>
-          <span className="font-bold text-emerald-700">{realizationRate}%</span>
+          <span className="font-bold text-[var(--text-primary)]">Overall Benefits Realization Progress</span>
+          <span className="font-bold text-[var(--green)]">{realizationRate}%</span>
         </div>
-        <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden">
+        <div className="h-3 w-full bg-[var(--bg-card-hover)] rounded-full overflow-hidden">
           <div className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400 transition-all" style={{ width: `${realizationRate}%` }} />
         </div>
-        <div className="flex gap-4 mt-2 text-[10px] text-slate-500">
-          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />{realized} Realized</span>
+        <div className="flex gap-4 mt-2 text-[10px] text-[var(--text-secondary)]">
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[var(--green-dim)]0 inline-block" />{realized} Realized</span>
           <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-400 inline-block" />{inProgress} In Progress</span>
           <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-slate-300 inline-block" />{notStarted} Not Started</span>
           {notAchieved > 0 && <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-400 inline-block" />{notAchieved} Not Achieved</span>}
@@ -182,8 +190,8 @@ export const BenefitsView: React.FC = () => {
 
       {/* Add Form */}
       {showAddForm && (
-        <div className="bg-white border border-emerald-200 rounded-xl p-5 shadow-sm space-y-4">
-          <h3 className="text-sm font-bold text-slate-800">Add New Benefit</h3>
+        <div className="bg-[var(--bg-card)] border border-emerald-200 rounded-xl p-5 shadow-sm space-y-4">
+          <h3 className="text-sm font-bold text-[var(--text-primary)]">Add New Benefit</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             {[
               { label: "Benefit Title *", key: "title", type: "text" },
@@ -194,22 +202,22 @@ export const BenefitsView: React.FC = () => {
               { label: "Description", key: "description", type: "text" }
             ].map(field => (
               <div key={field.key}>
-                <label className="block text-slate-600 font-bold mb-1">{field.label}</label>
+                <label className="block text-[var(--text-secondary)] font-bold mb-1">{field.label}</label>
                 <input
                   type={field.type}
                   placeholder={field.placeholder}
                   value={(newBenefit as any)[field.key] || ""}
                   onChange={e => setNewBenefit(prev => ({ ...prev, [field.key]: e.target.value }))}
-                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-slate-800 outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-[var(--text-primary)] outline-none focus:ring-2 focus:ring-emerald-500"
                 />
               </div>
             ))}
             <div>
-              <label className="block text-slate-600 font-bold mb-1 text-xs">Category</label>
+              <label className="block text-[var(--text-secondary)] font-bold mb-1 text-xs">Category</label>
               <select
                 value={newBenefit.category || "Financial"}
                 onChange={e => setNewBenefit(prev => ({ ...prev, category: e.target.value as Benefit["category"] }))}
-                className="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 outline-none"
+                className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-xs text-[var(--text-primary)] outline-none"
               >
                 {["Financial", "Operational", "Strategic", "Customer", "Compliance", "Risk Reduction"].map(c => (
                   <option key={c}>{c}</option>
@@ -219,7 +227,7 @@ export const BenefitsView: React.FC = () => {
           </div>
           <div className="flex gap-3">
             <button onClick={handleAddBenefit} className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition-all">Save Benefit</button>
-            <button onClick={() => setShowAddForm(false)} className="text-slate-500 text-xs font-bold px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 transition-all">Cancel</button>
+            <button onClick={() => setShowAddForm(false)} className="text-[var(--text-secondary)] text-xs font-bold px-4 py-2 rounded-lg border border-[var(--border)] hover:bg-[var(--bg-card)] transition-all">Cancel</button>
           </div>
         </div>
       )}
@@ -230,52 +238,52 @@ export const BenefitsView: React.FC = () => {
           const cfg = statusConfig[benefit.realizationStatus];
           const isExpanded = expandedId === benefit.id;
           return (
-            <div key={benefit.id} className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+            <div key={benefit.id} className="glass-card rounded-xl shadow-sm overflow-hidden">
               <div
-                className="flex items-center justify-between p-4 cursor-pointer hover:bg-slate-50 transition-all"
+                className="flex items-center justify-between p-4 cursor-pointer hover:bg-[var(--bg-card)] transition-all"
                 onClick={() => setExpandedId(isExpanded ? null : benefit.id)}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
+                  <div className="w-8 h-8 rounded-lg bg-[var(--green-dim)] border border-emerald-200 flex items-center justify-center text-[var(--green)]">
                     {categoryIcons[benefit.category] || <Target className="w-3.5 h-3.5" />}
                   </div>
                   <div>
-                    <div className="text-sm font-bold text-slate-800">{benefit.title}</div>
-                    <div className="text-[10px] text-slate-500">{benefit.category} · Owner: {benefit.owner}</div>
+                    <div className="text-sm font-bold text-[var(--text-primary)]">{benefit.title}</div>
+                    <div className="text-[10px] text-[var(--text-secondary)]">{benefit.category} · Owner: {benefit.owner}</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="hidden md:flex items-center gap-2 text-xs">
-                    <span className="text-slate-500">Target:</span>
-                    <span className="font-bold text-slate-800">{benefit.targetValue}</span>
+                    <span className="text-[var(--text-secondary)]">Target:</span>
+                    <span className="font-bold text-[var(--text-primary)]">{benefit.targetValue}</span>
                     {benefit.actualValue && (
                       <>
-                        <span className="text-slate-300">|</span>
-                        <span className="text-slate-500">Actual:</span>
-                        <span className="font-bold text-emerald-700">{benefit.actualValue}</span>
+                        <span className="text-[var(--text-muted)]">|</span>
+                        <span className="text-[var(--text-secondary)]">Actual:</span>
+                        <span className="font-bold text-[var(--green)]">{benefit.actualValue}</span>
                       </>
                     )}
                   </div>
                   <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${cfg.color}`}>{cfg.label}</span>
-                  {isExpanded ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                  {isExpanded ? <ChevronUp className="w-4 h-4 text-[var(--text-muted)]" /> : <ChevronDown className="w-4 h-4 text-[var(--text-muted)]" />}
                 </div>
               </div>
               {isExpanded && (
-                <div className="border-t border-slate-100 p-4 bg-slate-50/50 space-y-3">
-                  <p className="text-xs text-slate-600">{benefit.description}</p>
+                <div className="border-t border-[var(--border)] p-4 bg-[var(--bg-card)]/50 space-y-3">
+                  <p className="text-xs text-[var(--text-secondary)]">{benefit.description}</p>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-                    <div><span className="text-slate-500 font-medium">Target Date</span><div className="font-bold text-slate-800">{benefit.targetDate}</div></div>
-                    <div><span className="text-slate-500 font-medium">Measurement</span><div className="font-bold text-slate-800">{benefit.measurementMethod || "—"}</div></div>
-                    <div><span className="text-slate-500 font-medium">Target Value</span><div className="font-bold text-slate-800">{benefit.targetValue}</div></div>
-                    <div><span className="text-slate-500 font-medium">Actual Realized</span><div className="font-bold text-emerald-700">{benefit.actualValue || "Not yet measured"}</div></div>
+                    <div><span className="text-[var(--text-secondary)] font-medium">Target Date</span><div className="font-bold text-[var(--text-primary)]">{benefit.targetDate}</div></div>
+                    <div><span className="text-[var(--text-secondary)] font-medium">Measurement</span><div className="font-bold text-[var(--text-primary)]">{benefit.measurementMethod || "—"}</div></div>
+                    <div><span className="text-[var(--text-secondary)] font-medium">Target Value</span><div className="font-bold text-[var(--text-primary)]">{benefit.targetValue}</div></div>
+                    <div><span className="text-[var(--text-secondary)] font-medium">Actual Realized</span><div className="font-bold text-[var(--green)]">{benefit.actualValue || "Not yet measured"}</div></div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-slate-600">Update Status:</span>
+                    <span className="text-xs font-bold text-[var(--text-secondary)]">Update Status:</span>
                     {(["Not Started", "In Progress", "Partially Realized", "Fully Realized", "Not Achieved"] as Benefit["realizationStatus"][]).map(s => (
                       <button
                         key={s}
                         onClick={() => updateBenefitStatus(benefit.id, s)}
-                        className={`text-[10px] font-bold px-2.5 py-1 rounded-full border transition-all ${benefit.realizationStatus === s ? statusConfig[s].color : "bg-white text-slate-500 border-slate-200 hover:border-slate-400"}`}
+                        className={`text-[10px] font-bold px-2.5 py-1 rounded-full border transition-all ${benefit.realizationStatus === s ? statusConfig[s].color : "bg-[var(--bg-card)] text-[var(--text-secondary)] border-[var(--border)] hover:border-slate-400"}`}
                       >
                         {s}
                       </button>

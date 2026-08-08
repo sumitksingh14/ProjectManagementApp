@@ -50,27 +50,30 @@ export const ChangeManagementView: React.FC = () => {
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* Header */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex items-center justify-between">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+      <div
+        className="hero-banner animate-fadeIn"
+        style={{ padding: "24px 28px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "16px" }}
+      >
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+            <span
+              className="badge-violet"
+              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+            >
               Module 13
             </span>
-            <span className="text-xs text-slate-400">CCB Governance Workflow</span>
+            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>CCB Governance Workflow</span>
           </div>
-          <h1 className="text-2xl font-bold text-white">Change Control Board (CCB) Management</h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
+            Change Control Board (CCB) Management
+          </h1>
+          <p style={{ fontSize: "var(--text-base)", color: "rgba(255,255,255,0.65)", maxWidth: "580px", lineHeight: 1.6 }}>
             Formal change request workflow: Draft → Impact Analysis → CCB Review → Approval → Implementation.
           </p>
         </div>
-
-        <button
-          onClick={() => setShowForm(!showForm)}
-          className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-lg shadow-indigo-600/30 flex items-center gap-2 transition-all"
-        >
-          <Plus className="w-4 h-4" />
-          <span>New Change Request</span>
-        </button>
+        <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
+          <Plus style={{ width: "32px", height: "32px", color: "#fff" }} />
+        </div>
       </div>
 
       {/* Add Form */}
@@ -79,7 +82,7 @@ export const ChangeManagementView: React.FC = () => {
           <h3 className="text-sm font-bold text-white">Submit Change Request</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-slate-400 mb-1">Title *</label>
+              <label className="block text-[var(--text-muted)] mb-1">Title *</label>
               <input
                 type="text"
                 required
@@ -89,7 +92,7 @@ export const ChangeManagementView: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-slate-400 mb-1">Requested By</label>
+              <label className="block text-[var(--text-muted)] mb-1">Requested By</label>
               <input
                 type="text"
                 value={newCr.requestedBy}
@@ -98,7 +101,7 @@ export const ChangeManagementView: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-slate-400 mb-1">Schedule Impact (+ Days)</label>
+              <label className="block text-[var(--text-muted)] mb-1">Schedule Impact (+ Days)</label>
               <input
                 type="number"
                 value={newCr.impactScheduleDays}
@@ -107,7 +110,7 @@ export const ChangeManagementView: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-slate-400 mb-1">Cost Impact ($)</label>
+              <label className="block text-[var(--text-muted)] mb-1">Cost Impact ($)</label>
               <input
                 type="number"
                 value={newCr.impactCostAmount}
@@ -117,7 +120,7 @@ export const ChangeManagementView: React.FC = () => {
             </div>
           </div>
           <div>
-            <label className="block text-slate-400 mb-1">Scope & Technical Impact</label>
+            <label className="block text-[var(--text-muted)] mb-1">Scope & Technical Impact</label>
             <textarea
               rows={2}
               value={newCr.description}
@@ -126,10 +129,10 @@ export const ChangeManagementView: React.FC = () => {
             />
           </div>
           <div className="flex justify-end gap-2 pt-2">
-            <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg">
+            <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 bg-slate-800 text-[var(--text-muted)] rounded-lg">
               Cancel
             </button>
-            <button type="submit" className="px-4 py-2 bg-indigo-600 text-white font-bold rounded-lg">
+            <button type="submit" className="px-4 py-2 bg-[var(--accent)] text-white font-bold rounded-lg">
               Submit CR
             </button>
           </div>
@@ -142,7 +145,7 @@ export const ChangeManagementView: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-slate-800 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+              <tr className="border-b border-slate-800 text-[var(--text-muted)] font-bold uppercase tracking-wider text-[10px]">
                 <th className="p-3">CR #</th>
                 <th className="p-3">Title & Justification</th>
                 <th className="p-3">Schedule Impact</th>
@@ -157,13 +160,13 @@ export const ChangeManagementView: React.FC = () => {
                   <td className="p-3 font-mono font-bold text-indigo-400">{cr.crNumber}</td>
                   <td className="p-3 font-semibold text-white max-w-sm">
                     <div>{cr.title}</div>
-                    <div className="text-[10px] text-slate-400 font-normal">{cr.justification}</div>
+                    <div className="text-[10px] text-[var(--text-muted)] font-normal">{cr.justification}</div>
                   </td>
                   <td className="p-3 font-mono text-amber-300">+{cr.impactScheduleDays} Days</td>
                   <td className="p-3 font-mono text-emerald-400">+${cr.impactCostAmount.toLocaleString()}</td>
-                  <td className="p-3 text-slate-300">{cr.requestedBy}</td>
+                  <td className="p-3 text-[var(--text-muted)]">{cr.requestedBy}</td>
                   <td className="p-3">
-                    <span className="text-[10px] bg-emerald-500/20 text-emerald-300 font-bold px-2.5 py-1 rounded-full border border-emerald-500/40">
+                    <span className="text-[10px] bg-[var(--green-dim)]0/20 text-emerald-300 font-bold px-2.5 py-1 rounded-full border border-emerald-500/40">
                       {cr.status}
                     </span>
                   </td>
