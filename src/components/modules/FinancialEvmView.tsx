@@ -4,7 +4,11 @@ import { TrendingUp, DollarSign, Activity, AlertCircle, CheckCircle2 } from "luc
 
 export const FinancialEvmView: React.FC = () => {
   const { activeProject } = useProject();
-  const { evm } = activeProject;
+  const evm = activeProject?.evm ?? {
+    BAC: 0, PV: 0, EV: 0, AC: 0, CV: 0, SV: 0,
+    CPI: 1.0, SPI: 1.0, EAC: 0, ETC: 0, VAC: 0
+  };
+
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">

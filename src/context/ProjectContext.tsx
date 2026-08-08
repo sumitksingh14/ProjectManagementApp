@@ -1,9 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { Project, UserRole, Portfolio, Program, User, CopilotMessage, HealthStatus } from "../types";
+import { AuthUser, findAuthUser } from "../auth/roleConfig";
+
 
 interface ProjectContextType {
   isAuthenticated: boolean;
   authUsername: string;
+  authUser: AuthUser | null;
   login: (username: string, password: string) => boolean;
   logout: () => void;
   projects: Project[];
@@ -14,7 +17,7 @@ interface ProjectContextType {
   activePortfolio: Portfolio | null;
   activeProgram: Program | null;
   currentRole: UserRole;
-  activeTab: string; // Nav tab identifier
+  activeTab: string;
   copilotOpen: boolean;
   copilotMessages: CopilotMessage[];
   isAiLoading: boolean;
@@ -39,6 +42,7 @@ interface ProjectContextType {
   createProjectFromIntake: (intakeData: any) => Project;
 }
 
+
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 
 export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -46,15 +50,24 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({ child
     return sessionStorage.getItem("projectplanner_auth") === "true";
   });
   const [authUsername, setAuthUsername] = useState<string>(() => {
-    return sessionStorage.getItem("projectplanner_user") || "Sumit";
+    return sessionStorage.getItem("projectplanner_user") || "";
   });
+  const [authUser, setAuthUser] = useState<AuthUser | null>(() => {
+    const stored = sessionStorage.getItem("projectplanner_authuser");
+    return stored ? JSON.parse(stored) : null;
+  });
+
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
   const [programs, setPrograms] = useState<Program[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [activeProjectId, setActiveProjectId] = useState<string>("");
-  const [currentRole, setCurrentRole] = useState<UserRole>("Project Manager");
+  const [currentRole, setCurrentRole] = useState<UserRole>(() => {
+    const saved = sessionStorage.getItem("projectplanner_role") as UserRole | null;
+    return saved || "Project Manager";
+  });
+
   const [activeTab, setActiveTab] = useState<string>("dashboard");
   const [copilotOpen, setCopilotOpen] = useState<boolean>(false);
   const [isAiLoading, setIsAiLoading] = useState<boolean>(false);
@@ -86,22 +99,33 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }, []);
 
   const login = (usernameInput: string, passwordInput: string): boolean => {
-    if (usernameInput.trim().toLowerCase() === "sumit" && passwordInput === "Passwd12345") {
+    const matched = findAuthUser(usernameInput, passwordInput);
+    if (matched) {
       setIsAuthenticated(true);
-      setAuthUsername("Sumit");
+      setAuthUsername(matched.displayName);
+      setAuthUser(matched);
+      setCurrentRole(matched.role);
+      setActiveTab(matched.defaultTab);
       sessionStorage.setItem("projectplanner_auth", "true");
-      sessionStorage.setItem("projectplanner_user", "Sumit");
-      setActiveTab("dashboard");
+      sessionStorage.setItem("projectplanner_user", matched.displayName);
+      sessionStorage.setItem("projectplanner_authuser", JSON.stringify(matched));
+      sessionStorage.setItem("projectplanner_role", matched.role);
       return true;
     }
     return false;
   };
 
+
   const logout = () => {
     setIsAuthenticated(false);
+    setAuthUser(null);
+    setCurrentRole("Project Manager");
     sessionStorage.removeItem("projectplanner_auth");
     sessionStorage.removeItem("projectplanner_user");
+    sessionStorage.removeItem("projectplanner_authuser");
+    sessionStorage.removeItem("projectplanner_role");
   };
+
 
   const [copilotMessages, setCopilotMessages] = useState<CopilotMessage[]>([
     {
@@ -465,8 +489,23 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({ child
         resourceHealth: "Green",
         overallHealth: "Green",
         aiHealthCommentary: "Project successfully initialized from Intake Wizard. All baseline metrics established."
+      },
+      benefits: [],
+      vendors: [],
+      deliverables: [],
+      lessonsLearned: [],
+      actionItems: [],
+      meetingMinutes: [],
+      closureStatus: {
+        phase: "Not Started",
+        deliverablesAccepted: false,
+        lessonsLearnedCaptured: false,
+        resourcesReleased: false,
+        documentationArchived: false,
+        finalReportSubmitted: false
       }
     };
+
 
     setProjects((prev) => [newProject, ...prev]);
     setActiveProjectId(newId);
@@ -486,6 +525,7 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({ child
       value={{
         isAuthenticated,
         authUsername,
+        authUser,
         login,
         logout,
         projects,

@@ -28,6 +28,10 @@ import { DocumentGenView } from "./components/modules/DocumentGenView";
 import { PortfolioView } from "./components/modules/PortfolioView";
 import { ProjectOnboardingView } from "./components/modules/ProjectOnboardingView";
 import { ProjectEditView } from "./components/modules/ProjectEditView";
+import { ProgramHubView } from "./components/modules/ProgramHubView";
+import { BenefitsView } from "./components/modules/BenefitsView";
+import { ClosureView } from "./components/modules/ClosureView";
+import { VendorView } from "./components/modules/VendorView";
 
 const MainContent: React.FC = () => {
   const { activeTab, isAuthenticated } = useProject();
@@ -44,6 +48,14 @@ const MainContent: React.FC = () => {
         return <ProjectOnboardingView />;
       case "edit-project":
         return <ProjectEditView />;
+      case "program-hub":
+        return <ProgramHubView />;
+      case "benefits":
+        return <BenefitsView />;
+      case "closure":
+        return <ClosureView />;
+      case "vendors":
+        return <VendorView />;
       case "intake":
         return <IntakeView />;
       case "stakeholders":
@@ -60,8 +72,11 @@ const MainContent: React.FC = () => {
         return <EstimationView />;
       case "budget":
         return <BudgetCostView />;
+      case "evm":
+        return <FinancialEvmView />;
       case "financial-evm":
         return <FinancialEvmView />;
+
       case "risks":
         return <RiskView />;
       case "issues":

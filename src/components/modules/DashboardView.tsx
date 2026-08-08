@@ -101,9 +101,17 @@ export const DashboardView: React.FC = () => {
 
         <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm space-y-1.5">
           <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Cost Performance (CPI)</p>
-          <p className="text-2xl font-bold text-slate-800">${(evm.BAC / 1000).toFixed(1)}k <span className="text-xs font-medium text-emerald-500 ml-1">CPI {evm.CPI}</span></p>
-          <p className="text-[10px] text-slate-500">Under planned budget limit</p>
+          <p className="text-2xl font-bold text-slate-800">
+            {evm.CPI?.toFixed(2) || "1.00"}
+            <span className={`text-xs font-medium ml-2 ${(evm.CPI || 1) >= 1 ? "text-emerald-500" : "text-red-500"}`}>
+              CPI {(evm.CPI || 1) >= 1 ? "✓ On Budget" : "⚠ Over Budget"}
+            </span>
+          </p>
+          <p className="text-[10px] text-slate-500">
+            EAC: ${(evm.EAC || evm.BAC || 0).toLocaleString()} · BAC: ${(evm.BAC || 0).toLocaleString()}
+          </p>
         </div>
+
 
         <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm space-y-1.5">
           <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Schedule Risk Exposure</p>

@@ -82,12 +82,30 @@ export function initDb() {
       changeRequests TEXT NOT NULL,
       communicationPlan TEXT NOT NULL,
       governance TEXT NOT NULL,
-      health TEXT NOT NULL
+      health TEXT NOT NULL,
+      benefits TEXT DEFAULT '[]',
+      vendors TEXT DEFAULT '[]',
+      deliverables TEXT DEFAULT '[]',
+      lessonsLearned TEXT DEFAULT '[]',
+      actionItems TEXT DEFAULT '[]',
+      meetingMinutes TEXT DEFAULT '[]',
+      closureStatus TEXT DEFAULT 'null'
     );
   `);
 
+  // Migrate: add new columns if they don't exist (for existing DBs)
+  const alterCols = ["benefits", "vendors", "deliverables", "lessonsLearned", "actionItems", "meetingMinutes", "closureStatus"];
+  for (const col of alterCols) {
+    try {
+      db.exec(`ALTER TABLE projects ADD COLUMN ${col} TEXT DEFAULT '[]'`);
+    } catch {
+      // Column already exists, skip
+    }
+  }
+
   seedDataIfEmpty();
 }
+
 
 function seedDataIfEmpty() {
   const projectCount = (db.prepare("SELECT COUNT(*) as count FROM projects").get() as any).count;
@@ -215,8 +233,8 @@ export function getProjectById(id: string): Project | null {
 
 export function saveProject(project: Project): Project {
   const stmt = db.prepare(`
-    INSERT INTO projects (id, name, code, lastUpdated, intake, stakeholders, requirements, lifecyclePhases, costLineItems, evm, risks, issues, quality, changeRequests, communicationPlan, governance, health)
-    VALUES (@id, @name, @code, @lastUpdated, @intake, @stakeholders, @requirements, @lifecyclePhases, @costLineItems, @evm, @risks, @issues, @quality, @changeRequests, @communicationPlan, @governance, @health)
+    INSERT INTO projects (id, name, code, lastUpdated, intake, stakeholders, requirements, lifecyclePhases, costLineItems, evm, risks, issues, quality, changeRequests, communicationPlan, governance, health, benefits, vendors, deliverables, lessonsLearned, actionItems, meetingMinutes, closureStatus)
+    VALUES (@id, @name, @code, @lastUpdated, @intake, @stakeholders, @requirements, @lifecyclePhases, @costLineItems, @evm, @risks, @issues, @quality, @changeRequests, @communicationPlan, @governance, @health, @benefits, @vendors, @deliverables, @lessonsLearned, @actionItems, @meetingMinutes, @closureStatus)
     ON CONFLICT(id) DO UPDATE SET
       name = excluded.name,
       code = excluded.code,
@@ -233,7 +251,14 @@ export function saveProject(project: Project): Project {
       changeRequests = excluded.changeRequests,
       communicationPlan = excluded.communicationPlan,
       governance = excluded.governance,
-      health = excluded.health
+      health = excluded.health,
+      benefits = excluded.benefits,
+      vendors = excluded.vendors,
+      deliverables = excluded.deliverables,
+      lessonsLearned = excluded.lessonsLearned,
+      actionItems = excluded.actionItems,
+      meetingMinutes = excluded.meetingMinutes,
+      closureStatus = excluded.closureStatus
   `);
 
   stmt.run({
@@ -253,7 +278,14 @@ export function saveProject(project: Project): Project {
     changeRequests: JSON.stringify(project.changeRequests),
     communicationPlan: JSON.stringify(project.communicationPlan),
     governance: JSON.stringify(project.governance),
-    health: JSON.stringify(project.health)
+    health: JSON.stringify(project.health),
+    benefits: JSON.stringify(project.benefits || []),
+    vendors: JSON.stringify(project.vendors || []),
+    deliverables: JSON.stringify(project.deliverables || []),
+    lessonsLearned: JSON.stringify(project.lessonsLearned || []),
+    actionItems: JSON.stringify(project.actionItems || []),
+    meetingMinutes: JSON.stringify(project.meetingMinutes || []),
+    closureStatus: JSON.stringify(project.closureStatus || null)
   });
 
   return getProjectById(project.id)!;
@@ -277,7 +309,14 @@ function mapProjectRow(row: any): Project {
     changeRequests: JSON.parse(row.changeRequests),
     communicationPlan: JSON.parse(row.communicationPlan),
     governance: JSON.parse(row.governance),
-    health: JSON.parse(row.health)
+    health: JSON.parse(row.health),
+    benefits: JSON.parse(row.benefits || '[]'),
+    vendors: JSON.parse(row.vendors || '[]'),
+    deliverables: JSON.parse(row.deliverables || '[]'),
+    lessonsLearned: JSON.parse(row.lessonsLearned || '[]'),
+    actionItems: JSON.parse(row.actionItems || '[]'),
+    meetingMinutes: JSON.parse(row.meetingMinutes || '[]'),
+    closureStatus: row.closureStatus ? JSON.parse(row.closureStatus) : undefined
   };
 }
 

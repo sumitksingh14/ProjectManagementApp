@@ -10,7 +10,8 @@ export const seedUsers: User[] = [
     costRate: 220,
     availabilityPercent: 100,
     skills: ["Strategic Governance", "Portfolio Investment", "Risk Oversight"],
-    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80"
+    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80",
+    password: "Exec@2026"
   },
   {
     id: "usr-2",
@@ -21,7 +22,8 @@ export const seedUsers: User[] = [
     costRate: 160,
     availabilityPercent: 100,
     skills: ["PMO Governance", "Methodology Standard", "Portfolio Reporting"],
-    avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&auto=format&fit=crop&q=80"
+    avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&auto=format&fit=crop&q=80",
+    password: "PMO@2026"
   },
   {
     id: "usr-3",
@@ -32,7 +34,20 @@ export const seedUsers: User[] = [
     costRate: 180,
     availabilityPercent: 100,
     skills: ["Resource Capacity", "Budget Balancing", "Program Roadmap"],
-    avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80"
+    avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80",
+    password: "Portfolio@2026"
+  },
+  {
+    id: "usr-8",
+    name: "Priya Sharma",
+    email: "priya.sharma@enterprise.com",
+    role: "Program Manager",
+    department: "Digital Banking BU",
+    costRate: 165,
+    availabilityPercent: 100,
+    skills: ["Program Governance", "Benefits Realization", "Dependency Management", "Stakeholder Alignment"],
+    avatar: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=150&auto=format&fit=crop&q=80",
+    password: "Program@2026"
   },
   {
     id: "usr-4",
@@ -43,7 +58,8 @@ export const seedUsers: User[] = [
     costRate: 140,
     availabilityPercent: 100,
     skills: ["Agile/Scrum", "EVM Financials", "Risk Management", "FullCalendar"],
-    avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80"
+    avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80",
+    password: "Project@2026"
   },
   {
     id: "usr-5",
@@ -54,7 +70,8 @@ export const seedUsers: User[] = [
     costRate: 130,
     availabilityPercent: 100,
     skills: ["Solution Architecture", "AWS/GCP", "Kubernetes", "Microservices"],
-    avatar: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=150&auto=format&fit=crop&q=80"
+    avatar: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=150&auto=format&fit=crop&q=80",
+    password: "Team@2026"
   },
   {
     id: "usr-6",
@@ -65,7 +82,8 @@ export const seedUsers: User[] = [
     costRate: 110,
     availabilityPercent: 100,
     skills: ["React 19", "TypeScript", "Node.js", "Express"],
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80"
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
+    password: "Team@2026"
   },
   {
     id: "usr-7",
@@ -76,9 +94,11 @@ export const seedUsers: User[] = [
     costRate: 150,
     availabilityPercent: 80,
     skills: ["Change Management", "Business Analysis", "UAT Validation"],
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80"
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+    password: "Stake@2026"
   }
 ];
+
 
 export const seedPortfolios: Portfolio[] = [
   {

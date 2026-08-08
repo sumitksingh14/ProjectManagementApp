@@ -1,5 +1,7 @@
 import React from "react";
 import { useProject } from "../../context/ProjectContext";
+import { isModuleAllowed } from "../../auth/roleConfig";
+
 import {
   LayoutDashboard,
   PieChart,
@@ -22,7 +24,11 @@ import {
   FileText,
   Briefcase,
   Edit3,
-  PlusCircle
+  PlusCircle,
+  Target,
+  Package,
+  Archive,
+  GitMerge
 } from "lucide-react";
 
 interface NavGroup {
@@ -36,7 +42,8 @@ interface NavGroup {
 }
 
 export const Sidebar: React.FC = () => {
-  const { activeTab, setActiveTab, activeProject } = useProject();
+  const { activeTab, setActiveTab, activeProject, currentRole } = useProject();
+
 
   const navGroups: NavGroup[] = [
     {
@@ -84,7 +91,7 @@ export const Sidebar: React.FC = () => {
           badge: `${(activeProject?.issues || []).filter((i) => i.status !== "Resolved").length}`
         },
         { id: "quality", label: "Quality Gates", icon: ShieldAlert, badge: "M12" },
-        { id: "change-mgmt", label: "Change Requests", icon: GitPullRequest, badge: "M13" }
+        { id: "change-management", label: "Change Requests", icon: GitPullRequest, badge: "M13" }
       ]
     },
     {
@@ -94,53 +101,67 @@ export const Sidebar: React.FC = () => {
         { id: "kpis", label: "KPI Performance", icon: Activity, badge: "M16" },
         { id: "documents", label: "Document Export", icon: FileText, badge: "M17" }
       ]
+    },
+    {
+      title: "Program Management",
+      items: [
+        { id: "program-hub", label: "Program Hub", icon: GitMerge, badge: "PGM" },
+        { id: "benefits", label: "Benefits Realization", icon: Target, badge: "BRM" },
+        { id: "vendors", label: "Vendor Management", icon: Package, badge: "VND" },
+        { id: "closure", label: "Project Closure", icon: Archive, badge: "CLO" }
+      ]
     }
   ];
 
   return (
     <aside className="w-56 shrink-0 border-r border-slate-200 bg-slate-900 p-4 text-slate-300 flex flex-col h-[calc(100vh-3.5rem)] overflow-y-auto select-none">
       <div className="space-y-5">
-        {navGroups.map((group, idx) => (
-          <div key={idx}>
-            <p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-              {group.title}
-            </p>
-            <ul className="space-y-1">
-              {group.items.map((item) => {
-                const Icon = item.icon;
-                const isActive = activeTab === item.id;
-                return (
-                  <li key={item.id}>
-                    <button
-                      onClick={() => setActiveTab(item.id)}
-                      className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-xs font-medium transition-all ${
-                        isActive
-                          ? "bg-white/10 text-white font-semibold shadow-sm"
-                          : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5 truncate">
-                        <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-white" : "text-slate-400"}`} />
-                        <span className="truncate">{item.label}</span>
-                      </div>
-                      {item.badge && (
-                        <span
-                          className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
-                            isActive
-                              ? "bg-indigo-600 text-white"
-                              : "bg-slate-800 text-slate-400 border border-slate-700/60"
-                          }`}
-                        >
-                          {item.badge}
-                        </span>
-                      )}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        ))}
+        {navGroups.map((group, idx) => {
+          const visibleItems = group.items.filter(item => isModuleAllowed(currentRole, item.id));
+          if (visibleItems.length === 0) return null;
+          return (
+            <div key={idx}>
+              <p className="mb-2 px-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                {group.title}
+              </p>
+              <ul className="space-y-1">
+                {visibleItems.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = activeTab === item.id;
+                  return (
+                    <li key={item.id}>
+                      <button
+                        onClick={() => setActiveTab(item.id)}
+                        className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-xs font-medium transition-all ${
+                          isActive
+                            ? "bg-white/10 text-white font-semibold shadow-sm"
+                            : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5 truncate">
+                          <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-white" : "text-slate-400"}`} />
+                          <span className="truncate">{item.label}</span>
+                        </div>
+                        {item.badge && (
+                          <span
+                            className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
+                              isActive
+                                ? "bg-indigo-600 text-white"
+                                : "bg-slate-800 text-slate-400 border border-slate-700/60"
+                            }`}
+                          >
+                            {item.badge}
+                          </span>
+                        )}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          );
+        })}
+
 
         {/* Active Projects Quick Section */}
         <div>

@@ -1,6 +1,6 @@
 import React from "react";
 import { useProject } from "../../context/ProjectContext";
-import { UserRole } from "../../types";
+
 import {
   Sparkles,
   Search,
@@ -21,24 +21,17 @@ export const Header: React.FC = () => {
     activeProject,
     setActiveProjectById,
     currentRole,
-    setCurrentRole,
     setCopilotOpen,
     setActiveTab,
     searchQuery,
     setSearchQuery,
     authUsername,
+    authUser,
     logout
   } = useProject();
 
-  const roles: UserRole[] = [
-    "Executive Sponsor",
-    "PMO Admin",
-    "Portfolio Manager",
-    "Program Manager",
-    "Project Manager",
-    "Team Member",
-    "Stakeholder"
-  ];
+
+
 
   return (
     <header className="h-14 bg-white border-b border-slate-200 text-slate-800 flex items-center justify-between px-4 sticky top-0 z-40 shadow-sm shrink-0">
@@ -89,24 +82,15 @@ export const Header: React.FC = () => {
 
       {/* Right Controls: Role Switcher, AI Copilot, Intake Action */}
       <div className="flex items-center gap-3">
-        {/* Role Selector */}
-        <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-md px-2.5 py-1">
+        {/* Role Badge (read-only, set at login) */}
+        <div className="hidden md:flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-md px-2.5 py-1">
           <UserCheck className="w-3.5 h-3.5 text-emerald-600" />
           <div className="flex flex-col">
             <span className="text-[8px] text-slate-400 uppercase font-bold tracking-wider">Role View</span>
-            <select
-              value={currentRole}
-              onChange={(e) => setCurrentRole(e.target.value as UserRole)}
-              className="bg-transparent text-xs font-semibold text-slate-800 outline-none cursor-pointer"
-            >
-              {roles.map((r) => (
-                <option key={r} value={r} className="bg-white text-slate-800">
-                  {r}
-                </option>
-              ))}
-            </select>
+            <span className="text-xs font-semibold text-slate-800">{currentRole}</span>
           </div>
         </div>
+
 
         {/* AI Copilot Button */}
         <button
@@ -132,13 +116,18 @@ export const Header: React.FC = () => {
           <span className="absolute top-1 right-1 w-2 h-2 bg-emerald-500 rounded-full"></span>
         </div>
 
-        {/* User Profile Badge & Logout Button */}
+        {/* User Profile Badge & Logout */}
         <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
-          <div className="flex items-center gap-1.5 bg-indigo-50 border border-indigo-100 rounded-full py-1 px-2.5">
-            <div className="w-5 h-5 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center">
-              {authUsername ? authUsername.charAt(0).toUpperCase() : "S"}
+          <div className="flex items-center gap-2">
+            {/* Avatar */}
+            <div className={`w-7 h-7 rounded-lg ${authUser?.roleColor || "bg-indigo-600"} text-white text-[10px] font-bold flex items-center justify-center shadow shrink-0`}>
+              {authUser?.avatarInitials || (authUsername ? authUsername.charAt(0).toUpperCase() : "S")}
             </div>
-            <span className="text-xs font-semibold text-indigo-900">{authUsername || "Sumit"}</span>
+            {/* Name + Role pill */}
+            <div className="hidden lg:flex flex-col">
+              <span className="text-xs font-semibold text-slate-800 leading-tight">{authUsername || "Sumit"}</span>
+              <span className="text-[9px] text-slate-400 leading-tight">{currentRole}</span>
+            </div>
           </div>
 
           <button
@@ -149,6 +138,7 @@ export const Header: React.FC = () => {
             <LogOut className="w-4 h-4" />
           </button>
         </div>
+
       </div>
     </header>
   );

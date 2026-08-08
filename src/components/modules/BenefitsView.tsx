@@ -1,0 +1,292 @@
+import React, { useState } from "react";
+import { useProject } from "../../context/ProjectContext";
+import {
+  Target,
+  TrendingUp,
+  CheckCircle2,
+  Clock,
+  AlertCircle,
+  PlusCircle,
+  DollarSign,
+  BarChart2,
+  ChevronDown,
+  ChevronUp,
+  Sparkles
+} from "lucide-react";
+import { Benefit } from "../../types";
+
+const statusConfig: Record<Benefit["realizationStatus"], { color: string; label: string }> = {
+  "Not Started": { color: "bg-slate-100 text-slate-600 border-slate-300", label: "Not Started" },
+  "In Progress": { color: "bg-blue-100 text-blue-700 border-blue-300", label: "In Progress" },
+  "Partially Realized": { color: "bg-amber-100 text-amber-700 border-amber-300", label: "Partial" },
+  "Fully Realized": { color: "bg-emerald-100 text-emerald-700 border-emerald-300", label: "Realized ✓" },
+  "Not Achieved": { color: "bg-red-100 text-red-700 border-red-300", label: "Not Achieved" }
+};
+
+const categoryIcons: Record<string, React.ReactNode> = {
+  "Financial": <DollarSign className="w-3.5 h-3.5" />,
+  "Operational": <BarChart2 className="w-3.5 h-3.5" />,
+  "Strategic": <Sparkles className="w-3.5 h-3.5" />,
+  "Customer": <CheckCircle2 className="w-3.5 h-3.5" />,
+  "Compliance": <Target className="w-3.5 h-3.5" />,
+  "Risk Reduction": <AlertCircle className="w-3.5 h-3.5" />
+};
+
+const defaultBenefits: Benefit[] = [
+  {
+    id: "ben-001",
+    title: "Annual Labor Cost Reduction",
+    category: "Financial",
+    description: "Automate manual processes to reduce FTE headcount for operational tasks",
+    owner: "CFO Office",
+    targetValue: "$2.4M annual savings",
+    targetDate: "2026-12-31",
+    actualValue: "$1.1M achieved",
+    realizationStatus: "Partially Realized",
+    measurementMethod: "FTE cost tracking via HR system quarterly reports"
+  },
+  {
+    id: "ben-002",
+    title: "Customer Onboarding Time Reduction",
+    category: "Customer",
+    description: "Reduce customer onboarding cycle from 14 days to 3 days via digital portal",
+    owner: "Head of Customer Success",
+    targetValue: "3 business days",
+    targetDate: "2026-09-30",
+    actualValue: "5 business days",
+    realizationStatus: "In Progress",
+    measurementMethod: "CRM average onboarding cycle time dashboard"
+  },
+  {
+    id: "ben-003",
+    title: "Regulatory Compliance Audit Pass",
+    category: "Compliance",
+    description: "Achieve ISO 27001 and SOC 2 Type II certification by end of program",
+    owner: "CISO",
+    targetValue: "100% audit compliance",
+    targetDate: "2026-11-30",
+    realizationStatus: "Not Started",
+    measurementMethod: "Third-party audit report"
+  },
+  {
+    id: "ben-004",
+    title: "System Uptime Improvement",
+    category: "Operational",
+    description: "Increase platform availability from 99.5% to 99.95% SLA",
+    owner: "VP Engineering",
+    targetValue: "99.95% uptime",
+    targetDate: "2026-10-31",
+    actualValue: "99.91% achieved",
+    realizationStatus: "In Progress",
+    measurementMethod: "Infrastructure monitoring dashboards (Datadog)"
+  }
+];
+
+export const BenefitsView: React.FC = () => {
+  const { activeProject, updateActiveProject } = useProject();
+  const benefits: Benefit[] = (activeProject?.benefits && activeProject.benefits.length > 0)
+    ? activeProject.benefits
+    : defaultBenefits;
+
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [newBenefit, setNewBenefit] = useState<Partial<Benefit>>({
+    category: "Financial",
+    realizationStatus: "Not Started"
+  });
+
+  const realized = benefits.filter(b => b.realizationStatus === "Fully Realized").length;
+  const inProgress = benefits.filter(b => b.realizationStatus === "In Progress" || b.realizationStatus === "Partially Realized").length;
+  const notStarted = benefits.filter(b => b.realizationStatus === "Not Started").length;
+  const notAchieved = benefits.filter(b => b.realizationStatus === "Not Achieved").length;
+  const realizationRate = benefits.length > 0 ? Math.round((realized / benefits.length) * 100) : 0;
+
+  const handleAddBenefit = () => {
+    if (!newBenefit.title || !newBenefit.owner || !newBenefit.targetValue || !newBenefit.targetDate) return;
+    const benefit: Benefit = {
+      id: `ben-${Date.now()}`,
+      title: newBenefit.title!,
+      category: newBenefit.category as Benefit["category"] || "Financial",
+      description: newBenefit.description || "",
+      owner: newBenefit.owner!,
+      targetValue: newBenefit.targetValue!,
+      targetDate: newBenefit.targetDate!,
+      realizationStatus: newBenefit.realizationStatus as Benefit["realizationStatus"] || "Not Started",
+      measurementMethod: newBenefit.measurementMethod || ""
+    };
+    updateActiveProject(prev => ({ ...prev, benefits: [...(prev.benefits || []), benefit] }));
+    setShowAddForm(false);
+    setNewBenefit({ category: "Financial", realizationStatus: "Not Started" });
+  };
+
+  const updateBenefitStatus = (id: string, status: Benefit["realizationStatus"]) => {
+    updateActiveProject(prev => ({
+      ...prev,
+      benefits: (prev.benefits || defaultBenefits).map(b => b.id === id ? { ...b, realizationStatus: status } : b)
+    }));
+  };
+
+  return (
+    <div className="p-6 max-w-7xl mx-auto space-y-6 text-slate-900">
+      {/* Header */}
+      <div className="bg-gradient-to-br from-emerald-800 to-slate-900 rounded-2xl p-6 shadow-xl text-white flex flex-col md:flex-row justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/30 text-emerald-200 border border-emerald-400/30">
+              Benefits Realization Management
+            </span>
+          </div>
+          <h1 className="text-2xl font-bold">Benefits Realization Tracker</h1>
+          <p className="text-sm text-emerald-100 mt-1">Track expected business benefits vs. actual outcomes and ROI realization.</p>
+        </div>
+        <button
+          onClick={() => setShowAddForm(!showAddForm)}
+          className="self-start flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-white text-xs font-bold px-4 py-2 rounded-lg transition-all"
+        >
+          <PlusCircle className="w-4 h-4" /> Add Benefit
+        </button>
+      </div>
+
+      {/* KPI Summary */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+        {[
+          { label: "Total Benefits", value: benefits.length, color: "text-slate-800" },
+          { label: "Fully Realized", value: realized, color: "text-emerald-700" },
+          { label: "In Progress", value: inProgress, color: "text-blue-700" },
+          { label: "Not Started", value: notStarted, color: "text-slate-500" },
+          { label: "Realization Rate", value: `${realizationRate}%`, color: realizationRate >= 50 ? "text-emerald-700" : "text-amber-700" }
+        ].map((kpi, i) => (
+          <div key={i} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm text-center">
+            <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wide">{kpi.label}</p>
+            <div className={`text-2xl font-extrabold font-mono mt-1 ${kpi.color}`}>{kpi.value}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Progress Bar */}
+      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+        <div className="flex justify-between text-xs mb-2">
+          <span className="font-bold text-slate-700">Overall Benefits Realization Progress</span>
+          <span className="font-bold text-emerald-700">{realizationRate}%</span>
+        </div>
+        <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden">
+          <div className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400 transition-all" style={{ width: `${realizationRate}%` }} />
+        </div>
+        <div className="flex gap-4 mt-2 text-[10px] text-slate-500">
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />{realized} Realized</span>
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-400 inline-block" />{inProgress} In Progress</span>
+          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-slate-300 inline-block" />{notStarted} Not Started</span>
+          {notAchieved > 0 && <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-400 inline-block" />{notAchieved} Not Achieved</span>}
+        </div>
+      </div>
+
+      {/* Add Form */}
+      {showAddForm && (
+        <div className="bg-white border border-emerald-200 rounded-xl p-5 shadow-sm space-y-4">
+          <h3 className="text-sm font-bold text-slate-800">Add New Benefit</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            {[
+              { label: "Benefit Title *", key: "title", type: "text" },
+              { label: "Owner *", key: "owner", type: "text" },
+              { label: "Target Value *", key: "targetValue", type: "text", placeholder: "e.g. $2M savings" },
+              { label: "Target Date *", key: "targetDate", type: "date" },
+              { label: "Measurement Method", key: "measurementMethod", type: "text" },
+              { label: "Description", key: "description", type: "text" }
+            ].map(field => (
+              <div key={field.key}>
+                <label className="block text-slate-600 font-bold mb-1">{field.label}</label>
+                <input
+                  type={field.type}
+                  placeholder={field.placeholder}
+                  value={(newBenefit as any)[field.key] || ""}
+                  onChange={e => setNewBenefit(prev => ({ ...prev, [field.key]: e.target.value }))}
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-slate-800 outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+              </div>
+            ))}
+            <div>
+              <label className="block text-slate-600 font-bold mb-1 text-xs">Category</label>
+              <select
+                value={newBenefit.category || "Financial"}
+                onChange={e => setNewBenefit(prev => ({ ...prev, category: e.target.value as Benefit["category"] }))}
+                className="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 outline-none"
+              >
+                {["Financial", "Operational", "Strategic", "Customer", "Compliance", "Risk Reduction"].map(c => (
+                  <option key={c}>{c}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <button onClick={handleAddBenefit} className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition-all">Save Benefit</button>
+            <button onClick={() => setShowAddForm(false)} className="text-slate-500 text-xs font-bold px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-50 transition-all">Cancel</button>
+          </div>
+        </div>
+      )}
+
+      {/* Benefits List */}
+      <div className="space-y-3">
+        {benefits.map(benefit => {
+          const cfg = statusConfig[benefit.realizationStatus];
+          const isExpanded = expandedId === benefit.id;
+          return (
+            <div key={benefit.id} className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+              <div
+                className="flex items-center justify-between p-4 cursor-pointer hover:bg-slate-50 transition-all"
+                onClick={() => setExpandedId(isExpanded ? null : benefit.id)}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
+                    {categoryIcons[benefit.category] || <Target className="w-3.5 h-3.5" />}
+                  </div>
+                  <div>
+                    <div className="text-sm font-bold text-slate-800">{benefit.title}</div>
+                    <div className="text-[10px] text-slate-500">{benefit.category} · Owner: {benefit.owner}</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="hidden md:flex items-center gap-2 text-xs">
+                    <span className="text-slate-500">Target:</span>
+                    <span className="font-bold text-slate-800">{benefit.targetValue}</span>
+                    {benefit.actualValue && (
+                      <>
+                        <span className="text-slate-300">|</span>
+                        <span className="text-slate-500">Actual:</span>
+                        <span className="font-bold text-emerald-700">{benefit.actualValue}</span>
+                      </>
+                    )}
+                  </div>
+                  <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${cfg.color}`}>{cfg.label}</span>
+                  {isExpanded ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                </div>
+              </div>
+              {isExpanded && (
+                <div className="border-t border-slate-100 p-4 bg-slate-50/50 space-y-3">
+                  <p className="text-xs text-slate-600">{benefit.description}</p>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                    <div><span className="text-slate-500 font-medium">Target Date</span><div className="font-bold text-slate-800">{benefit.targetDate}</div></div>
+                    <div><span className="text-slate-500 font-medium">Measurement</span><div className="font-bold text-slate-800">{benefit.measurementMethod || "—"}</div></div>
+                    <div><span className="text-slate-500 font-medium">Target Value</span><div className="font-bold text-slate-800">{benefit.targetValue}</div></div>
+                    <div><span className="text-slate-500 font-medium">Actual Realized</span><div className="font-bold text-emerald-700">{benefit.actualValue || "Not yet measured"}</div></div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-slate-600">Update Status:</span>
+                    {(["Not Started", "In Progress", "Partially Realized", "Fully Realized", "Not Achieved"] as Benefit["realizationStatus"][]).map(s => (
+                      <button
+                        key={s}
+                        onClick={() => updateBenefitStatus(benefit.id, s)}
+                        className={`text-[10px] font-bold px-2.5 py-1 rounded-full border transition-all ${benefit.realizationStatus === s ? statusConfig[s].color : "bg-white text-slate-500 border-slate-200 hover:border-slate-400"}`}
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};

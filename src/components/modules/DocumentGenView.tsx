@@ -6,51 +6,58 @@ export const DocumentGenView: React.FC = () => {
   const { activeProject } = useProject();
   const [docType, setDocType] = useState<"charter" | "wbs" | "risk" | "deck">("charter");
   const [copied, setCopied] = useState(false);
+  const evm = activeProject?.evm ?? { BAC: 0, EAC: 0, CPI: 1, SPI: 1 };
+  const intake = activeProject?.intake ?? {};
+  const health = activeProject?.health ?? { overallHealth: 'Green' };
+  const lifecyclePhases = activeProject?.lifecyclePhases ?? [];
+  const risks = activeProject?.risks ?? [];
+
 
   const getDocContent = () => {
     switch (docType) {
       case "charter":
-        return `# PROJECT CHARTER: ${activeProject.name.toUpperCase()}
-**Project Code:** ${activeProject.code}
-**Sponsor:** ${activeProject.intake.sponsor}
-**Approved Budget:** $${activeProject.intake.estimatedBudget.toLocaleString()}
-**Target Launch:** ${activeProject.intake.plannedEndDate}
+        return `# PROJECT CHARTER: ${activeProject?.name?.toUpperCase() ?? 'UNTITLED'}
+**Project Code:** ${activeProject?.code ?? 'N/A'}
+**Sponsor:** ${intake.sponsor ?? 'TBD'}
+**Approved Budget:** $${(intake.estimatedBudget ?? 0).toLocaleString()}
+**Target Launch:** ${intake.plannedEndDate ?? 'TBD'}
 
 ---
 
 ### 1. EXECUTIVE SUMMARY & OBJECTIVES
-${activeProject.intake.executiveSummary}
+${intake.executiveSummary ?? ''}
 
-**Strategic Objective:** ${activeProject.intake.strategicObjective}
+**Strategic Objective:** ${intake.strategicObjective ?? ''}
 
 ---
 
 ### 2. BUSINESS CASE & EXPECTED BENEFITS
-- **Problem Statement:** ${activeProject.intake.problemStatement}
-- **Expected ROI:** ${activeProject.intake.expectedRoiPercent}%
+- **Problem Statement:** ${intake.problemStatement ?? ''}
+- **Expected ROI:** ${intake.expectedRoiPercent ?? 0}%
 - **Key Business Benefits:**
-${activeProject.intake.expectedBenefits}
+${intake.expectedBenefits ?? ''}
 
 ---
 
 ### 3. PROJECT SCOPE & BOUNDARIES
 - **In Scope:**
-${activeProject.intake.inScope}
+${intake.inScope ?? ''}
 
 - **Out of Scope:**
-${activeProject.intake.outOfScope}
+${intake.outOfScope ?? ''}
 
 ---
 
 ### 4. GOVERNANCE & EARNED VALUE BASES
-- **CPI:** ${activeProject.evm.CPI} | **SPI:** ${activeProject.evm.SPI}
-- **Estimate at Completion (EAC):** $${activeProject.evm.EAC.toLocaleString()}
+- **CPI:** ${evm.CPI} | **SPI:** ${evm.SPI}
+- **Estimate at Completion (EAC):** $${(evm.EAC ?? 0).toLocaleString()}
 `;
 
-      case "wbs":
-        return `# WORK BREAKDOWN STRUCTURE (WBS) DICTIONARY: ${activeProject.name.toUpperCase()}
 
-${activeProject.lifecyclePhases
+      case "wbs":
+        return `# WORK BREAKDOWN STRUCTURE (WBS) DICTIONARY: ${activeProject?.name?.toUpperCase() ?? 'UNTITLED'}
+
+${lifecyclePhases
   .map(
     (ph) => `## PHASE ${ph.wbsCode}: ${ph.name} (${ph.durationDays} Days)
 ${ph.workPackages
@@ -71,9 +78,9 @@ ${wp.tasks
   .join("\n\n---\n\n")}`;
 
       case "risk":
-        return `# PROJECT RISK REGISTER & MITIGATION LOG: ${activeProject.name.toUpperCase()}
+        return `# PROJECT RISK REGISTER & MITIGATION LOG: ${activeProject?.name?.toUpperCase() ?? 'UNTITLED'}
 
-${activeProject.risks
+${risks
   .map(
     (r) => `### [${r.riskCode}] ${r.description}
 - **Category:** ${r.category}
@@ -86,14 +93,14 @@ ${activeProject.risks
   .join("\n---\n")}`;
 
       case "deck":
-        return `# EXECUTIVE STEERING COMMITTEE DECK: ${activeProject.name.toUpperCase()}
-**Status:** Overall Health - ${activeProject.health.overallHealth}
+        return `# EXECUTIVE STEERING COMMITTEE DECK: ${activeProject?.name?.toUpperCase() ?? 'UNTITLED'}
+**Status:** Overall Health - ${health.overallHealth}
 
 ## 1. FINANCIAL & SCHEDULE PERFORMANCE
-- **Budget (BAC):** $${activeProject.evm.BAC.toLocaleString()}
-- **Forecast Spend (EAC):** $${activeProject.evm.EAC.toLocaleString()}
-- **CPI (Cost Index):** ${activeProject.evm.CPI}
-- **SPI (Schedule Index):** ${activeProject.evm.SPI}
+- **Budget (BAC):** $${(evm.BAC ?? 0).toLocaleString()}
+- **Forecast Spend (EAC):** $${(evm.EAC ?? 0).toLocaleString()}
+- **CPI (Cost Index):** ${evm.CPI}
+- **SPI (Schedule Index):** ${evm.SPI}
 
 ## 2. HIGH-PRIORITY OPEN RISKS & ISSUES
 - Active Risks: ${(activeProject?.risks || []).filter((r) => r.status === "Open").length}

@@ -19,7 +19,9 @@ export interface User {
   costRate: number; // Hourly cost
   availabilityPercent: number;
   skills: string[];
+  password?: string; // Used for local auth (not stored in DB in plaintext in production)
 }
+
 
 export interface Portfolio {
   id: string;
@@ -32,6 +34,13 @@ export interface Portfolio {
   expectedRoiPercent: number;
   programs: string[]; // Program IDs
   health: HealthStatus;
+  // Extended for portfolio management
+  strategicThemes?: string[];
+  prioritizationCriteria?: { name: string; weight: number }[];
+  totalBudget?: number;
+  owner?: string;
+  strategicAlignmentScore?: number;
+  projects?: Project[];
 }
 
 export interface Program {
@@ -44,6 +53,154 @@ export interface Program {
   targetCompletion: string;
   projectIds: string[];
   health: HealthStatus;
+  // Extended for program management
+  strategicObjective?: string;
+  expectedBenefits?: string[];
+  totalBudget?: number;
+  totalActualCost?: number;
+  strategicAlignmentScore?: number;
+  steeringCommittee?: string[];
+  programRisks?: ProgramRisk[];
+  dependencies?: ProgramDependency[];
+  benefitsRealized?: number; // percentage 0-100
+}
+
+// --- NEW: Program-level risk ---
+export interface ProgramRisk {
+  id: string;
+  description: string;
+  category: string;
+  probability: "High" | "Medium" | "Low";
+  impact: "High" | "Medium" | "Low";
+  affectedProjectIds: string[];
+  mitigation: string;
+  status: "Open" | "Mitigated" | "Closed";
+}
+
+// --- NEW: Cross-project dependency ---
+export interface ProgramDependency {
+  id: string;
+  sourceProjectId: string;
+  targetProjectId: string;
+  type: "Finish-to-Start" | "Start-to-Start" | "Finish-to-Finish" | "Start-to-Finish";
+  description: string;
+  impactLevel: "Critical" | "High" | "Medium" | "Low";
+  status: "Active" | "Resolved" | "At Risk";
+  dueDate?: string;
+}
+
+// --- NEW: Benefits Realization ---
+export interface Benefit {
+  id: string;
+  title: string;
+  category: "Financial" | "Operational" | "Strategic" | "Customer" | "Compliance" | "Risk Reduction";
+  description: string;
+  owner: string;
+  targetValue: string;
+  targetDate: string;
+  actualValue?: string;
+  actualDate?: string;
+  realizationStatus: "Not Started" | "In Progress" | "Partially Realized" | "Fully Realized" | "Not Achieved";
+  measurementMethod: string;
+  notes?: string;
+}
+
+// --- NEW: Lessons Learned ---
+export interface LessonsLearned {
+  id: string;
+  phase: string;
+  category: "Technical" | "Process" | "People" | "Risk" | "Communication" | "Governance" | "Vendor";
+  title: string;
+  description: string;
+  recommendation: string;
+  impact: "High" | "Medium" | "Low";
+  capturedBy: string;
+  capturedDate: string;
+  status: "Captured" | "Reviewed" | "Published" | "Applied";
+}
+
+// --- NEW: Project Deliverable (for closure) ---
+export interface ProjectDeliverable {
+  id: string;
+  title: string;
+  description: string;
+  phase: string;
+  dueDate: string;
+  owner: string;
+  acceptanceCriteria: string[];
+  status: "Not Started" | "In Progress" | "Submitted" | "Accepted" | "Rejected";
+  signedOffBy?: string;
+  signOffDate?: string;
+  notes?: string;
+}
+
+// --- NEW: Vendor Management ---
+export interface VendorItem {
+  id: string;
+  vendorCode: string;
+  vendorName: string;
+  category: "Software" | "Hardware" | "Consulting" | "Cloud Services" | "Staffing" | "Other";
+  contractType: "Fixed Price" | "Time & Materials" | "Retainer" | "SLA-Based";
+  contractValue: number;
+  startDate: string;
+  endDate: string;
+  accountManager: string;
+  deliverables: VendorDeliverable[];
+  slaTerms: string;
+  performanceScore: number; // 1-100
+  status: "Active" | "On Hold" | "Completed" | "Terminated";
+  paymentTerms: string;
+  notes?: string;
+}
+
+export interface VendorDeliverable {
+  id: string;
+  title: string;
+  dueDate: string;
+  status: "Pending" | "Delivered" | "Accepted" | "Overdue";
+  amount: number;
+}
+
+// --- NEW: Decision Log (for Governance) ---
+export interface DecisionLog {
+  id: string;
+  decisionDate: string;
+  title: string;
+  description: string;
+  decisionMaker: string;
+  participants: string[];
+  rationale: string;
+  impact: string;
+  status: "Pending" | "Approved" | "Rejected" | "Deferred";
+  reviewDate?: string;
+}
+
+// --- NEW: Action Item (for Communications) ---
+export interface ActionItem {
+  id: string;
+  description: string;
+  owner: string;
+  dueDate: string;
+  priority: "High" | "Medium" | "Low";
+  status: "Open" | "In Progress" | "Completed" | "Cancelled";
+  sourceType: "Meeting" | "Risk" | "Issue" | "Change Request" | "Steering Committee";
+  sourceRef?: string;
+  createdDate: string;
+  completedDate?: string;
+}
+
+// --- NEW: Meeting Minutes ---
+export interface MeetingMinutes {
+  id: string;
+  meetingType: "Steering Committee" | "Project Status" | "Risk Review" | "CCB" | "Retrospective" | "Stakeholder";
+  title: string;
+  date: string;
+  attendees: string[];
+  agenda: string[];
+  keyDecisions: string[];
+  actionItems: string[];
+  nextMeetingDate?: string;
+  facilitator: string;
 }
 
 // Module 1: Intake & General Info
@@ -318,6 +475,10 @@ export interface GovernancePlan {
   escalationLevel2: string;
   escalationLevel3: string;
   raciMatrix: RACIRow[];
+  // Extended governance fields
+  decisionLog?: DecisionLog[];
+  meetingCadence?: string;
+  nextSteeringDate?: string;
 }
 
 // Module 16: KPI & Performance Management
@@ -330,6 +491,18 @@ export interface HealthChecks {
   resourceHealth: HealthStatus;
   overallHealth: HealthStatus;
   aiHealthCommentary: string;
+}
+
+// Project Closure Status
+export interface ClosureStatus {
+  phase: "Not Started" | "In Progress" | "Pending Sign-off" | "Closed";
+  deliverablesAccepted: boolean;
+  lessonsLearnedCaptured: boolean;
+  resourcesReleased: boolean;
+  documentationArchived: boolean;
+  finalReportSubmitted: boolean;
+  closureDate?: string;
+  closedBy?: string;
 }
 
 // Main Project Entity
@@ -351,6 +524,14 @@ export interface Project {
   governance: GovernancePlan[];
   health: HealthChecks;
   lastUpdated: string;
+  // Extended for full PM suite
+  benefits?: Benefit[];
+  vendors?: VendorItem[];
+  deliverables?: ProjectDeliverable[];
+  lessonsLearned?: LessonsLearned[];
+  actionItems?: ActionItem[];
+  meetingMinutes?: MeetingMinutes[];
+  closureStatus?: ClosureStatus;
 }
 
 // Copilot Chat Message

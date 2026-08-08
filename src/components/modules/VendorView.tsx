@@ -1,0 +1,321 @@
+import React, { useState } from "react";
+import { useProject } from "../../context/ProjectContext";
+import {
+  Package,
+  DollarSign,
+  Calendar,
+  Star,
+  AlertTriangle,
+  PlusCircle,
+  ChevronDown,
+  ChevronUp,
+  CheckCircle2,
+  Clock,
+  XCircle,
+  TrendingUp,
+  FileText
+} from "lucide-react";
+import { VendorItem, VendorDeliverable } from "../../types";
+
+const defaultVendors: VendorItem[] = [
+  {
+    id: "vnd-001",
+    vendorCode: "VND-001",
+    vendorName: "CloudSphere Technologies",
+    category: "Cloud Services",
+    contractType: "SLA-Based",
+    contractValue: 480000,
+    startDate: "2026-01-15",
+    endDate: "2026-12-31",
+    accountManager: "Sarah Chen",
+    slaTerms: "99.95% uptime, <200ms API response, 4h P1 resolution SLA",
+    performanceScore: 88,
+    status: "Active",
+    paymentTerms: "Monthly in arrears",
+    deliverables: [
+      { id: "vd-001", title: "Cloud Infrastructure Setup", dueDate: "2026-03-01", status: "Accepted", amount: 80000 },
+      { id: "vd-002", title: "Migration Completion", dueDate: "2026-06-30", status: "Delivered", amount: 150000 },
+      { id: "vd-003", title: "Ongoing Managed Services", dueDate: "2026-12-31", status: "Pending", amount: 250000 }
+    ],
+    notes: "Preferred vendor. Strong SLA performance with minor latency spikes in Aug 2026."
+  },
+  {
+    id: "vnd-002",
+    vendorCode: "VND-002",
+    vendorName: "SecureAuth Solutions",
+    category: "Software",
+    contractType: "Fixed Price",
+    contractValue: 125000,
+    startDate: "2026-02-01",
+    endDate: "2026-10-31",
+    accountManager: "Mark Thompson",
+    slaTerms: "SAML 2.0 integration delivery, defect resolution within 72h",
+    performanceScore: 72,
+    status: "Active",
+    paymentTerms: "30% upfront, 70% on delivery",
+    deliverables: [
+      { id: "vd-004", title: "SAML/SSO Integration Module", dueDate: "2026-05-30", status: "Overdue", amount: 75000 },
+      { id: "vd-005", title: "Security Audit Documentation", dueDate: "2026-09-30", status: "Pending", amount: 50000 }
+    ],
+    notes: "Delivery delays on SSO module. Escalated to senior management."
+  },
+  {
+    id: "vnd-003",
+    vendorCode: "VND-003",
+    vendorName: "DataBridge Consulting",
+    category: "Consulting",
+    contractType: "Time & Materials",
+    contractValue: 200000,
+    startDate: "2026-03-01",
+    endDate: "2026-09-30",
+    accountManager: "Priya Sharma",
+    slaTerms: "Weekly deliverables, max 2-day turnaround on reviews",
+    performanceScore: 95,
+    status: "Active",
+    paymentTerms: "Bi-weekly invoicing, NET-15",
+    deliverables: [
+      { id: "vd-006", title: "Data Migration Strategy", dueDate: "2026-04-15", status: "Accepted", amount: 60000 },
+      { id: "vd-007", title: "ETL Pipeline Development", dueDate: "2026-07-31", status: "Delivered", amount: 90000 },
+      { id: "vd-008", title: "Post-migration Validation", dueDate: "2026-09-30", status: "Pending", amount: 50000 }
+    ],
+    notes: "Excellent performance. Recommended for follow-on work."
+  }
+];
+
+const statusConfig = {
+  Active: "bg-emerald-100 text-emerald-700 border-emerald-300",
+  "On Hold": "bg-amber-100 text-amber-700 border-amber-300",
+  Completed: "bg-slate-100 text-slate-600 border-slate-300",
+  Terminated: "bg-red-100 text-red-700 border-red-300"
+};
+
+const deliverableStatusConfig: Record<VendorDeliverable["status"], string> = {
+  Pending: "bg-slate-100 text-slate-600 border-slate-300",
+  Delivered: "bg-blue-100 text-blue-700 border-blue-300",
+  Accepted: "bg-emerald-100 text-emerald-700 border-emerald-300",
+  Overdue: "bg-red-100 text-red-700 border-red-300"
+};
+
+const ScoreMeter: React.FC<{ score: number }> = ({ score }) => {
+  const color = score >= 90 ? "bg-emerald-500" : score >= 70 ? "bg-amber-500" : "bg-red-500";
+  return (
+    <div className="space-y-1">
+      <div className="flex justify-between text-[10px]">
+        <span className="text-slate-500">Performance Score</span>
+        <span className="font-bold text-slate-800">{score}/100</span>
+      </div>
+      <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+        <div className={`h-full rounded-full ${color}`} style={{ width: `${score}%` }} />
+      </div>
+    </div>
+  );
+};
+
+export const VendorView: React.FC = () => {
+  const { activeProject, updateActiveProject } = useProject();
+  const vendors: VendorItem[] = (activeProject?.vendors && activeProject.vendors.length > 0)
+    ? activeProject.vendors
+    : defaultVendors;
+
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [newVendor, setNewVendor] = useState<Partial<VendorItem>>({
+    category: "Consulting",
+    contractType: "Fixed Price",
+    status: "Active",
+    deliverables: []
+  });
+  const [filterStatus, setFilterStatus] = useState<string>("All");
+
+  const totalContractValue = vendors.reduce((acc, v) => acc + v.contractValue, 0);
+  const activeCount = vendors.filter(v => v.status === "Active").length;
+  const overdueDeliverables = vendors.flatMap(v => v.deliverables).filter(d => d.status === "Overdue").length;
+  const avgScore = vendors.length > 0
+    ? Math.round(vendors.reduce((acc, v) => acc + v.performanceScore, 0) / vendors.length)
+    : 0;
+
+  const filtered = filterStatus === "All" ? vendors : vendors.filter(v => v.status === filterStatus);
+
+  const handleAddVendor = () => {
+    if (!newVendor.vendorName || !newVendor.accountManager || !newVendor.contractValue) return;
+    const vendor: VendorItem = {
+      id: `vnd-${Date.now()}`,
+      vendorCode: `VND-${(vendors.length + 1).toString().padStart(3, "0")}`,
+      vendorName: newVendor.vendorName!,
+      category: newVendor.category as VendorItem["category"] || "Consulting",
+      contractType: newVendor.contractType as VendorItem["contractType"] || "Fixed Price",
+      contractValue: Number(newVendor.contractValue) || 0,
+      startDate: newVendor.startDate || "",
+      endDate: newVendor.endDate || "",
+      accountManager: newVendor.accountManager!,
+      slaTerms: newVendor.slaTerms || "",
+      performanceScore: 80,
+      status: "Active",
+      paymentTerms: newVendor.paymentTerms || "",
+      deliverables: []
+    };
+    updateActiveProject(prev => ({ ...prev, vendors: [...(prev.vendors || []), vendor] }));
+    setShowAddForm(false);
+    setNewVendor({ category: "Consulting", contractType: "Fixed Price", status: "Active", deliverables: [] });
+  };
+
+  return (
+    <div className="p-6 max-w-7xl mx-auto space-y-6 text-slate-900">
+      {/* Header */}
+      <div className="bg-gradient-to-br from-purple-900 to-slate-900 rounded-2xl p-6 shadow-xl text-white flex flex-col md:flex-row justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-purple-500/30 text-purple-200 border border-purple-400/30">Vendor & Third-Party Management</span>
+          </div>
+          <h1 className="text-2xl font-bold">Vendor Management & SLA Tracker</h1>
+          <p className="text-sm text-purple-100 mt-1">Track vendor contracts, SLAs, deliverable milestones, and performance scores.</p>
+        </div>
+        <button
+          onClick={() => setShowAddForm(!showAddForm)}
+          className="self-start flex items-center gap-2 bg-purple-500 hover:bg-purple-400 text-white text-xs font-bold px-4 py-2 rounded-lg transition-all"
+        >
+          <PlusCircle className="w-4 h-4" /> Add Vendor
+        </button>
+      </div>
+
+      {/* KPI Bar */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {[
+          { label: "Total Contract Value", value: `$${(totalContractValue / 1000).toFixed(0)}K`, color: "text-slate-800" },
+          { label: "Active Vendors", value: activeCount, color: "text-indigo-600" },
+          { label: "Overdue Deliverables", value: overdueDeliverables, color: overdueDeliverables > 0 ? "text-red-600" : "text-emerald-600" },
+          { label: "Avg Performance Score", value: `${avgScore}/100`, color: avgScore >= 80 ? "text-emerald-600" : "text-amber-600" }
+        ].map((kpi, i) => (
+          <div key={i} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+            <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wide">{kpi.label}</p>
+            <div className={`text-2xl font-extrabold font-mono mt-1 ${kpi.color}`}>{kpi.value}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Filters */}
+      <div className="flex gap-2 flex-wrap">
+        {["All", "Active", "On Hold", "Completed", "Terminated"].map(s => (
+          <button
+            key={s}
+            onClick={() => setFilterStatus(s)}
+            className={`text-xs font-bold px-3 py-1.5 rounded-full border transition-all ${filterStatus === s ? "bg-indigo-600 text-white border-indigo-600" : "bg-white text-slate-600 border-slate-200 hover:border-indigo-400"}`}
+          >
+            {s}
+          </button>
+        ))}
+      </div>
+
+      {/* Add Form */}
+      {showAddForm && (
+        <div className="bg-white border border-purple-200 rounded-xl p-5 shadow-sm space-y-4">
+          <h3 className="text-sm font-bold text-slate-800">Register New Vendor</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            {[
+              { label: "Vendor Name *", key: "vendorName", type: "text" },
+              { label: "Account Manager *", key: "accountManager", type: "text" },
+              { label: "Contract Value ($) *", key: "contractValue", type: "number" },
+              { label: "Payment Terms", key: "paymentTerms", type: "text" },
+              { label: "Start Date", key: "startDate", type: "date" },
+              { label: "End Date", key: "endDate", type: "date" },
+              { label: "SLA Terms", key: "slaTerms", type: "text" }
+            ].map(f => (
+              <div key={f.key}>
+                <label className="block text-slate-600 font-bold mb-1">{f.label}</label>
+                <input type={f.type} value={(newVendor as any)[f.key] || ""} onChange={e => setNewVendor(p => ({ ...p, [f.key]: e.target.value }))}
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-slate-800 outline-none focus:ring-2 focus:ring-purple-500" />
+              </div>
+            ))}
+            <div>
+              <label className="block text-slate-600 font-bold mb-1 text-xs">Category</label>
+              <select value={newVendor.category} onChange={e => setNewVendor(p => ({ ...p, category: e.target.value as VendorItem["category"] }))}
+                className="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 outline-none">
+                {["Software", "Hardware", "Consulting", "Cloud Services", "Staffing", "Other"].map(c => <option key={c}>{c}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="block text-slate-600 font-bold mb-1 text-xs">Contract Type</label>
+              <select value={newVendor.contractType} onChange={e => setNewVendor(p => ({ ...p, contractType: e.target.value as VendorItem["contractType"] }))}
+                className="w-full border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 outline-none">
+                {["Fixed Price", "Time & Materials", "Retainer", "SLA-Based"].map(c => <option key={c}>{c}</option>)}
+              </select>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <button onClick={handleAddVendor} className="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold px-4 py-2 rounded-lg">Register Vendor</button>
+            <button onClick={() => setShowAddForm(false)} className="text-slate-500 text-xs font-bold px-4 py-2 rounded-lg border border-slate-200 hover:bg-slate-50">Cancel</button>
+          </div>
+        </div>
+      )}
+
+      {/* Vendor Cards */}
+      <div className="space-y-3">
+        {filtered.map(vendor => {
+          const isEx = expandedId === vendor.id;
+          const overdueCount = vendor.deliverables.filter(d => d.status === "Overdue").length;
+          return (
+            <div key={vendor.id} className={`bg-white border rounded-xl shadow-sm overflow-hidden ${overdueCount > 0 ? "border-red-200" : "border-slate-200"}`}>
+              <div className="flex items-center justify-between p-5 cursor-pointer hover:bg-slate-50 gap-4" onClick={() => setExpandedId(isEx ? null : vendor.id)}>
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-center text-purple-700 font-black text-sm">
+                    {vendor.vendorName.charAt(0)}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span className="font-bold text-slate-900">{vendor.vendorName}</span>
+                      <span className="text-[10px] font-mono bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">{vendor.vendorCode}</span>
+                      {overdueCount > 0 && <span className="text-[10px] font-bold bg-red-100 text-red-700 border border-red-300 px-2 py-0.5 rounded flex items-center gap-1"><AlertTriangle className="w-3 h-3" />{overdueCount} Overdue</span>}
+                    </div>
+                    <div className="text-[10px] text-slate-500">{vendor.category} · {vendor.contractType} · Manager: {vendor.accountManager}</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="text-right hidden md:block">
+                    <div className="text-sm font-extrabold font-mono text-slate-900">${vendor.contractValue.toLocaleString()}</div>
+                    <div className="text-[10px] text-slate-400">Contract Value</div>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    {[1,2,3,4,5].map(s => (
+                      <Star key={s} className={`w-3 h-3 ${s <= Math.round(vendor.performanceScore / 20) ? "text-amber-400 fill-amber-400" : "text-slate-200"}`} />
+                    ))}
+                  </div>
+                  <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${statusConfig[vendor.status]}`}>{vendor.status}</span>
+                  {isEx ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+                </div>
+              </div>
+              {isEx && (
+                <div className="border-t border-slate-100 p-5 bg-slate-50/50 space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div className="space-y-2">
+                      <div><span className="text-slate-500">Contract Period</span><div className="font-bold text-slate-800">{vendor.startDate} → {vendor.endDate}</div></div>
+                      <div><span className="text-slate-500">Payment Terms</span><div className="font-bold text-slate-800">{vendor.paymentTerms}</div></div>
+                      <ScoreMeter score={vendor.performanceScore} />
+                    </div>
+                    <div className="md:col-span-2">
+                      <div className="mb-2"><span className="text-[10px] font-bold text-slate-500 uppercase">SLA Terms</span><p className="text-xs text-slate-700 mt-1">{vendor.slaTerms}</p></div>
+                      {vendor.notes && <div><span className="text-[10px] font-bold text-slate-500 uppercase">Notes</span><p className="text-xs text-slate-700 mt-1 italic">{vendor.notes}</p></div>}
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-[10px] font-bold text-slate-500 uppercase mb-2">Deliverable Milestones</h4>
+                    <div className="space-y-2">
+                      {vendor.deliverables.map(del => (
+                        <div key={del.id} className="flex items-center justify-between p-3 bg-white rounded-lg border border-slate-100">
+                          <div>
+                            <div className="text-xs font-bold text-slate-800">{del.title}</div>
+                            <div className="text-[10px] text-slate-400">Due: {del.dueDate} · Value: ${del.amount.toLocaleString()}</div>
+                          </div>
+                          <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${deliverableStatusConfig[del.status]}`}>{del.status}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
