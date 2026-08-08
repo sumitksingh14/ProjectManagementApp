@@ -20,7 +20,9 @@ import {
   Landmark,
   Activity,
   FileText,
-  Briefcase
+  Briefcase,
+  Edit3,
+  PlusCircle
 } from "lucide-react";
 
 interface NavGroup {
@@ -41,6 +43,8 @@ export const Sidebar: React.FC = () => {
       title: "Governance",
       items: [
         { id: "dashboard", label: "PMO Overview", icon: LayoutDashboard },
+        { id: "onboarding", label: "Project Onboarding", icon: PlusCircle, badge: "NEW" },
+        { id: "edit-project", label: "Edit Project Details", icon: Edit3, badge: "EDIT" },
         { id: "portfolio", label: "Portfolios & Health", icon: Briefcase, badge: "M18" },
         { id: "intake", label: "Project Intake", icon: FileSpreadsheet, badge: "M1" },
         { id: "governance", label: "Cost & Governance", icon: Landmark, badge: "M15" }

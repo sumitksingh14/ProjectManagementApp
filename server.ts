@@ -4,7 +4,20 @@ import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
 
+import {
+  initDb,
+  getAllProjects,
+  getProjectById,
+  saveProject,
+  getAllPortfolios,
+  getAllPrograms,
+  getAllUsers
+} from "./src/db/db";
+
 dotenv.config();
+
+// Initialize SQLite Database
+initDb();
 
 const app = express();
 const PORT = 3000;
@@ -30,6 +43,74 @@ const getAiClient = () => {
 // API Routes
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
+});
+
+// SQLite Data Endpoints
+app.get("/api/projects", (req, res) => {
+  try {
+    const projects = getAllProjects();
+    res.json(projects);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/api/projects/:id", (req, res) => {
+  try {
+    const project = getProjectById(req.params.id);
+    if (!project) {
+      return res.status(404).json({ error: "Project not found" });
+    }
+    res.json(project);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post("/api/projects", (req, res) => {
+  try {
+    const saved = saveProject(req.body);
+    res.json({ success: true, project: saved });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.put("/api/projects/:id", (req, res) => {
+  try {
+    const projectData = { ...req.body, id: req.params.id };
+    const updated = saveProject(projectData);
+    res.json({ success: true, project: updated });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/api/portfolios", (req, res) => {
+  try {
+    const portfolios = getAllPortfolios();
+    res.json(portfolios);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/api/programs", (req, res) => {
+  try {
+    const programs = getAllPrograms();
+    res.json(programs);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/api/users", (req, res) => {
+  try {
+    const users = getAllUsers();
+    res.json(users);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 // AI Project Plan Generator Endpoint

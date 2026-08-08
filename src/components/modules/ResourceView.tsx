@@ -1,8 +1,9 @@
 import React from "react";
-import { mockUsers } from "../../data/mockEnterpriseData";
+import { useProject } from "../../context/ProjectContext";
 import { UserCheck, Zap, AlertCircle, BarChart2, ShieldCheck, DollarSign } from "lucide-react";
 
 export const ResourceView: React.FC = () => {
+  const { users } = useProject();
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* Header */}
@@ -43,7 +44,7 @@ export const ResourceView: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/60">
-              {mockUsers.map((usr, idx) => {
+              {users.map((usr, idx) => {
                 const util = idx === 4 ? 120 : idx === 5 ? 95 : 80;
                 return (
                   <tr key={usr.id} className="hover:bg-slate-800/40 transition-colors">

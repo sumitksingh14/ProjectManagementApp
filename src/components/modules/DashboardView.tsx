@@ -11,7 +11,8 @@ import {
   Sparkles,
   ArrowUpRight,
   PieChart,
-  ShieldAlert
+  ShieldAlert,
+  Edit3
 } from "lucide-react";
 
 export const DashboardView: React.FC = () => {
@@ -53,37 +54,37 @@ export const DashboardView: React.FC = () => {
   };
 
   return (
-    <div className="p-6 space-y-6 max-w-7xl mx-auto text-slate-900">
+    <div className="p-6 space-y-6 max-w-7xl mx-auto text-slate-900 font-sans">
       {/* Top Banner / Portfolio Header */}
       <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1.5">
             <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-200">
-              {activeProject.code}
+              {activeProject?.code || "PRJ"}
             </span>
             <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${getHealthBadge(health.overallHealth)}`}>
               Overall Health: {health.overallHealth}
             </span>
             <span className="text-xs text-slate-500">| View Role: <strong className="text-slate-800">{currentRole}</strong></span>
           </div>
-          <h1 className="text-xl font-bold text-slate-800 tracking-tight">{activeProject.name}</h1>
+          <h1 className="text-xl font-bold text-slate-800 tracking-tight">{activeProject?.name}</h1>
           <p className="text-xs text-slate-500 mt-1 max-w-2xl">{intake.executiveSummary || intake.strategicObjective}</p>
         </div>
 
         <div className="flex items-center gap-2.5">
           <button
+            onClick={() => setActiveTab("edit-project")}
+            className="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-2 rounded-md border border-slate-200 shadow-sm flex items-center gap-1.5 transition-all cursor-pointer"
+          >
+            <Edit3 className="w-3.5 h-3.5 text-indigo-600" />
+            <span>Edit Project Details</span>
+          </button>
+          <button
             onClick={() => setActiveTab("ai-planner")}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3.5 py-2 rounded-md shadow-sm flex items-center gap-2 transition-all"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3.5 py-2 rounded-md shadow-sm flex items-center gap-2 transition-all cursor-pointer"
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-300" />
             <span>AI WBS Generator</span>
-          </button>
-          <button
-            onClick={() => setActiveTab("documents")}
-            className="bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold px-3.5 py-2 rounded-md border border-slate-200 shadow-sm flex items-center gap-1.5 transition-all"
-          >
-            <span>Export Deck</span>
-            <ArrowUpRight className="w-3.5 h-3.5 text-slate-400" />
           </button>
         </div>
       </div>

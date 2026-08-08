@@ -1,9 +1,15 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { Project, UserRole, Portfolio, Program, CopilotMessage, HealthStatus } from "../types";
-import { mockProjects, mockPortfolios, mockPrograms, mockUsers } from "../data/mockEnterpriseData";
+import { Project, UserRole, Portfolio, Program, User, CopilotMessage, HealthStatus } from "../types";
 
 interface ProjectContextType {
+  isAuthenticated: boolean;
+  authUsername: string;
+  login: (username: string, password: string) => boolean;
+  logout: () => void;
   projects: Project[];
+  portfolios: Portfolio[];
+  programs: Program[];
+  users: User[];
   activeProject: Project;
   activePortfolio: Portfolio | null;
   activeProgram: Program | null;
@@ -36,13 +42,66 @@ interface ProjectContextType {
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 
 export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [projects, setProjects] = useState<Project[]>(mockProjects);
-  const [activeProjectId, setActiveProjectId] = useState<string>(mockProjects[0].id);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    return sessionStorage.getItem("projectplanner_auth") === "true";
+  });
+  const [authUsername, setAuthUsername] = useState<string>(() => {
+    return sessionStorage.getItem("projectplanner_user") || "Sumit";
+  });
+
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
+  const [programs, setPrograms] = useState<Program[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [activeProjectId, setActiveProjectId] = useState<string>("");
   const [currentRole, setCurrentRole] = useState<UserRole>("Project Manager");
   const [activeTab, setActiveTab] = useState<string>("dashboard");
   const [copilotOpen, setCopilotOpen] = useState<boolean>(false);
   const [isAiLoading, setIsAiLoading] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
+
+  // Fetch initial data from SQLite DB
+  useEffect(() => {
+    Promise.all([
+      fetch("/api/projects").then((res) => res.json()),
+      fetch("/api/portfolios").then((res) => res.json()),
+      fetch("/api/programs").then((res) => res.json()),
+      fetch("/api/users").then((res) => res.json())
+    ])
+      .then(([prjData, portData, progData, usrData]) => {
+        if (Array.isArray(prjData) && prjData.length > 0) {
+          setProjects(prjData);
+          const savedActiveId = sessionStorage.getItem("projectplanner_active_id");
+          setActiveProjectId((prevId) => {
+            if (prevId && prjData.some((p: Project) => p.id === prevId)) return prevId;
+            if (savedActiveId && prjData.some((p: Project) => p.id === savedActiveId)) return savedActiveId;
+            return prjData[0].id;
+          });
+        }
+        if (Array.isArray(portData)) setPortfolios(portData);
+        if (Array.isArray(progData)) setPrograms(progData);
+        if (Array.isArray(usrData)) setUsers(usrData);
+      })
+      .catch((err) => console.error("Error loading SQLite DB data:", err));
+  }, []);
+
+  const login = (usernameInput: string, passwordInput: string): boolean => {
+    if (usernameInput.trim().toLowerCase() === "sumit" && passwordInput === "Passwd12345") {
+      setIsAuthenticated(true);
+      setAuthUsername("Sumit");
+      sessionStorage.setItem("projectplanner_auth", "true");
+      sessionStorage.setItem("projectplanner_user", "Sumit");
+      setActiveTab("dashboard");
+      return true;
+    }
+    return false;
+  };
+
+  const logout = () => {
+    setIsAuthenticated(false);
+    sessionStorage.removeItem("projectplanner_auth");
+    sessionStorage.removeItem("projectplanner_user");
+  };
 
   const [copilotMessages, setCopilotMessages] = useState<CopilotMessage[]>([
     {
@@ -53,21 +112,23 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   ]);
 
-  const activeProject = projects.find((p) => p.id === activeProjectId) || projects[0];
+  const activeProject = projects.find((p) => p.id === activeProjectId) || projects[0] || ({} as Project);
 
   const activePortfolio =
-    mockPortfolios.find((port) => port.id === activeProject.intake.portfolioId) || mockPortfolios[0];
+    portfolios.find((port) => port.id === activeProject?.intake?.portfolioId) || portfolios[0] || null;
 
   const activeProgram =
-    mockPrograms.find((prog) => prog.id === activeProject.intake.programId) || mockPrograms[0];
+    programs.find((prog) => prog.id === activeProject?.intake?.programId) || programs[0] || null;
 
   const setActiveProjectById = (id: string) => {
     setActiveProjectId(id);
+    sessionStorage.setItem("projectplanner_active_id", id);
   };
 
   const updateActiveProject = (updater: (prev: Project) => Project) => {
-    setProjects((prevProjects) =>
-      prevProjects.map((p) => {
+    setProjects((prevProjects) => {
+      let updatedProject: Project | null = null;
+      const nextProjects = prevProjects.map((p) => {
         if (p.id === activeProject.id) {
           const updated = updater(p);
           // Recalculate EVM metrics
@@ -107,11 +168,22 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({ child
             VAC: BAC - EAC
           };
 
+          updatedProject = updated;
           return updated;
         }
         return p;
-      })
-    );
+      });
+
+      if (updatedProject) {
+        fetch(`/api/projects/${(updatedProject as Project).id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedProject)
+        }).catch((err) => console.error("Error saving updated project to SQLite DB:", err));
+      }
+
+      return nextProjects;
+    });
   };
 
   const addCopilotMessage = (msg: Omit<CopilotMessage, "id" | "timestamp">) => {
@@ -323,9 +395,9 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({ child
         constraints: ["Fixed budget"],
         dependencies: ["Executive Approval"]
       },
-      stakeholders: mockProjects[0].stakeholders,
+      stakeholders: activeProject?.stakeholders || [],
       requirements: [],
-      lifecyclePhases: mockProjects[0].lifecyclePhases,
+      lifecyclePhases: activeProject?.lifecyclePhases || [],
       costLineItems: [
         { id: "c-new-1", category: "Labor", description: "Development Team", plannedAmount: Number(intakeData.estimatedBudget) * 0.7, forecastAmount: Number(intakeData.estimatedBudget) * 0.7, actualAmount: 0 },
         { id: "c-new-2", category: "Cloud Costs", description: "Cloud Hosting", plannedAmount: Number(intakeData.estimatedBudget) * 0.2, forecastAmount: Number(intakeData.estimatedBudget) * 0.2, actualAmount: 0 },
@@ -382,8 +454,8 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({ child
         ]
       },
       changeRequests: [],
-      communicationPlan: mockProjects[0].communicationPlan,
-      governance: mockProjects[0].governance,
+      communicationPlan: activeProject?.communicationPlan || [],
+      governance: activeProject?.governance || [],
       health: {
         scheduleHealth: "Green",
         budgetHealth: "Green",
@@ -398,13 +470,28 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     setProjects((prev) => [newProject, ...prev]);
     setActiveProjectId(newId);
+
+    // Persist new project to SQLite DB
+    fetch("/api/projects", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newProject)
+    }).catch((err) => console.error("Error creating project in SQLite DB:", err));
+
     return newProject;
   };
 
   return (
     <ProjectContext.Provider
       value={{
+        isAuthenticated,
+        authUsername,
+        login,
+        logout,
         projects,
+        portfolios,
+        programs,
+        users,
         activeProject,
         activePortfolio,
         activeProgram,

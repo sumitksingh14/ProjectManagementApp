@@ -10,7 +10,9 @@ import {
   UserCheck,
   ShieldCheck,
   Bell,
-  Layers
+  Layers,
+  LogOut,
+  User
 } from "lucide-react";
 
 export const Header: React.FC = () => {
@@ -23,7 +25,9 @@ export const Header: React.FC = () => {
     setCopilotOpen,
     setActiveTab,
     searchQuery,
-    setSearchQuery
+    setSearchQuery,
+    authUsername,
+    logout
   } = useProject();
 
   const roles: UserRole[] = [
@@ -126,6 +130,24 @@ export const Header: React.FC = () => {
         <div className="relative p-1.5 text-slate-400 hover:text-slate-600 cursor-pointer rounded-md hover:bg-slate-100">
           <Bell className="w-4 h-4" />
           <span className="absolute top-1 right-1 w-2 h-2 bg-emerald-500 rounded-full"></span>
+        </div>
+
+        {/* User Profile Badge & Logout Button */}
+        <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
+          <div className="flex items-center gap-1.5 bg-indigo-50 border border-indigo-100 rounded-full py-1 px-2.5">
+            <div className="w-5 h-5 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center">
+              {authUsername ? authUsername.charAt(0).toUpperCase() : "S"}
+            </div>
+            <span className="text-xs font-semibold text-indigo-900">{authUsername || "Sumit"}</span>
+          </div>
+
+          <button
+            onClick={logout}
+            title="Sign Out"
+            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors cursor-pointer"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
         </div>
       </div>
     </header>

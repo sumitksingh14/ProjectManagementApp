@@ -1,6 +1,6 @@
 import { Portfolio, Program, Project, User } from "../types";
 
-export const mockUsers: User[] = [
+export const seedUsers: User[] = [
   {
     id: "usr-1",
     name: "Sarah Jenkins",
@@ -80,7 +80,7 @@ export const mockUsers: User[] = [
   }
 ];
 
-export const mockPortfolios: Portfolio[] = [
+export const seedPortfolios: Portfolio[] = [
   {
     id: "port-1",
     name: "Digital Financial Transformation 2026",
@@ -107,7 +107,7 @@ export const mockPortfolios: Portfolio[] = [
   }
 ];
 
-export const mockPrograms: Program[] = [
+export const seedPrograms: Program[] = [
   {
     id: "prog-1",
     portfolioId: "port-1",
@@ -132,7 +132,7 @@ export const mockPrograms: Program[] = [
   }
 ];
 
-export const mockProjects: Project[] = [
+export const seedProjects: Project[] = [
   {
     id: "prj-1",
     name: "Global Mobile Banking Modernization",

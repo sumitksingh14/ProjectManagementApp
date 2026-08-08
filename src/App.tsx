@@ -4,6 +4,8 @@ import { Header } from "./components/layout/Header";
 import { Sidebar } from "./components/layout/Sidebar";
 import { CopilotDrawer } from "./components/layout/CopilotDrawer";
 
+import { LoginPage } from "./components/auth/LoginPage";
+
 // Import Module Views
 import { DashboardView } from "./components/modules/DashboardView";
 import { IntakeView } from "./components/modules/IntakeView";
@@ -24,14 +26,24 @@ import { GovernanceView } from "./components/modules/GovernanceView";
 import { KpiPerformanceView } from "./components/modules/KpiPerformanceView";
 import { DocumentGenView } from "./components/modules/DocumentGenView";
 import { PortfolioView } from "./components/modules/PortfolioView";
+import { ProjectOnboardingView } from "./components/modules/ProjectOnboardingView";
+import { ProjectEditView } from "./components/modules/ProjectEditView";
 
 const MainContent: React.FC = () => {
-  const { activeTab } = useProject();
+  const { activeTab, isAuthenticated } = useProject();
+
+  if (!isAuthenticated) {
+    return <LoginPage />;
+  }
 
   const renderModuleView = () => {
     switch (activeTab) {
       case "dashboard":
         return <DashboardView />;
+      case "onboarding":
+        return <ProjectOnboardingView />;
+      case "edit-project":
+        return <ProjectEditView />;
       case "intake":
         return <IntakeView />;
       case "stakeholders":
