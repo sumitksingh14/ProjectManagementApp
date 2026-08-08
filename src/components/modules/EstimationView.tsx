@@ -42,7 +42,7 @@ export const EstimationView: React.FC = () => {
 
       {/* Interactive PERT Calculator */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4 md:col-span-2">
+        <div className="glass-card p-6 space-y-4 md:col-span-2">
           <h3 className="text-sm font-bold text-white flex items-center gap-2">
             <Calculator className="w-4 h-4 text-indigo-400" />
             3-Point PERT Effort Estimator
@@ -55,7 +55,7 @@ export const EstimationView: React.FC = () => {
                 type="number"
                 value={optimistic}
                 onChange={(e) => setOptimistic(Number(e.target.value))}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-emerald-400 font-mono font-bold"
+                className="w-full form-input-dark text-[var(--green)] font-mono font-bold"
               />
             </div>
             <div>
@@ -64,7 +64,7 @@ export const EstimationView: React.FC = () => {
                 type="number"
                 value={mostLikely}
                 onChange={(e) => setMostLikely(Number(e.target.value))}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-indigo-400 font-mono font-bold"
+                className="w-full form-input-dark text-[var(--accent)] font-mono font-bold"
               />
             </div>
             <div>
@@ -73,12 +73,12 @@ export const EstimationView: React.FC = () => {
                 type="number"
                 value={pessimistic}
                 onChange={(e) => setPessimistic(Number(e.target.value))}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2.5 text-rose-400 font-mono font-bold"
+                className="w-full form-input-dark text-[var(--pink)] font-mono font-bold"
               />
             </div>
           </div>
 
-          <div className="p-4 bg-slate-950/60 rounded-xl border border-slate-800 space-y-2 text-xs">
+          <div className="p-4 rounded-xl border border-[var(--border)] space-y-2 text-xs">
             <p className="text-[var(--text-muted)] font-mono">PMP Formula: Expected Effort E = (a + 4m + b) / 6</p>
             <p className="text-[var(--text-muted)] font-mono">Standard Deviation σ = (b - a) / 6 = {standardDeviation}</p>
           </div>
@@ -104,3 +104,4 @@ export const EstimationView: React.FC = () => {
     </div>
   );
 };
+

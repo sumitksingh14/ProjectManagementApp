@@ -78,7 +78,7 @@ export const ChangeManagementView: React.FC = () => {
 
       {/* Add Form */}
       {showForm && (
-        <form onSubmit={handleAddCr} className="bg-slate-900 border border-indigo-500/40 rounded-2xl p-6 shadow-2xl space-y-4 text-xs">
+        <form onSubmit={handleAddCr} className="glass-card p-6 space-y-4 text-xs">
           <h3 className="text-sm font-bold text-white">Submit Change Request</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
@@ -88,7 +88,7 @@ export const ChangeManagementView: React.FC = () => {
                 required
                 value={newCr.title}
                 onChange={(e) => setNewCr({ ...newCr, title: e.target.value })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-white"
+                className="form-input-dark"
               />
             </div>
             <div>
@@ -97,7 +97,7 @@ export const ChangeManagementView: React.FC = () => {
                 type="text"
                 value={newCr.requestedBy}
                 onChange={(e) => setNewCr({ ...newCr, requestedBy: e.target.value })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-white"
+                className="form-input-dark"
               />
             </div>
             <div>
@@ -106,7 +106,7 @@ export const ChangeManagementView: React.FC = () => {
                 type="number"
                 value={newCr.impactScheduleDays}
                 onChange={(e) => setNewCr({ ...newCr, impactScheduleDays: Number(e.target.value) })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-white font-mono"
+                className="form-input-dark font-mono"
               />
             </div>
             <div>
@@ -115,7 +115,7 @@ export const ChangeManagementView: React.FC = () => {
                 type="number"
                 value={newCr.impactCostAmount}
                 onChange={(e) => setNewCr({ ...newCr, impactCostAmount: Number(e.target.value) })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-white font-mono"
+                className="form-input-dark font-mono"
               />
             </div>
           </div>
@@ -125,11 +125,11 @@ export const ChangeManagementView: React.FC = () => {
               rows={2}
               value={newCr.description}
               onChange={(e) => setNewCr({ ...newCr, description: e.target.value })}
-              className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-white"
+              className="form-input-dark"
             />
           </div>
           <div className="flex justify-end gap-2 pt-2">
-            <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 bg-slate-800 text-[var(--text-muted)] rounded-lg">
+            <button type="button" onClick={() => setShowForm(false)} className="badge-slate p-2">
               Cancel
             </button>
             <button type="submit" className="px-4 py-2 bg-[var(--accent)] text-white font-bold rounded-lg">
@@ -140,7 +140,7 @@ export const ChangeManagementView: React.FC = () => {
       )}
 
       {/* Change Register */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+      <div className="glass-card p-6 space-y-4">
         <h3 className="text-sm font-bold text-white">Change Request Audit Log</h3>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
@@ -154,9 +154,9 @@ export const ChangeManagementView: React.FC = () => {
                 <th className="p-3">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="">
               {changeRequests.map((cr) => (
-                <tr key={cr.id} className="hover:bg-slate-800/40 transition-colors">
+                <tr key={cr.id} className="table-row-dark">
                   <td className="p-3 font-mono font-bold text-indigo-400">{cr.crNumber}</td>
                   <td className="p-3 font-semibold text-white max-w-sm">
                     <div>{cr.title}</div>
@@ -179,3 +179,4 @@ export const ChangeManagementView: React.FC = () => {
     </div>
   );
 };
+

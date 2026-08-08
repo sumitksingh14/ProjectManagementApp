@@ -53,8 +53,8 @@ const defaultMeetings: MeetingMinutes[] = [
 ];
 
 const priorityConfig: Record<ActionItem["priority"], string> = {
-  High: "bg-red-100 text-[var(--pink)] border-red-300",
-  Medium: "bg-amber-100 text-[var(--amber)] border-amber-300",
+  High: "badge-red",
+  Medium: "badge-amber",
   Low: "bg-[var(--bg-card-hover)] text-[var(--text-secondary)] border-[var(--border)]"
 };
 
@@ -162,7 +162,7 @@ export const CommunicationView: React.FC = () => {
               </button>
             ))}
           </div>
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4 text-xs">
+          <div className="glass-card p-6 space-y-4 text-xs">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <h3 className="text-sm font-bold text-white uppercase tracking-wider">
                 {reportType === "weekly" ? "Weekly Project Status Summary" : "Executive Steering Brief"} — {activeProject?.name}
@@ -196,14 +196,14 @@ export const CommunicationView: React.FC = () => {
                     { label: "EAC", value: `$${(activeProject?.evm?.EAC || 0).toLocaleString()}` },
                     { label: "VAC", value: `$${(activeProject?.evm?.VAC || 0).toLocaleString()}` }
                   ].map(m => (
-                    <div key={m.label} className="bg-slate-800/60 rounded-lg p-3 text-center">
+                    <div key={m.label} className="rounded-lg p-3 text-center">
                       <div className="text-[10px] text-[var(--text-muted)]">{m.label}</div>
                       <div className="text-lg font-extrabold text-white font-mono">{m.value}</div>
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="bg-slate-900 p-3 rounded-lg border border-slate-800">
+              <div className="p-3 rounded-lg border border-[var(--border)]">
                 <span className="font-bold text-white uppercase tracking-wider text-[10px]">Open Risks & Issues</span>
                 <div className="mt-2 space-y-1">
                   <div className="flex justify-between"><span>Open Risks:</span><span className="text-rose-400 font-bold">{(activeProject?.risks || []).filter(r => r.status === "Open").length}</span></div>
@@ -275,7 +275,7 @@ export const CommunicationView: React.FC = () => {
                   <th className="p-3 text-center">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50">
+              <tbody className="divide-y divide-[var(--border)]">
                 {actionItems.map(item => {
                   const cfg = statusConfig[item.status];
                   const isOverdue = (item.status === "Open" || item.status === "In Progress") && new Date(item.dueDate) < new Date();
@@ -295,7 +295,7 @@ export const CommunicationView: React.FC = () => {
                             <button onClick={() => toggleActionStatus(item.id, "Completed")} className="text-[10px] text-[var(--green)] font-bold hover:bg-[var(--green-dim)] px-2 py-0.5 rounded">Done</button>
                           )}
                           {item.status === "Open" && (
-                            <button onClick={() => toggleActionStatus(item.id, "In Progress")} className="text-[10px] text-blue-700 font-bold hover:bg-blue-100 px-2 py-0.5 rounded">Start</button>
+                            <button onClick={() => toggleActionStatus(item.id, "In Progress")} className="text-[10px] text-[var(--cyan)] font-bold hover:bg-[var(--cyan-dim)] px-2 py-0.5 rounded">Start</button>
                           )}
                         </div>
                       </td>
@@ -361,3 +361,4 @@ export const CommunicationView: React.FC = () => {
     </div>
   );
 };
+

@@ -76,15 +76,19 @@ export const IssueView: React.FC = () => {
 
       {/* Add Issue Modal */}
       {showForm && (
-        <form onSubmit={handleAddIssue} className="bg-slate-900 border border-indigo-500/40 rounded-2xl p-6 shadow-2xl space-y-4 text-xs">
-          <h3 className="text-sm font-bold text-white">Report New Issue</h3>
+        <form
+          onSubmit={handleAddIssue}
+          className="glass-card animate-fadeIn"
+          style={{ padding: "24px", borderColor: "var(--accent-border)", background: "linear-gradient(145deg, rgba(109,40,217,0.08) 0%, var(--bg-card) 100%)" }}
+        >
+          <h3 style={{ fontSize: "var(--text-md)", fontWeight: 700, color: "var(--text-primary)", marginBottom: "16px" }}>Report New Issue</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-[var(--text-muted)] mb-1">Priority</label>
+              <label className="section-label" style={{ display: "block", marginBottom: "6px" }}>Priority</label>
               <select
                 value={newIss.priority}
                 onChange={(e) => setNewIss({ ...newIss, priority: e.target.value as any })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-white"
+                className="form-input-dark"
               >
                 <option>Critical</option>
                 <option>High</option>
@@ -93,11 +97,11 @@ export const IssueView: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="block text-[var(--text-muted)] mb-1">Severity</label>
+              <label className="section-label" style={{ display: "block", marginBottom: "6px" }}>Severity</label>
               <select
                 value={newIss.severity}
                 onChange={(e) => setNewIss({ ...newIss, severity: e.target.value as any })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-white"
+                className="form-input-dark"
               >
                 <option>Blocker</option>
                 <option>Major</option>
@@ -105,66 +109,69 @@ export const IssueView: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="block text-[var(--text-muted)] mb-1">Assigned Owner</label>
+              <label className="section-label" style={{ display: "block", marginBottom: "6px" }}>Assigned Owner</label>
               <input
                 type="text"
                 value={newIss.owner}
                 onChange={(e) => setNewIss({ ...newIss, owner: e.target.value })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-white"
+                className="form-input-dark"
               />
             </div>
           </div>
-          <div>
-            <label className="block text-[var(--text-muted)] mb-1">Issue Description *</label>
+          <div style={{ marginTop: "16px" }}>
+            <label className="section-label" style={{ display: "block", marginBottom: "6px" }}>Issue Description *</label>
             <textarea
               required
               rows={2}
               value={newIss.description}
               onChange={(e) => setNewIss({ ...newIss, description: e.target.value })}
-              className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-white"
+              className="form-input-dark"
             />
           </div>
-          <div className="flex justify-end gap-2 pt-2">
-            <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 bg-slate-800 text-[var(--text-muted)] rounded-lg">
+          <div className="flex justify-end gap-2 pt-4">
+            <button
+              type="button"
+              onClick={() => setShowForm(false)}
+              style={{ padding: "8px 16px", borderRadius: "8px", fontSize: "var(--text-sm)", background: "rgba(255,255,255,0.05)", border: "1px solid var(--border)", color: "var(--text-muted)", cursor: "pointer" }}
+            >
               Cancel
             </button>
-            <button type="submit" className="px-4 py-2 bg-[var(--accent)] text-white font-bold rounded-lg">
-              Save Issue
-            </button>
+            <button type="submit" className="btn-accent">Save Issue</button>
           </div>
         </form>
       )}
 
       {/* Issues Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
-        <h3 className="text-sm font-bold text-white">Active Issue Log & Aging Report</h3>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
+      <div className="glass-card" style={{ overflow: "hidden" }}>
+        <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <h3 style={{ fontSize: "var(--text-md)", fontWeight: 700, color: "var(--text-primary)" }}>Active Issue Log &amp; Aging Report</h3>
+          <button onClick={() => setShowForm(!showForm)} className="btn-accent flex items-center gap-1.5" style={{ padding: "6px 12px" }}>
+            <Plus className="w-3.5 h-3.5" /> Add Issue
+          </button>
+        </div>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
-              <tr className="border-b border-slate-800 text-[var(--text-muted)] font-bold uppercase tracking-wider text-[10px]">
-                <th className="p-3">Issue ID</th>
-                <th className="p-3">Description</th>
-                <th className="p-3">Priority / Severity</th>
-                <th className="p-3 font-mono">Days Open</th>
-                <th className="p-3">Owner</th>
-                <th className="p-3">Status</th>
+              <tr style={{ borderBottom: "1px solid var(--border)" }}>
+                {["Issue ID", "Description", "Priority / Severity", "Days Open", "Owner", "Status"].map(h => (
+                  <th key={h} className="section-label" style={{ padding: "10px 16px", textAlign: "left" }}>{h}</th>
+                ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody>
               {issues.map((iss) => (
-                <tr key={iss.id} className="hover:bg-slate-800/40 transition-colors">
-                  <td className="p-3 font-mono font-bold text-rose-400">{iss.issueCode}</td>
-                  <td className="p-3 font-semibold text-white max-w-sm">{iss.description}</td>
-                  <td className="p-3">
-                    <span className="text-rose-400 font-bold">{iss.priority}</span> /{" "}
-                    <span className="text-amber-300 font-medium">{iss.severity}</span>
+                <tr key={iss.id} className="table-row-dark">
+                  <td style={{ padding: "12px 16px", fontFamily: "monospace", fontWeight: 700, color: "var(--pink)" }}>{iss.issueCode}</td>
+                  <td style={{ padding: "12px 16px", fontWeight: 600, color: "var(--text-primary)", maxWidth: "280px", fontSize: "var(--text-sm)" }}>{iss.description}</td>
+                  <td style={{ padding: "12px 16px" }}>
+                    <span style={{ color: "var(--pink)", fontWeight: 700 }}>{iss.priority}</span>
+                    {" / "}
+                    <span style={{ color: "var(--amber)", fontWeight: 500 }}>{iss.severity}</span>
                   </td>
-                  <td className="p-3 font-mono font-bold text-slate-200">{iss.daysOpen} Days</td>
-                  <td className="p-3 text-[var(--text-muted)]">{iss.owner}</td>
-                  <td className="p-3">
-                    <span className="text-[10px] bg-rose-500/20 text-rose-300 font-bold px-2.5 py-1 rounded-full border border-rose-500/30">
-                      {iss.status}
-                    </span>
+                  <td style={{ padding: "12px 16px", fontFamily: "monospace", fontWeight: 700, color: "var(--text-primary)" }}>{iss.daysOpen} Days</td>
+                  <td style={{ padding: "12px 16px", fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>{iss.owner}</td>
+                  <td style={{ padding: "12px 16px" }}>
+                    <span className="badge-red">{iss.status}</span>
                   </td>
                 </tr>
               ))}

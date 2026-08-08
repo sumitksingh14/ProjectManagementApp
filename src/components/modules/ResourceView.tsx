@@ -34,74 +34,58 @@ export const ResourceView: React.FC = () => {
       </div>
 
       {/* Resource Utilization Heatmap */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
-        <h3 className="text-sm font-bold text-white flex items-center gap-2">
-          <BarChart2 className="w-4 h-4 text-indigo-400" />
-          Resource Allocation & Monthly Utilization Heatmap (%)
-        </h3>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
+      <div className="glass-card" style={{ overflow: "hidden" }}>
+        <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", gap: "8px" }}>
+          <BarChart2 style={{ width: "16px", height: "16px", color: "var(--accent)" }} />
+          <h3 style={{ fontSize: "var(--text-md)", fontWeight: 700, color: "var(--text-primary)" }}>Resource Allocation &amp; Monthly Utilization Heatmap (%)</h3>
+        </div>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
-              <tr className="border-b border-slate-800 text-[var(--text-muted)] font-bold uppercase tracking-wider text-[10px]">
-                <th className="p-3">Team Member</th>
-                <th className="p-3">Role & Dept</th>
-                <th className="p-3">Hourly Rate</th>
-                <th className="p-3 font-mono">Aug 2026</th>
-                <th className="p-3 font-mono">Sep 2026</th>
-                <th className="p-3 font-mono">Oct 2026</th>
-                <th className="p-3 font-mono">Nov 2026</th>
-                <th className="p-3">Status</th>
+              <tr style={{ borderBottom: "1px solid var(--border)" }}>
+                {["Team Member", "Role & Dept", "Hourly Rate", "Aug 2026", "Sep 2026", "Oct 2026", "Nov 2026", "Status"].map(h => (
+                  <th key={h} className="section-label" style={{ padding: "10px 16px", textAlign: "left" }}>{h}</th>
+                ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody>
               {users.map((usr, idx) => {
                 const util = idx === 4 ? 120 : idx === 5 ? 95 : 80;
                 return (
-                  <tr key={usr.id} className="hover:bg-slate-800/40 transition-colors">
-                    <td className="p-3 font-semibold text-white flex items-center gap-2.5">
-                      <img src={usr.avatar} alt={usr.name} className="w-7 h-7 rounded-full object-cover border border-slate-700" />
+                  <tr key={usr.id} className="table-row-dark">
+                    <td style={{ padding: "12px 16px", fontWeight: 600, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: "10px" }}>
+                      <img src={usr.avatar} alt={usr.name} style={{ width: "28px", height: "28px", borderRadius: "50%", objectFit: "cover", border: "1px solid var(--border)" }} />
                       <div>
-                        <div>{usr.name}</div>
-                        <div className="text-[10px] text-[var(--text-muted)] font-normal">{usr.email}</div>
+                        <div style={{ fontSize: "var(--text-sm)" }}>{usr.name}</div>
+                        <div style={{ fontSize: "10px", color: "var(--text-muted)", fontWeight: 400 }}>{usr.email}</div>
                       </div>
                     </td>
-                    <td className="p-3 text-[var(--text-muted)]">
+                    <td style={{ padding: "12px 16px", color: "var(--text-muted)", fontSize: "var(--text-sm)" }}>
                       <div>{usr.role}</div>
-                      <div className="text-[10px] text-[var(--text-secondary)]">{usr.department}</div>
+                      <div style={{ fontSize: "10px", color: "var(--text-secondary)" }}>{usr.department}</div>
                     </td>
-                    <td className="p-3 font-mono text-emerald-400">${usr.costRate}/hr</td>
-                    <td className="p-3 font-mono">
-                      <span className={`px-2 py-0.5 rounded font-bold ${
-                        util > 100 ? "bg-rose-500/20 text-rose-300 border border-rose-500/30" : "bg-[var(--green-dim)]0/20 text-emerald-300"
-                      }`}>
+                    <td style={{ padding: "12px 16px", fontFamily: "monospace", color: "var(--green)" }}>${usr.costRate}/hr</td>
+                    <td style={{ padding: "12px 16px", fontFamily: "monospace" }}>
+                      <span className={util > 100 ? "badge-red" : "badge-green"}>
                         {util}%
                       </span>
                     </td>
-                    <td className="p-3 font-mono">
-                      <span className="bg-[var(--accent-glow)]0/20 text-indigo-300 px-2 py-0.5 rounded font-bold">
-                        {Math.min(util, 100)}%
-                      </span>
+                    <td style={{ padding: "12px 16px", fontFamily: "monospace" }}>
+                      <span className="badge-blue">{Math.min(util, 100)}%</span>
                     </td>
-                    <td className="p-3 font-mono">
-                      <span className="bg-[var(--accent-glow)]0/20 text-indigo-300 px-2 py-0.5 rounded font-bold">
-                        85%
-                      </span>
+                    <td style={{ padding: "12px 16px", fontFamily: "monospace" }}>
+                      <span className="badge-blue">85%</span>
                     </td>
-                    <td className="p-3 font-mono">
-                      <span className="bg-[var(--accent-glow)]0/20 text-indigo-300 px-2 py-0.5 rounded font-bold">
-                        75%
-                      </span>
+                    <td style={{ padding: "12px 16px", fontFamily: "monospace" }}>
+                      <span className="badge-blue">75%</span>
                     </td>
-                    <td className="p-3">
+                    <td style={{ padding: "12px 16px" }}>
                       {util > 100 ? (
-                        <span className="text-[10px] bg-rose-500/20 text-rose-300 font-bold px-2 py-0.5 rounded border border-rose-500/30 flex items-center gap-1 w-max">
+                        <span className="badge-red flex items-center gap-1" style={{ width: "max-content" }}>
                           <AlertCircle className="w-3 h-3" /> Over-Allocated
                         </span>
                       ) : (
-                        <span className="text-[10px] bg-[var(--green-dim)]0/20 text-emerald-300 font-bold px-2 py-0.5 rounded border border-emerald-500/30 w-max block">
-                          Balanced
-                        </span>
+                        <span className="badge-green" style={{ width: "max-content", display: "block" }}>Balanced</span>
                       )}
                     </td>
                   </tr>
@@ -113,25 +97,23 @@ export const ResourceView: React.FC = () => {
       </div>
 
       {/* Skills Gap Analysis */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
-        <h3 className="text-sm font-bold text-white">Skills Gap Analysis & Capability Matrix</h3>
+      <div className="glass-card" style={{ padding: "20px" }}>
+        <h3 style={{ fontSize: "var(--text-md)", fontWeight: 700, color: "var(--text-primary)", marginBottom: "16px" }}>Skills Gap Analysis &amp; Capability Matrix</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
           {[
             { skill: "Cloud Architecture (AWS/GCP)", demand: "High", availableCount: 2, gap: "Balanced" },
             { skill: "React 19 / TypeScript", demand: "High", availableCount: 1, gap: "Gap (+1 Senior Eng)" },
             { skill: "Cybersecurity & PCI Compliance", demand: "Critical", availableCount: 1, gap: "Balanced" }
           ].map((item, idx) => (
-            <div key={idx} className="bg-slate-800/60 p-4 rounded-xl border border-slate-700/60 space-y-2">
+            <div key={idx} style={{ background: "rgba(255,255,255,0.03)", padding: "16px", borderRadius: "10px", border: "1px solid var(--border)" }} className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="font-bold text-white">{item.skill}</span>
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                  item.gap.includes("Gap") ? "bg-[var(--amber-dim)]0/20 text-amber-300" : "bg-[var(--green-dim)]0/20 text-emerald-300"
-                }`}>
+                <span style={{ fontWeight: 700, color: "var(--text-primary)", fontSize: "var(--text-sm)" }}>{item.skill}</span>
+                <span className={item.gap.includes("Gap") ? "badge-amber" : "badge-green"}>
                   {item.gap}
                 </span>
               </div>
-              <p className="text-[11px] text-[var(--text-muted)]">Demand Level: <strong className="text-slate-200">{item.demand}</strong></p>
-              <p className="text-[11px] text-[var(--text-muted)]">Available Qualified FTEs: <strong className="text-indigo-400">{item.availableCount}</strong></p>
+              <p style={{ fontSize: "11px", color: "var(--text-muted)" }}>Demand Level: <strong style={{ color: "var(--text-primary)" }}>{item.demand}</strong></p>
+              <p style={{ fontSize: "11px", color: "var(--text-muted)" }}>Available Qualified FTEs: <strong style={{ color: "var(--accent)" }}>{item.availableCount}</strong></p>
             </div>
           ))}
         </div>

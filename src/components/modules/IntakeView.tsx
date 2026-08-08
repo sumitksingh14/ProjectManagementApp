@@ -103,7 +103,7 @@ export const IntakeView: React.FC = () => {
                 isActive
                   ? "bg-[var(--accent)] border-indigo-600 text-white shadow-sm"
                   : isDone
-                  ? "bg-[var(--green-dim)] border-emerald-200 text-emerald-800"
+                  ? "bg-[var(--green-dim)] border-[var(--border)] text-[var(--text-primary)]"
                   : "bg-[var(--bg-card)] border-[var(--border)] text-[var(--text-secondary)] hover:bg-[var(--bg-card)]"
               }`}
             >
@@ -395,3 +395,4 @@ export const IntakeView: React.FC = () => {
     </div>
   );
 };
+

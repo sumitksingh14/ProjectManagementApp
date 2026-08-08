@@ -42,24 +42,24 @@ export const BudgetCostView: React.FC = () => {
 
       {/* Financial Summary KPI Bar */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl shadow-md">
+        <div className="glass-card p-5">
           <span className="text-xs text-[var(--text-muted)] font-medium">Approved Planned Budget</span>
           <div className="text-2xl font-extrabold text-white mt-1 font-mono">${totalPlanned.toLocaleString()}</div>
         </div>
-        <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl shadow-md">
+        <div className="glass-card p-5">
           <span className="text-xs text-[var(--text-muted)] font-medium">Forecasted Total Spend</span>
-          <div className="text-2xl font-extrabold text-indigo-400 mt-1 font-mono">${totalForecast.toLocaleString()}</div>
+          <div className="text-2xl font-extrabold text-[var(--accent)] mt-1 font-mono">${totalForecast.toLocaleString()}</div>
         </div>
-        <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl shadow-md">
+        <div className="glass-card p-5">
           <span className="text-xs text-[var(--text-muted)] font-medium">Actual Incurred Spend</span>
           <div className="text-2xl font-extrabold text-emerald-400 mt-1 font-mono">${totalActual.toLocaleString()}</div>
         </div>
       </div>
 
       {/* Cost Breakdown Structure Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+      <div className="glass-card p-6 space-y-4">
         <h3 className="text-sm font-bold text-white flex items-center gap-2">
-          <DollarSign className="w-4 h-4 text-indigo-400" />
+          <DollarSign className="w-4 h-4" />
           Cost Breakdown Structure (CBS) Line Items
         </h3>
 
@@ -75,19 +75,19 @@ export const BudgetCostView: React.FC = () => {
                 <th className="p-3 font-mono">Variance ($)</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="">
               {costLineItems.map((c) => {
                 const variance = c.plannedAmount - c.forecastAmount;
                 return (
-                  <tr key={c.id} className="hover:bg-slate-800/40 transition-colors">
+                  <tr key={c.id} className="table-row-dark">
                     <td className="p-3 font-bold text-white">
-                      <span className="bg-[var(--accent-glow)]0/10 text-indigo-300 px-2 py-0.5 rounded border border-indigo-500/20">
+                      <span className="badge-violet">
                         {c.category}
                       </span>
                     </td>
                     <td className="p-3 text-[var(--text-muted)]">{c.description}</td>
                     <td className="p-3 font-mono text-slate-200">${c.plannedAmount.toLocaleString()}</td>
-                    <td className="p-3 font-mono text-indigo-300">${c.forecastAmount.toLocaleString()}</td>
+                    <td className="p-3 font-mono text-[var(--cyan)]">${c.forecastAmount.toLocaleString()}</td>
                     <td className="p-3 font-mono text-emerald-400">${c.actualAmount.toLocaleString()}</td>
                     <td className="p-3 font-mono">
                       <span className={variance >= 0 ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"}>
@@ -104,3 +104,4 @@ export const BudgetCostView: React.FC = () => {
     </div>
   );
 };
+

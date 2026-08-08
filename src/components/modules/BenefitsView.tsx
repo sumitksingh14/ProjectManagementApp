@@ -16,11 +16,11 @@ import {
 import { Benefit } from "../../types";
 
 const statusConfig: Record<Benefit["realizationStatus"], { color: string; label: string }> = {
-  "Not Started": { color: "bg-[var(--bg-card-hover)] text-[var(--text-secondary)] border-[var(--border)]", label: "Not Started" },
-  "In Progress": { color: "bg-blue-100 text-blue-700 border-blue-300", label: "In Progress" },
-  "Partially Realized": { color: "bg-amber-100 text-[var(--amber)] border-amber-300", label: "Partial" },
-  "Fully Realized": { color: "bg-[var(--green-dim)] text-[var(--green)] border-emerald-300", label: "Realized ✓" },
-  "Not Achieved": { color: "bg-red-100 text-[var(--pink)] border-red-300", label: "Not Achieved" }
+  "Not Started": { color: "badge-slate", label: "Not Started" },
+  "In Progress": { color: "badge-blue", label: "In Progress" },
+  "Partially Realized": { color: "badge-amber", label: "Partial" },
+  "Fully Realized": { color: "badge-green", label: "Realized ✓" },
+  "Not Achieved": { color: "badge-red", label: "Not Achieved" }
 };
 
 const categoryIcons: Record<string, React.ReactNode> = {
@@ -160,7 +160,7 @@ export const BenefitsView: React.FC = () => {
         {[
           { label: "Total Benefits", value: benefits.length, color: "text-[var(--text-primary)]" },
           { label: "Fully Realized", value: realized, color: "text-[var(--green)]" },
-          { label: "In Progress", value: inProgress, color: "text-blue-700" },
+          { label: "In Progress", value: inProgress, color: "text-[var(--cyan)]" },
           { label: "Not Started", value: notStarted, color: "text-[var(--text-secondary)]" },
           { label: "Realization Rate", value: `${realizationRate}%`, color: realizationRate >= 50 ? "text-[var(--green)]" : "text-[var(--amber)]" }
         ].map((kpi, i) => (
@@ -181,17 +181,17 @@ export const BenefitsView: React.FC = () => {
           <div className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400 transition-all" style={{ width: `${realizationRate}%` }} />
         </div>
         <div className="flex gap-4 mt-2 text-[10px] text-[var(--text-secondary)]">
-          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-[var(--green-dim)]0 inline-block" />{realized} Realized</span>
-          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-400 inline-block" />{inProgress} In Progress</span>
-          <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-slate-300 inline-block" />{notStarted} Not Started</span>
-          {notAchieved > 0 && <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-400 inline-block" />{notAchieved} Not Achieved</span>}
+          <span className="flex items-center gap-1"><span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "var(--green)", display: "inline-block" }} />{realized} Realized</span>
+          <span className="flex items-center gap-1"><span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "var(--cyan)", display: "inline-block" }} />{inProgress} In Progress</span>
+          <span className="flex items-center gap-1"><span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "var(--text-muted)", display: "inline-block" }} />{notStarted} Not Started</span>
+          {notAchieved > 0 && <span className="flex items-center gap-1"><span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "var(--pink)", display: "inline-block" }} />{notAchieved} Not Achieved</span>}
         </div>
       </div>
 
       {/* Add Form */}
       {showAddForm && (
-        <div className="bg-[var(--bg-card)] border border-emerald-200 rounded-xl p-5 shadow-sm space-y-4">
-          <h3 className="text-sm font-bold text-[var(--text-primary)]">Add New Benefit</h3>
+        <div className="glass-card animate-fadeIn" style={{ padding: "24px", borderColor: "var(--accent-border)", background: "linear-gradient(145deg, rgba(109,40,217,0.08) 0%, var(--bg-card) 100%)" }}>
+          <h3 style={{ fontSize: "var(--text-md)", fontWeight: 700, color: "var(--text-primary)", marginBottom: "16px" }}>Add New Benefit</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             {[
               { label: "Benefit Title *", key: "title", type: "text" },
@@ -202,22 +202,22 @@ export const BenefitsView: React.FC = () => {
               { label: "Description", key: "description", type: "text" }
             ].map(field => (
               <div key={field.key}>
-                <label className="block text-[var(--text-secondary)] font-bold mb-1">{field.label}</label>
+                <label className="section-label" style={{ display: "block", marginBottom: "6px" }}>{field.label}</label>
                 <input
                   type={field.type}
                   placeholder={field.placeholder}
                   value={(newBenefit as any)[field.key] || ""}
                   onChange={e => setNewBenefit(prev => ({ ...prev, [field.key]: e.target.value }))}
-                  className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-[var(--text-primary)] outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="form-input-dark"
                 />
               </div>
             ))}
             <div>
-              <label className="block text-[var(--text-secondary)] font-bold mb-1 text-xs">Category</label>
+              <label className="section-label" style={{ display: "block", marginBottom: "6px" }}>Category</label>
               <select
                 value={newBenefit.category || "Financial"}
                 onChange={e => setNewBenefit(prev => ({ ...prev, category: e.target.value as Benefit["category"] }))}
-                className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-xs text-[var(--text-primary)] outline-none"
+                className="form-input-dark"
               >
                 {["Financial", "Operational", "Strategic", "Customer", "Compliance", "Risk Reduction"].map(c => (
                   <option key={c}>{c}</option>
@@ -225,9 +225,9 @@ export const BenefitsView: React.FC = () => {
               </select>
             </div>
           </div>
-          <div className="flex gap-3">
-            <button onClick={handleAddBenefit} className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition-all">Save Benefit</button>
-            <button onClick={() => setShowAddForm(false)} className="text-[var(--text-secondary)] text-xs font-bold px-4 py-2 rounded-lg border border-[var(--border)] hover:bg-[var(--bg-card)] transition-all">Cancel</button>
+          <div className="flex gap-3" style={{ marginTop: "16px" }}>
+            <button onClick={handleAddBenefit} className="btn-accent">Save Benefit</button>
+            <button onClick={() => setShowAddForm(false)} style={{ background: "rgba(255,255,255,0.05)", border: "1px solid var(--border)", color: "var(--text-muted)", fontSize: "var(--text-xs)", fontWeight: 700, padding: "8px 16px", borderRadius: "8px", cursor: "pointer" }}>Cancel</button>
           </div>
         </div>
       )}
@@ -244,7 +244,7 @@ export const BenefitsView: React.FC = () => {
                 onClick={() => setExpandedId(isExpanded ? null : benefit.id)}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-[var(--green-dim)] border border-emerald-200 flex items-center justify-center text-[var(--green)]">
+                  <div className="w-8 h-8 rounded-lg bg-[var(--green-dim)] border border-[var(--border)] flex items-center justify-center text-[var(--green)]">
                     {categoryIcons[benefit.category] || <Target className="w-3.5 h-3.5" />}
                   </div>
                   <div>
@@ -283,7 +283,7 @@ export const BenefitsView: React.FC = () => {
                       <button
                         key={s}
                         onClick={() => updateBenefitStatus(benefit.id, s)}
-                        className={`text-[10px] font-bold px-2.5 py-1 rounded-full border transition-all ${benefit.realizationStatus === s ? statusConfig[s].color : "bg-[var(--bg-card)] text-[var(--text-secondary)] border-[var(--border)] hover:border-slate-400"}`}
+                        className={`text-[10px] font-bold px-2.5 py-1 rounded-full border transition-all ${benefit.realizationStatus === s ? statusConfig[s].color : "badge-slate hover:border-[var(--accent-border)]"}`}
                       >
                         {s}
                       </button>

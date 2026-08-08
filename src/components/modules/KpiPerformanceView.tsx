@@ -56,7 +56,7 @@ export const KpiPerformanceView: React.FC = () => {
           { title: "Scope Drift", value: "Controlled", status: health.scopeHealth, desc: "Approved CCB change count" },
           { title: "Resource Utilization", value: "92%", status: health.resourceHealth, desc: "Team capacity optimization" }
         ].map((kpi, idx) => (
-          <div key={idx} className="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-xl space-y-3">
+          <div key={idx} className="glass-card p-5 space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs text-[var(--text-muted)] font-bold uppercase tracking-wider">{kpi.title}</span>
               <span className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded border ${getRaciBadge(kpi.status)}`}>
@@ -71,3 +71,4 @@ export const KpiPerformanceView: React.FC = () => {
     </div>
   );
 };
+

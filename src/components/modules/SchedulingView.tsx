@@ -11,6 +11,12 @@ export const SchedulingView: React.FC = () => {
     ph.workPackages.flatMap((wp) => wp.tasks)
   );
 
+  const viewTabs = [
+    { id: "gantt", label: "Gantt / CPM", icon: <AlignLeft className="w-3.5 h-3.5" /> },
+    { id: "kanban", label: "Kanban Board", icon: <Kanban className="w-3.5 h-3.5" /> },
+    { id: "milestones", label: "Milestones", icon: <Flag className="w-3.5 h-3.5" /> },
+  ];
+
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* Header */}
@@ -29,57 +35,71 @@ export const SchedulingView: React.FC = () => {
             <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>Enterprise Scheduling Engine</span>
           </div>
           <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
-            Scheduling & Gantt Engine
+            Scheduling &amp; Gantt Engine
           </h1>
           <p style={{ fontSize: "var(--text-base)", color: "rgba(255,255,255,0.65)", maxWidth: "580px", lineHeight: 1.6 }}>
             Critical Path Method (CPM), milestone forecasting, baseline variance comparison, and interactive Kanban.
           </p>
         </div>
-        <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
-          <AlignLeft style={{ width: "32px", height: "32px", color: "#fff" }} />
+        {/* View Mode Toggle */}
+        <div className="flex glass-card rounded-xl p-1 gap-1 shrink-0" style={{ padding: "4px" }}>
+          {viewTabs.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setViewMode(tab.id as any)}
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all ${viewMode === tab.id ? "bg-[var(--accent)] text-white" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"}`}
+            >
+              {tab.icon} {tab.label}
+            </button>
+          ))}
         </div>
       </div>
 
       {/* View Content */}
       {viewMode === "gantt" && (
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-            <h3 className="text-sm font-bold text-white">Interactive Gantt & Critical Path Schedule</h3>
-            <div className="flex items-center gap-3 text-xs">
-              <span className="flex items-center gap-1 text-rose-400 font-bold">
-                <span className="w-2.5 h-2.5 rounded-full bg-rose-500"></span> Critical Path
+        <div className="glass-card" style={{ overflow: "hidden" }}>
+          <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <h3 style={{ fontSize: "var(--text-md)", fontWeight: 700, color: "var(--text-primary)" }}>Interactive Gantt &amp; Critical Path Schedule</h3>
+            <div className="flex items-center gap-4 text-xs">
+              <span className="flex items-center gap-1.5" style={{ color: "var(--pink)", fontWeight: 700 }}>
+                <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "var(--pink)", display: "inline-block" }} /> Critical Path
               </span>
-              <span className="flex items-center gap-1 text-indigo-400 font-bold">
-                <span className="w-2.5 h-2.5 rounded-full bg-[var(--accent-glow)]0"></span> Standard Task
+              <span className="flex items-center gap-1.5" style={{ color: "var(--accent)", fontWeight: 700 }}>
+                <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "var(--accent)", display: "inline-block" }} /> Standard Task
               </span>
             </div>
           </div>
-
-          <div className="space-y-4">
-            {allTasks.map((t) => (
-              <div key={t.id} className="space-y-1 text-xs">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-indigo-400 font-bold">{t.wbsCode}</span>
-                    <span className="font-semibold text-white">{t.title}</span>
-                    <span className="text-[10px] text-[var(--text-muted)]">({t.assignedTo})</span>
+          <div style={{ padding: "16px 20px" }}>
+            <div className="space-y-4">
+              {allTasks.map((t) => (
+                <div key={t.id} className="space-y-1 text-xs">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span style={{ fontFamily: "monospace", color: "var(--accent)", fontWeight: 700, fontSize: "10px" }}>{t.wbsCode}</span>
+                      <span style={{ fontWeight: 600, color: "var(--text-primary)", fontSize: "var(--text-sm)" }}>{t.title}</span>
+                      <span style={{ fontSize: "10px", color: "var(--text-muted)" }}>({t.assignedTo})</span>
+                    </div>
+                    <span style={{ color: "var(--text-muted)", fontFamily: "monospace", fontSize: "11px" }}>{t.progressPercent}% Complete ({t.durationDays}d)</span>
                   </div>
-                  <span className="text-[var(--text-muted)] font-mono text-[11px]">{t.progressPercent}% Complete ({t.durationDays}d)</span>
-                </div>
-
-                {/* Visual Gantt Bar */}
-                <div className="w-full bg-slate-800 h-6 rounded-lg overflow-hidden relative flex items-center px-2">
-                  <div
-                    className={`h-4 rounded transition-all duration-500 flex items-center justify-end px-2 text-[10px] font-bold text-white ${
-                      t.isCriticalPath ? "bg-gradient-to-r from-rose-600 to-rose-500" : "bg-gradient-to-r from-indigo-600 to-blue-500"
-                    }`}
-                    style={{ width: `${Math.max(t.progressPercent, 15)}%` }}
-                  >
-                    {t.progressPercent}%
+                  {/* Visual Gantt Bar */}
+                  <div style={{ width: "100%", background: "rgba(255,255,255,0.05)", height: "24px", borderRadius: "8px", overflow: "hidden", position: "relative", display: "flex", alignItems: "center", padding: "0 8px" }}>
+                    <div
+                      style={{
+                        height: "16px", borderRadius: "6px", transition: "width 0.5s",
+                        display: "flex", alignItems: "center", justifyContent: "flex-end", paddingRight: "8px",
+                        fontSize: "10px", fontWeight: 700, color: "#fff",
+                        width: `${Math.max(t.progressPercent, 15)}%`,
+                        background: t.isCriticalPath
+                          ? "linear-gradient(90deg, #BE185D, var(--pink))"
+                          : "linear-gradient(90deg, var(--accent-2), var(--accent))"
+                      }}
+                    >
+                      {t.progressPercent}%
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       )}
@@ -88,28 +108,32 @@ export const SchedulingView: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {["Not Started", "In Progress", "Completed"].map((status) => {
             const tasksInCol = allTasks.filter((t) => t.status === status);
+            const accentMap: Record<string, string> = {
+              "Not Started": "var(--text-muted)",
+              "In Progress": "var(--accent)",
+              "Completed": "var(--green)"
+            };
             return (
-              <div key={status} className="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-                  <h3 className="text-xs font-bold text-white uppercase tracking-wider">{status}</h3>
-                  <span className="text-xs font-mono bg-slate-800 text-[var(--text-muted)] px-2 py-0.5 rounded-full">
+              <div key={status} className="glass-card" style={{ padding: "16px" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid var(--border)", paddingBottom: "10px", marginBottom: "14px" }}>
+                  <h3 style={{ fontSize: "var(--text-sm)", fontWeight: 700, color: accentMap[status], textTransform: "uppercase", letterSpacing: "0.06em" }}>{status}</h3>
+                  <span style={{ fontFamily: "monospace", fontSize: "var(--text-xs)", background: "rgba(255,255,255,0.05)", border: "1px solid var(--border)", color: "var(--text-muted)", padding: "2px 8px", borderRadius: "99px" }}>
                     {tasksInCol.length}
                   </span>
                 </div>
-
                 <div className="space-y-3">
                   {tasksInCol.map((t) => (
-                    <div key={t.id} className="bg-slate-800/80 border border-slate-700/70 rounded-xl p-3 space-y-2 text-xs">
+                    <div key={t.id} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid var(--border)", borderRadius: "10px", padding: "12px" }} className="space-y-2 text-xs">
                       <div className="flex items-center justify-between">
-                        <span className="font-mono text-[10px] text-indigo-400">{t.wbsCode}</span>
+                        <span style={{ fontFamily: "monospace", fontSize: "10px", color: "var(--accent)" }}>{t.wbsCode}</span>
                         {t.isCriticalPath && (
-                          <span className="text-[9px] bg-rose-500/20 text-rose-300 px-1.5 py-0.5 rounded border border-rose-500/30">
+                          <span style={{ fontSize: "9px", background: "var(--pink-dim)", color: "var(--pink)", padding: "2px 6px", borderRadius: "4px", border: "1px solid rgba(236,72,153,0.25)" }}>
                             Critical
                           </span>
                         )}
                       </div>
-                      <p className="font-bold text-white">{t.title}</p>
-                      <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)]">
+                      <p style={{ fontWeight: 700, color: "var(--text-primary)", fontSize: "var(--text-sm)" }}>{t.title}</p>
+                      <div className="flex items-center justify-between" style={{ fontSize: "10px", color: "var(--text-muted)" }}>
                         <span>Assigned: {t.assignedTo}</span>
                         <span>{t.effortDays} Days</span>
                       </div>
@@ -123,27 +147,27 @@ export const SchedulingView: React.FC = () => {
       )}
 
       {viewMode === "milestones" && (
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
-          <h3 className="text-sm font-bold text-white">Project Major Milestones</h3>
-          <div className="space-y-3 text-xs">
+        <div className="glass-card" style={{ overflow: "hidden" }}>
+          <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border)" }}>
+            <h3 style={{ fontSize: "var(--text-md)", fontWeight: 700, color: "var(--text-primary)" }}>Project Major Milestones</h3>
+          </div>
+          <div style={{ padding: "16px 20px" }} className="space-y-3 text-xs">
             {allTasks.filter((t) => t.isMilestone).map((m) => (
-              <div key={m.id} className="bg-slate-800/60 p-4 rounded-xl border border-slate-700/60 flex items-center justify-between">
+              <div key={m.id} style={{ background: "rgba(255,255,255,0.03)", padding: "16px", borderRadius: "10px", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-[var(--amber-dim)]0/20 text-amber-300">
+                  <div style={{ padding: "8px", borderRadius: "8px", background: "var(--amber-dim)", color: "var(--amber)" }}>
                     <Flag className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="font-bold text-white">{m.title}</p>
-                    <p className="text-[10px] text-[var(--text-muted)]">Deliverable: {m.deliverableName}</p>
+                    <p style={{ fontWeight: 700, color: "var(--text-primary)", fontSize: "var(--text-sm)" }}>{m.title}</p>
+                    <p style={{ fontSize: "10px", color: "var(--text-muted)" }}>Deliverable: {m.deliverableName}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${
-                    m.status === "Completed" ? "bg-[var(--green-dim)]0/20 text-emerald-400" : "bg-[var(--amber-dim)]0/20 text-amber-300"
-                  }`}>
+                  <span className={m.status === "Completed" ? "badge-green" : "badge-amber"}>
                     {m.status}
                   </span>
-                  <p className="text-[10px] text-[var(--text-muted)] mt-1 font-mono">End: {m.endDate}</p>
+                  <p style={{ fontSize: "10px", color: "var(--text-muted)", marginTop: "4px", fontFamily: "monospace" }}>End: {m.endDate}</p>
                 </div>
               </div>
             ))}

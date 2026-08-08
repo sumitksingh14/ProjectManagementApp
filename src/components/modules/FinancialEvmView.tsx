@@ -41,25 +41,25 @@ export const FinancialEvmView: React.FC = () => {
 
       {/* EVM Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
-        <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl shadow-md space-y-2">
+        <div className="glass-card p-5 space-y-2">
           <span className="text-[var(--text-muted)] font-medium">Cost Performance Index (CPI)</span>
           <div className="text-3xl font-extrabold text-white font-mono">{evm.CPI}</div>
           <p className="text-[10px] text-[var(--text-muted)]">Formula: EV / AC ({evm.CPI >= 1 ? "Under Budget / Efficient" : "Over Budget"})</p>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl shadow-md space-y-2">
+        <div className="glass-card p-5 space-y-2">
           <span className="text-[var(--text-muted)] font-medium">Schedule Performance Index (SPI)</span>
           <div className="text-3xl font-extrabold text-white font-mono">{evm.SPI}</div>
           <p className="text-[10px] text-[var(--text-muted)]">Formula: EV / PV ({evm.SPI >= 1 ? "Ahead of Schedule" : "Behind Schedule"})</p>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl shadow-md space-y-2">
+        <div className="glass-card p-5 space-y-2">
           <span className="text-[var(--text-muted)] font-medium">Estimate at Completion (EAC)</span>
           <div className="text-3xl font-extrabold text-indigo-400 font-mono">${(evm.EAC / 1000).toFixed(0)}k</div>
           <p className="text-[10px] text-[var(--text-muted)]">Formula: BAC / CPI (Baseline: ${(evm.BAC / 1000).toFixed(0)}k)</p>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 p-5 rounded-xl shadow-md space-y-2">
+        <div className="glass-card p-5 space-y-2">
           <span className="text-[var(--text-muted)] font-medium">Variance at Completion (VAC)</span>
           <div className="text-3xl font-extrabold text-emerald-400 font-mono">+${(evm.VAC / 1000).toFixed(0)}k</div>
           <p className="text-[10px] text-[var(--text-muted)]">Formula: BAC - EAC (Favorable cost saving)</p>
@@ -67,7 +67,7 @@ export const FinancialEvmView: React.FC = () => {
       </div>
 
       {/* EVM S-Curve Representation */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+      <div className="glass-card p-6 space-y-4">
         <h3 className="text-sm font-bold text-white flex items-center gap-2">
           <TrendingUp className="w-4 h-4 text-indigo-400" />
           Earned Value S-Curve Performance (PV vs EV vs AC)
@@ -80,7 +80,7 @@ export const FinancialEvmView: React.FC = () => {
               <span className="font-semibold text-blue-400">Planned Value (PV)</span>
               <span className="font-mono text-slate-200">${evm.PV.toLocaleString()}</span>
             </div>
-            <div className="w-full bg-slate-800 h-3 rounded-full overflow-hidden">
+            <div className="w-full h-3 rounded-full overflow-hidden bg-[var(--bg-card-hover)]">
               <div className="bg-blue-500 h-full" style={{ width: "65%" }}></div>
             </div>
           </div>
@@ -91,7 +91,7 @@ export const FinancialEvmView: React.FC = () => {
               <span className="font-semibold text-emerald-400">Earned Value (EV)</span>
               <span className="font-mono text-slate-200">${evm.EV.toLocaleString()}</span>
             </div>
-            <div className="w-full bg-slate-800 h-3 rounded-full overflow-hidden">
+            <div className="w-full h-3 rounded-full overflow-hidden bg-[var(--bg-card-hover)]">
               <div className="bg-[var(--green-dim)]0 h-full" style={{ width: "68%" }}></div>
             </div>
           </div>
@@ -102,7 +102,7 @@ export const FinancialEvmView: React.FC = () => {
               <span className="font-semibold text-purple-400">Actual Cost (AC)</span>
               <span className="font-mono text-slate-200">${evm.AC.toLocaleString()}</span>
             </div>
-            <div className="w-full bg-slate-800 h-3 rounded-full overflow-hidden">
+            <div className="w-full h-3 rounded-full overflow-hidden bg-[var(--bg-card-hover)]">
               <div className="bg-purple-500 h-full" style={{ width: "60%" }}></div>
             </div>
           </div>
@@ -111,3 +111,4 @@ export const FinancialEvmView: React.FC = () => {
     </div>
   );
 };
+

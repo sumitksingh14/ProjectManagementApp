@@ -40,11 +40,11 @@ const defaultClosureStatus: ClosureStatus = {
 };
 
 const deliverableStatusColor: Record<ProjectDeliverable["status"], string> = {
-  "Not Started": "bg-[var(--bg-card-hover)] text-[var(--text-secondary)] border-[var(--border)]",
-  "In Progress": "bg-blue-100 text-blue-700 border-blue-300",
-  "Submitted": "bg-amber-100 text-[var(--amber)] border-amber-300",
-  "Accepted": "bg-[var(--green-dim)] text-[var(--green)] border-emerald-300",
-  "Rejected": "bg-red-100 text-[var(--pink)] border-red-300"
+  "Not Started": "badge-slate",
+  "In Progress": "badge-blue",
+  "Submitted": "badge-amber",
+  "Accepted": "badge-green",
+  "Rejected": "badge-red"
 };
 
 const lessonCategoryIcons: Record<string, React.ReactNode> = {
@@ -208,7 +208,7 @@ export const ClosureView: React.FC = () => {
                       <button
                         key={s}
                         onClick={() => updateDeliverableStatus(del.id, s)}
-                        className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all ${s === "Accepted" ? "border-emerald-300 text-[var(--green)] hover:bg-[var(--green-dim)]" : "border-red-300 text-[var(--pink)] hover:bg-[var(--pink-dim)]"}`}
+                        className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all ${s === "Accepted" ? "border-[var(--border)] text-[var(--green)] hover:bg-[var(--green-dim)]" : "border-[var(--border)] text-[var(--pink)] hover:bg-[var(--pink-dim)]"}`}
                       >
                         {s === "Accepted" ? "Accept ✓" : "Reject ✗"}
                       </button>
@@ -275,7 +275,7 @@ export const ClosureView: React.FC = () => {
               <div key={lesson.id} className="glass-card rounded-xl shadow-sm overflow-hidden">
                 <div className="flex items-center justify-between p-4 cursor-pointer hover:bg-[var(--bg-card)]" onClick={() => setExpandedLesson(isEx ? null : lesson.id)}>
                   <div className="flex items-center gap-3">
-                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center border ${lesson.impact === "High" ? "bg-[var(--pink-dim)] border-red-200 text-[var(--pink)]" : lesson.impact === "Medium" ? "bg-[var(--amber-dim)] border-amber-200 text-[var(--amber)]" : "bg-[var(--bg-card)] border-[var(--border)] text-[var(--text-secondary)]"}`}>
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center border ${lesson.impact === "High" ? "bg-[var(--pink-dim)] border-[var(--border)] text-[var(--pink)]" : lesson.impact === "Medium" ? "bg-[var(--amber-dim)] border-[var(--border)] text-[var(--amber)]" : "bg-[var(--bg-card)] border-[var(--border)] text-[var(--text-secondary)]"}`}>
                       {lessonCategoryIcons[lesson.category] || <FileText className="w-3.5 h-3.5" />}
                     </div>
                     <div>
@@ -284,8 +284,8 @@ export const ClosureView: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className={`text-[10px] font-bold px-2.5 py-1 rounded border ${lesson.impact === "High" ? "bg-red-100 text-[var(--pink)] border-red-300" : lesson.impact === "Medium" ? "bg-amber-100 text-[var(--amber)] border-amber-300" : "bg-[var(--bg-card-hover)] text-[var(--text-secondary)] border-[var(--border)]"}`}>{lesson.impact} Impact</span>
-                    <span className="text-[10px] bg-indigo-100 text-[var(--accent)] border border-[var(--accent-border)] font-bold px-2.5 py-1 rounded">{lesson.status}</span>
+                    <span className={`text-[10px] font-bold px-2.5 py-1 rounded border ${lesson.impact === "High" ? "badge-red" : lesson.impact === "Medium" ? "badge-amber" : "badge-slate"}`}>{lesson.impact} Impact</span>
+                    <span className="badge-violet">{lesson.status}</span>
                     {isEx ? <ChevronUp className="w-4 h-4 text-[var(--text-muted)]" /> : <ChevronDown className="w-4 h-4 text-[var(--text-muted)]" />}
                   </div>
                 </div>
@@ -298,7 +298,7 @@ export const ClosureView: React.FC = () => {
                     {lesson.recommendation && (
                       <div>
                         <span className="text-[10px] font-bold text-[var(--green)] uppercase">Recommendation</span>
-                        <p className="text-xs text-emerald-800 mt-1 bg-[var(--green-dim)] border border-emerald-100 rounded-lg p-2">{lesson.recommendation}</p>
+                        <p className="text-xs text-[var(--text-primary)] mt-1 bg-[var(--green-dim)] border border-[var(--border)] rounded-lg p-2">{lesson.recommendation}</p>
                       </div>
                     )}
                   </div>
@@ -314,31 +314,31 @@ export const ClosureView: React.FC = () => {
         <div className="glass-card rounded-xl p-6 shadow-sm space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-bold text-[var(--text-primary)]">Formal Project Closure Checklist</h3>
-            <span className={`text-xs font-bold px-3 py-1 rounded-full border ${closureReadiness === 100 ? "bg-[var(--green-dim)] text-[var(--green)] border-emerald-300" : "bg-amber-100 text-[var(--amber)] border-amber-300"}`}>
+            <span className={`text-xs font-bold px-3 py-1 rounded-full border ${closureReadiness === 100 ? "badge-green" : "badge-amber"}`}>
               {checklistDone}/{closureChecklist.length} Complete
             </span>
           </div>
           <div className="h-2 w-full bg-[var(--bg-card-hover)] rounded-full overflow-hidden mb-4">
-            <div className="h-full rounded-full bg-[var(--green-dim)]0 transition-all" style={{ width: `${closureReadiness}%` }} />
+            <div className="h-full rounded-full transition-all" style={{ width: `${closureReadiness}%`, background: "var(--grad-primary)" }} />
           </div>
           <div className="space-y-3">
             {closureChecklist.map(item => (
               <div
                 key={item.key}
                 onClick={() => toggleChecklistItem(item.key)}
-                className={`flex items-center gap-4 p-4 rounded-xl border cursor-pointer transition-all ${item.done ? "bg-[var(--green-dim)] border-emerald-200" : "bg-[var(--bg-card)] border-[var(--border)] hover:border-[var(--border)]"}`}
+                className={`flex items-center gap-4 p-4 rounded-xl border cursor-pointer transition-all ${item.done ? "bg-[var(--green-dim)] border-[var(--border)]" : "bg-[var(--bg-card)] border-[var(--border)] hover:border-[var(--accent-border)]"}`}
               >
                 {item.done
                   ? <CheckCircle2 className="w-5 h-5 text-[var(--green)] shrink-0" />
                   : <div className="w-5 h-5 rounded-full border-2 border-[var(--border)] shrink-0" />}
-                <span className={`text-sm font-medium ${item.done ? "text-emerald-800 line-through" : "text-[var(--text-primary)]"}`}>{item.label}</span>
+                <span className={`text-sm font-medium ${item.done ? "text-[var(--green)] line-through" : "text-[var(--text-primary)]"}`}>{item.label}</span>
               </div>
             ))}
           </div>
           {closureReadiness === 100 && (
-            <div className="mt-4 p-4 bg-[var(--green-dim)] border border-emerald-200 rounded-xl text-center">
+            <div className="mt-4 p-4 bg-[var(--green-dim)] border border-[var(--border)] rounded-xl text-center">
               <CheckCircle2 className="w-8 h-8 text-[var(--green)] mx-auto mb-2" />
-              <p className="text-sm font-bold text-emerald-800">Project is ready for formal closure!</p>
+              <p className="text-sm font-bold text-[var(--text-primary)]">Project is ready for formal closure!</p>
               <p className="text-xs text-[var(--green)] mt-1">All closure criteria have been met. Notify the PMO to issue the formal project closure certificate.</p>
             </div>
           )}

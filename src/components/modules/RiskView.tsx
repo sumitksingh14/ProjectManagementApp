@@ -71,131 +71,142 @@ export const RiskView: React.FC = () => {
             <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>PMP Risk Governance Framework</span>
           </div>
           <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
-            
-            Risk Register & Predictive Risk Engine
+            Risk Register &amp; Predictive Risk Engine
           </h1>
           <p style={{ fontSize: "var(--text-base)", color: "rgba(255,255,255,0.65)", maxWidth: "580px", lineHeight: 1.6 }}>
             Capture root causes, triggers, mitigations, contingencies, severity heatmaps, and AI predictive risk analysis.
           </p>
         </div>
         <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
-          <AlertTriangle style={{ width: "32px", height: "32px", color: "#fff" }} />
+          <button
+            onClick={() => generateAiRisks?.()}
+            className="btn-accent flex items-center gap-1.5"
+            style={{ padding: "8px 16px" }}
+            disabled={isAiLoading}
+          >
+            {isAiLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles style={{ width: "13px", height: "13px", color: "#FCD34D" }} />}
+            AI Risk Analysis
+          </button>
+          <button
+            onClick={() => setShowForm(!showForm)}
+            className="flex items-center gap-1.5 rounded-xl transition-all cursor-pointer"
+            style={{
+              background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.20)",
+              color: "#fff", padding: "8px 14px", fontSize: "12px", fontWeight: 600, backdropFilter: "blur(10px)"
+            }}
+          >
+            <Plus style={{ width: "14px", height: "14px" }} />
+            Add Risk
+          </button>
         </div>
       </div>
 
       {/* Manual Risk Form */}
       {showForm && (
-        <form onSubmit={handleAddRisk} className="bg-slate-900 border border-indigo-500/40 rounded-2xl p-6 shadow-2xl space-y-4 text-xs">
-          <h3 className="text-sm font-bold text-white">Add Risk to Register</h3>
+        <form
+          onSubmit={handleAddRisk}
+          className="glass-card animate-fadeIn"
+          style={{
+            padding: "24px",
+            borderColor: "var(--accent-border)",
+            background: "linear-gradient(145deg, rgba(109,40,217,0.08) 0%, var(--bg-card) 100%)"
+          }}
+        >
+          <h3 style={{ fontSize: "var(--text-md)", fontWeight: 700, color: "var(--text-primary)", marginBottom: "16px" }}>
+            Add Risk to Register
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-[var(--text-muted)] mb-1">Risk Category</label>
-              <select
-                value={newRisk.category}
-                onChange={(e) => setNewRisk({ ...newRisk, category: e.target.value as any })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-white"
-              >
-                <option>Technical</option>
-                <option>Schedule</option>
-                <option>Financial</option>
-                <option>Resource</option>
-                <option>Vendor</option>
-                <option>Scope</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-[var(--text-muted)] mb-1">Probability</label>
-              <select
-                value={newRisk.probability}
-                onChange={(e) => setNewRisk({ ...newRisk, probability: e.target.value as any })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-white"
-              >
-                <option>High</option>
-                <option>Medium</option>
-                <option>Low</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-[var(--text-muted)] mb-1">Impact</label>
-              <select
-                value={newRisk.impact}
-                onChange={(e) => setNewRisk({ ...newRisk, impact: e.target.value as any })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-white"
-              >
-                <option>High</option>
-                <option>Medium</option>
-                <option>Low</option>
-              </select>
-            </div>
+            {[
+              { label: "Risk Category", key: "category", type: "select", options: ["Technical", "Schedule", "Financial", "Resource", "Vendor", "Scope"] },
+              { label: "Probability", key: "probability", type: "select", options: ["High", "Medium", "Low"] },
+              { label: "Impact", key: "impact", type: "select", options: ["High", "Medium", "Low"] },
+            ].map(field => (
+              <div key={field.key}>
+                <label className="section-label" style={{ display: "block", marginBottom: "6px" }}>{field.label}</label>
+                <select
+                  value={(newRisk as any)[field.key]}
+                  onChange={(e) => setNewRisk({ ...newRisk, [field.key]: e.target.value as any })}
+                  className="form-input-dark"
+                >
+                  {field.options.map(o => <option key={o}>{o}</option>)}
+                </select>
+              </div>
+            ))}
           </div>
-          <div>
-            <label className="block text-[var(--text-muted)] mb-1">Risk Statement / Description *</label>
+          <div style={{ marginTop: "16px" }}>
+            <label className="section-label" style={{ display: "block", marginBottom: "6px" }}>Risk Statement / Description *</label>
             <textarea
               required
               rows={2}
               value={newRisk.description}
               onChange={(e) => setNewRisk({ ...newRisk, description: e.target.value })}
-              className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-white"
+              className="form-input-dark"
             />
           </div>
-          <div>
-            <label className="block text-[var(--text-muted)] mb-1">Proactive Mitigation Strategy</label>
+          <div style={{ marginTop: "16px" }}>
+            <label className="section-label" style={{ display: "block", marginBottom: "6px" }}>Proactive Mitigation Strategy</label>
             <textarea
               rows={2}
               value={newRisk.mitigation}
               onChange={(e) => setNewRisk({ ...newRisk, mitigation: e.target.value })}
-              className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-white"
+              className="form-input-dark"
             />
           </div>
-          <div className="flex justify-end gap-2 pt-2">
-            <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 bg-slate-800 text-[var(--text-muted)] rounded-lg">
+          <div className="flex justify-end gap-2 pt-4">
+            <button
+              type="button"
+              onClick={() => setShowForm(false)}
+              style={{
+                padding: "8px 16px", borderRadius: "8px", fontSize: "var(--text-sm)",
+                background: "rgba(255,255,255,0.05)", border: "1px solid var(--border)",
+                color: "var(--text-muted)", cursor: "pointer"
+              }}
+            >
               Cancel
             </button>
-            <button type="submit" className="px-4 py-2 bg-[var(--accent)] text-white font-bold rounded-lg">
-              Save Risk
-            </button>
+            <button type="submit" className="btn-accent">Save Risk</button>
           </div>
         </form>
       )}
 
       {/* Risk Register Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
-        <h3 className="text-sm font-bold text-white">Active Risk Register & Mitigation Strategy</h3>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
+      <div className="glass-card" style={{ overflow: "hidden" }}>
+        <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border)" }}>
+          <h3 style={{ fontSize: "var(--text-md)", fontWeight: 700, color: "var(--text-primary)" }}>
+            Active Risk Register &amp; Mitigation Strategy
+          </h3>
+        </div>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
-              <tr className="border-b border-slate-800 text-[var(--text-muted)] font-bold uppercase tracking-wider text-[10px]">
-                <th className="p-3">Risk ID</th>
-                <th className="p-3">Category & Description</th>
-                <th className="p-3">Prob / Impact</th>
-                <th className="p-3">Severity</th>
-                <th className="p-3">Proactive Mitigation</th>
-                <th className="p-3">Owner</th>
-                <th className="p-3">Status</th>
+              <tr style={{ borderBottom: "1px solid var(--border)" }}>
+                {["Risk ID", "Category & Description", "Prob / Impact", "Severity", "Proactive Mitigation", "Owner", "Status"].map(h => (
+                  <th key={h} className="section-label" style={{ padding: "10px 16px", textAlign: "left" }}>{h}</th>
+                ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody>
               {risks.map((r) => (
-                <tr key={r.id} className="hover:bg-slate-800/40 transition-colors">
-                  <td className="p-3 font-mono font-bold text-amber-400">{r.riskCode}</td>
-                  <td className="p-3 max-w-xs">
-                    <div className="font-semibold text-white">{r.description}</div>
-                    <div className="text-[10px] text-[var(--text-muted)]">Category: {r.category}</div>
+                <tr key={r.id} className="table-row-dark">
+                  <td style={{ padding: "12px 16px", fontFamily: "monospace", fontWeight: 700, color: "var(--amber)" }}>{r.riskCode}</td>
+                  <td style={{ padding: "12px 16px", maxWidth: "200px" }}>
+                    <div style={{ fontWeight: 600, color: "var(--text-primary)", fontSize: "var(--text-sm)" }}>{r.description}</div>
+                    <div style={{ fontSize: "10px", color: "var(--text-muted)" }}>Category: {r.category}</div>
                   </td>
-                  <td className="p-3 font-mono">
-                    <span className="text-amber-300">{r.probability}</span> / <span className="text-rose-400">{r.impact}</span>
+                  <td style={{ padding: "12px 16px", fontFamily: "monospace" }}>
+                    <span style={{ color: "var(--amber)" }}>{r.probability}</span>
+                    {" / "}
+                    <span style={{ color: "var(--pink)" }}>{r.impact}</span>
                   </td>
-                  <td className="p-3 font-mono">
-                    <span className="bg-rose-500/20 text-rose-300 font-extrabold px-2 py-0.5 rounded border border-rose-500/30">
+                  <td style={{ padding: "12px 16px", fontFamily: "monospace" }}>
+                    <span style={{ background: "var(--pink-dim)", color: "var(--pink)", fontWeight: 800, padding: "2px 8px", borderRadius: "6px", border: "1px solid rgba(236,72,153,0.25)" }}>
                       {r.severityScore} / 25
                     </span>
                   </td>
-                  <td className="p-3 text-[var(--text-muted)] max-w-xs leading-relaxed">{r.mitigation}</td>
-                  <td className="p-3 text-[var(--text-muted)]">{r.owner}</td>
-                  <td className="p-3">
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                      r.status === "Open" ? "bg-[var(--amber-dim)]0/20 text-amber-300" : "bg-[var(--green-dim)]0/20 text-emerald-300"
-                    }`}>
+                  <td style={{ padding: "12px 16px", fontSize: "var(--text-sm)", color: "var(--text-muted)", maxWidth: "200px", lineHeight: 1.6 }}>{r.mitigation}</td>
+                  <td style={{ padding: "12px 16px", fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>{r.owner}</td>
+                  <td style={{ padding: "12px 16px" }}>
+                    <span className={r.status === "Open" ? "badge-amber" : "badge-green"}>
                       {r.status}
                     </span>
                   </td>

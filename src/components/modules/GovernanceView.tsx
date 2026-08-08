@@ -148,7 +148,7 @@ export const GovernanceView: React.FC = () => {
                   <th className="p-3 text-[var(--green)]">Informed (I)</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50">
+              <tbody className="divide-y divide-[var(--border)]">
                 {raciTasks.map((r, idx) => (
                   <tr key={idx} className="hover:bg-[var(--bg-card)] transition-colors">
                     <td className="p-3 font-bold text-[var(--text-primary)]">{r.activity}</td>
@@ -169,7 +169,7 @@ export const GovernanceView: React.FC = () => {
         <div className="space-y-3">
           {decisionLog.map(dec => {
             const isEx = expandedDec === dec.id;
-            const statusColor = dec.status === "Approved" ? "bg-[var(--green-dim)] text-[var(--green)] border-emerald-300" : dec.status === "Rejected" ? "bg-red-100 text-[var(--pink)] border-red-300" : "bg-amber-100 text-[var(--amber)] border-amber-300";
+            const statusColor = dec.status === "Approved" ? "bg-[var(--green-dim)] text-[var(--green)] border-[var(--border)]" : dec.status === "Rejected" ? "bg-[var(--pink-dim)] text-[var(--pink)] border-[rgba(236,72,153,0.25)]" : "bg-[var(--amber-dim)] text-[var(--amber)] border-[rgba(245,158,11,0.25)]";
             return (
               <div key={dec.id} className="glass-card rounded-xl shadow-sm overflow-hidden">
                 <div className="flex items-center justify-between p-4 cursor-pointer hover:bg-[var(--bg-card)]" onClick={() => setExpandedDec(isEx ? null : dec.id)}>
@@ -191,7 +191,7 @@ export const GovernanceView: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div><span className="font-bold text-[var(--text-secondary)] uppercase text-[10px]">Participants</span><p className="mt-1 text-[var(--text-primary)]">{dec.participants.join(", ")}</p></div>
                       <div><span className="font-bold text-[var(--text-secondary)] uppercase text-[10px]">Impact</span><p className="mt-1 text-[var(--text-primary)]">{dec.impact}</p></div>
-                      <div className="md:col-span-2"><span className="font-bold text-[var(--green)] uppercase text-[10px]">Rationale</span><p className="mt-1 text-emerald-800 bg-[var(--green-dim)] border border-emerald-100 rounded p-2">{dec.rationale}</p></div>
+                      <div className="md:col-span-2"><span className="font-bold text-[var(--green)] uppercase text-[10px]">Rationale</span><p className="mt-1 text-[var(--text-primary)] bg-[var(--green-dim)] border border-[var(--border)] rounded p-2">{dec.rationale}</p></div>
                     </div>
                   </div>
                 )}
@@ -248,7 +248,7 @@ export const GovernanceView: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {governance.steeringCommitteeMembers.map((member, i) => (
                 <div key={i} className="flex items-center gap-3 p-3 bg-[var(--bg-card)] rounded-lg border border-[var(--border)]">
-                  <div className="w-8 h-8 rounded-full bg-indigo-100 border border-[var(--accent-border)] flex items-center justify-center font-bold text-[var(--accent)] text-sm">{member.charAt(0)}</div>
+                  <div className="w-8 h-8 rounded-full bg-[var(--accent-glow)] border border-[var(--accent-border)] flex items-center justify-center font-bold text-[var(--accent)] text-sm">{member.charAt(0)}</div>
                   <span className="text-xs font-semibold text-[var(--text-primary)]">{member}</span>
                 </div>
               ))}
@@ -259,7 +259,7 @@ export const GovernanceView: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {governance.changeControlBoardMembers.map((member, i) => (
                 <div key={i} className="flex items-center gap-3 p-3 bg-[var(--amber-dim)] rounded-lg border border-amber-100">
-                  <div className="w-8 h-8 rounded-full bg-amber-100 border border-amber-200 flex items-center justify-center font-bold text-[var(--amber)] text-sm">{member.charAt(0)}</div>
+                  <div className="w-8 h-8 rounded-full bg-[var(--amber-dim)] border border-[rgba(245,158,11,0.25)] flex items-center justify-center font-bold text-[var(--amber)] text-sm">{member.charAt(0)}</div>
                   <span className="text-xs font-semibold text-[var(--text-primary)]">{member}</span>
                 </div>
               ))}
@@ -270,3 +270,4 @@ export const GovernanceView: React.FC = () => {
     </div>
   );
 };
+

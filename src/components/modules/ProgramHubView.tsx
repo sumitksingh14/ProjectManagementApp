@@ -18,12 +18,12 @@ import { HealthStatus } from "../../types";
 
 const HealthBadge: React.FC<{ status: HealthStatus }> = ({ status }) => {
   const map: Record<HealthStatus, string> = {
-    Green: "bg-[var(--green-dim)] text-[var(--green)] border-emerald-300",
-    Amber: "bg-amber-100 text-[var(--amber)] border-amber-300",
-    Red: "bg-red-100 text-[var(--pink)] border-red-300"
+    Green: "badge-green",
+    Amber: "badge-amber",
+    Red: "badge-red"
   };
   return (
-    <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${map[status]}`}>{status}</span>
+    <span className={map[status]}>{status}</span>
   );
 };
 
@@ -112,14 +112,14 @@ export const ProgramHubView: React.FC = () => {
         {/* Health Summary */}
         <div className="glass-card rounded-xl p-5 shadow-sm space-y-4">
           <h3 className="section-label flex items-center gap-2">
-            <Activity className="w-4 h-4 text-indigo-500" />
+            <Activity className="w-4 h-4" style={{ color: "var(--accent)" }} />
             Program Health Radar
           </h3>
           <div className="space-y-3">
             {[
-              { label: "Green (On Track)", count: healthCounts.Green, color: "bg-[var(--green-dim)]0" },
-              { label: "Amber (At Risk)", count: healthCounts.Amber, color: "bg-[var(--amber-dim)]0" },
-              { label: "Red (Critical)", count: healthCounts.Red, color: "bg-[var(--pink-dim)]0" }
+              { label: "Green (On Track)", count: healthCounts.Green, barColor: "var(--green)" },
+              { label: "Amber (At Risk)", count: healthCounts.Amber, barColor: "var(--amber)" },
+              { label: "Red (Critical)", count: healthCounts.Red, barColor: "var(--pink)" }
             ].map((item, i) => (
               <div key={i} className="space-y-1">
                 <div className="flex justify-between text-xs">
@@ -128,8 +128,7 @@ export const ProgramHubView: React.FC = () => {
                 </div>
                 <div className="h-1.5 w-full bg-[var(--bg-card-hover)] rounded-full">
                   <div
-                    className={`h-full rounded-full ${item.color}`}
-                    style={{ width: programProjects.length > 0 ? `${(item.count / programProjects.length) * 100}%` : "0%" }}
+                    style={{ height: "100%", width: programProjects.length > 0 ? `${(item.count / programProjects.length) * 100}%` : "0%", background: item.barColor, borderRadius: "99px" }}
                   />
                 </div>
               </div>
@@ -151,7 +150,7 @@ export const ProgramHubView: React.FC = () => {
         {/* Project Cards */}
         <div className="lg:col-span-2 glass-card rounded-xl p-5 shadow-sm space-y-3">
           <h3 className="section-label flex items-center gap-2">
-            <Layers className="w-4 h-4 text-indigo-500" />
+            <Layers className="w-4 h-4" style={{ color: "var(--accent)" }} />
             Projects in Program ({programProjects.length})
           </h3>
           <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
@@ -164,7 +163,7 @@ export const ProgramHubView: React.FC = () => {
                 onClick={() => { setActiveProjectById(proj.id); setActiveTab("dashboard"); }}
               >
                 <div className="flex items-center gap-3">
-                  <span className="text-[10px] font-mono font-bold bg-indigo-100 text-[var(--accent)] px-2 py-0.5 rounded">{proj.code}</span>
+                  <span style={{ fontSize: "10px", fontFamily: "monospace", fontWeight: 700, background: "var(--accent-glow)", color: "var(--accent)", border: "1px solid var(--accent-border)", padding: "2px 8px", borderRadius: "4px" }}>{proj.code}</span>
                   <div>
                     <div className="text-xs font-bold text-[var(--text-primary)]">{proj.name}</div>
                     <div className="text-[10px] text-[var(--text-secondary)]">CPI: {proj.evm?.CPI?.toFixed(2)} | SPI: {proj.evm?.SPI?.toFixed(2)} | Risks: {(proj.risks || []).filter(r => r.status === "Open").length}</div>
@@ -172,7 +171,7 @@ export const ProgramHubView: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <HealthBadge status={proj.health?.overallHealth || "Green"} />
-                  <ArrowRight className="w-4 h-4 text-[var(--text-muted)] group-hover:text-indigo-500 transition-colors" />
+                  <ArrowRight className="w-4 h-4 text-[var(--text-muted)] group-hover:text-[var(--accent)] transition-colors" />
                 </div>
               </div>
             ))}
@@ -183,7 +182,7 @@ export const ProgramHubView: React.FC = () => {
       {/* Cross-Project Dependencies */}
       <div className="glass-card rounded-xl p-5 shadow-sm space-y-4">
         <h3 className="section-label flex items-center gap-2">
-          <Link2 className="w-4 h-4 text-indigo-500" />
+          <Link2 className="w-4 h-4" style={{ color: "var(--accent)" }} />
           Cross-Project Dependency Map
         </h3>
         {dependencies.length === 0 ? (
@@ -200,7 +199,7 @@ export const ProgramHubView: React.FC = () => {
                   <th className="p-3 text-center">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50">
+              <tbody className="divide-y divide-[var(--border)]">
                 {dependencies.map((dep, i) => (
                   <tr key={i} className="hover:bg-[var(--bg-card)]">
                     <td className="p-3 font-semibold text-[var(--text-primary)]">{dep.from}</td>
@@ -209,10 +208,10 @@ export const ProgramHubView: React.FC = () => {
                     </td>
                     <td className="p-3 font-semibold text-[var(--text-primary)]">{dep.to}</td>
                     <td className="p-3 text-center">
-                      <span className={`px-2 py-0.5 rounded font-bold text-[10px] ${dep.impact === "Critical" ? "bg-red-100 text-[var(--pink)]" : "bg-amber-100 text-[var(--amber)]"}`}>{dep.impact}</span>
+                      <span className={`px-2 py-0.5 rounded font-bold text-[10px] ${dep.impact === "Critical" ? "badge-red" : "badge-amber"}`}>{dep.impact}</span>
                     </td>
                     <td className="p-3 text-center">
-                      <span className={`px-2 py-0.5 rounded font-bold text-[10px] ${dep.status === "Active" ? "bg-[var(--green-dim)] text-[var(--green)]" : "bg-amber-100 text-[var(--amber)]"}`}>{dep.status}</span>
+                      <span className={`px-2 py-0.5 rounded font-bold text-[10px] ${dep.status === "Active" ? "badge-green" : "badge-amber"}`}>{dep.status}</span>
                     </td>
                   </tr>
                 ))}
@@ -225,7 +224,7 @@ export const ProgramHubView: React.FC = () => {
       {/* Consolidated Financial Roll-up */}
       <div className="glass-card rounded-xl p-5 shadow-sm space-y-4">
         <h3 className="section-label flex items-center gap-2">
-          <DollarSign className="w-4 h-4 text-indigo-500" />
+          <DollarSign className="w-4 h-4" style={{ color: "var(--accent)" }} />
           Consolidated Financial Performance
         </h3>
         <div className="overflow-x-auto">
@@ -242,7 +241,7 @@ export const ProgramHubView: React.FC = () => {
                 <th className="p-3 text-center">Health</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-50">
+            <tbody className="divide-y divide-[var(--border)]">
               {programProjects.map(proj => (
                 <tr key={proj.id} className="hover:bg-[var(--bg-card)]">
                   <td className="p-3 font-bold text-[var(--text-primary)]">{proj.name}</td>
@@ -279,3 +278,4 @@ export const ProgramHubView: React.FC = () => {
     </div>
   );
 };
+

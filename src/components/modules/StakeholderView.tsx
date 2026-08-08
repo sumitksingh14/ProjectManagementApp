@@ -72,188 +72,168 @@ export const StakeholderView: React.FC = () => {
             Stakeholder Management
           </h1>
           <p style={{ fontSize: "var(--text-base)", color: "rgba(255,255,255,0.65)", maxWidth: "580px", lineHeight: 1.6 }}>
-            Analyze influence & interest power dynamics, engagement strategies, and communication protocols.
+            Analyze influence &amp; interest power dynamics, engagement strategies, and communication protocols.
           </p>
         </div>
         <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
-          <Plus style={{ width: "32px", height: "32px", color: "#fff" }} />
+          <button
+            onClick={() => setShowForm(!showForm)}
+            className="btn-accent flex items-center gap-1.5"
+            style={{ padding: "8px 16px" }}
+          >
+            <Plus style={{ width: "14px", height: "14px" }} />
+            Add Stakeholder
+          </button>
         </div>
       </div>
 
-      {/* Add Stakeholder Form Modal */}
+      {/* Add Stakeholder Form */}
       {showForm && (
-        <form onSubmit={handleAddStakeholder} className="bg-slate-900 border border-indigo-500/40 rounded-2xl p-6 shadow-2xl space-y-4 text-xs">
-          <h3 className="text-sm font-bold text-white">New Stakeholder Record</h3>
+        <form
+          onSubmit={handleAddStakeholder}
+          className="glass-card animate-fadeIn"
+          style={{
+            padding: "24px",
+            borderColor: "var(--accent-border)",
+            background: "linear-gradient(145deg, rgba(109,40,217,0.08) 0%, var(--bg-card) 100%)"
+          }}
+        >
+          <h3 style={{ fontSize: "var(--text-md)", fontWeight: 700, color: "var(--text-primary)", marginBottom: "16px" }}>
+            New Stakeholder Record
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-[var(--text-muted)] mb-1">Name *</label>
-              <input
-                type="text"
-                required
-                value={newStk.name}
-                onChange={(e) => setNewStk({ ...newStk, name: e.target.value })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-white focus:outline-none"
-              />
-            </div>
-            <div>
-              <label className="block text-[var(--text-muted)] mb-1">Position / Title</label>
-              <input
-                type="text"
-                value={newStk.position}
-                onChange={(e) => setNewStk({ ...newStk, position: e.target.value })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-white focus:outline-none"
-              />
-            </div>
-            <div>
-              <label className="block text-[var(--text-muted)] mb-1">Department</label>
-              <input
-                type="text"
-                value={newStk.department}
-                onChange={(e) => setNewStk({ ...newStk, department: e.target.value })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-white focus:outline-none"
-              />
-            </div>
-            <div>
-              <label className="block text-[var(--text-muted)] mb-1">Influence Power</label>
-              <select
-                value={newStk.influence}
-                onChange={(e) => setNewStk({ ...newStk, influence: e.target.value as any })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-white focus:outline-none"
-              >
-                <option>High</option>
-                <option>Medium</option>
-                <option>Low</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-[var(--text-muted)] mb-1">Interest Level</label>
-              <select
-                value={newStk.interest}
-                onChange={(e) => setNewStk({ ...newStk, interest: e.target.value as any })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-white focus:outline-none"
-              >
-                <option>High</option>
-                <option>Medium</option>
-                <option>Low</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-[var(--text-muted)] mb-1">Communication Channel</label>
-              <select
-                value={newStk.communicationPreference}
-                onChange={(e) => setNewStk({ ...newStk, communicationPreference: e.target.value as any })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-white focus:outline-none"
-              >
-                <option>Weekly Steering</option>
-                <option>Bi-Weekly Email</option>
-                <option>Ad-hoc Dashboard</option>
-                <option>Slack/Teams</option>
-              </select>
-            </div>
+            {[
+              { label: "Name *", key: "name", type: "text", required: true },
+              { label: "Position / Title", key: "position", type: "text" },
+              { label: "Department", key: "department", type: "text" },
+            ].map(field => (
+              <div key={field.key}>
+                <label className="section-label" style={{ display: "block", marginBottom: "6px" }}>{field.label}</label>
+                <input
+                  type={field.type}
+                  required={field.required}
+                  value={(newStk as any)[field.key] || ""}
+                  onChange={(e) => setNewStk({ ...newStk, [field.key]: e.target.value })}
+                  className="form-input-dark"
+                />
+              </div>
+            ))}
+            {[
+              { label: "Influence Power", key: "influence", options: ["High", "Medium", "Low"] },
+              { label: "Interest Level", key: "interest", options: ["High", "Medium", "Low"] },
+              { label: "Communication Channel", key: "communicationPreference", options: ["Weekly Steering", "Bi-Weekly Email", "Ad-hoc Dashboard", "Slack/Teams"] },
+            ].map(field => (
+              <div key={field.key}>
+                <label className="section-label" style={{ display: "block", marginBottom: "6px" }}>{field.label}</label>
+                <select
+                  value={(newStk as any)[field.key] || ""}
+                  onChange={(e) => setNewStk({ ...newStk, [field.key]: e.target.value as any })}
+                  className="form-input-dark"
+                >
+                  {field.options.map(o => <option key={o}>{o}</option>)}
+                </select>
+              </div>
+            ))}
           </div>
-          <div className="flex justify-end gap-2 pt-2">
+          <div className="flex justify-end gap-2 pt-4">
             <button
               type="button"
               onClick={() => setShowForm(false)}
-              className="px-4 py-2 bg-slate-800 text-[var(--text-muted)] rounded-lg"
+              style={{
+                padding: "8px 16px", borderRadius: "8px", fontSize: "var(--text-sm)",
+                background: "rgba(255,255,255,0.05)", border: "1px solid var(--border)",
+                color: "var(--text-muted)", cursor: "pointer"
+              }}
             >
               Cancel
             </button>
-            <button type="submit" className="px-4 py-2 bg-[var(--accent)] text-white font-bold rounded-lg">
-              Save Stakeholder
-            </button>
+            <button type="submit" className="btn-accent">Save Stakeholder</button>
           </div>
         </form>
       )}
 
       {/* 2x2 Stakeholder Matrix */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
-        <h3 className="text-sm font-bold text-white flex items-center gap-2">
-          <Users className="w-4 h-4 text-indigo-400" />
-          Stakeholder Power / Interest Grid (2x2 Matrix)
+      <div className="glass-card" style={{ padding: "24px" }}>
+        <h3 style={{ fontSize: "var(--text-md)", fontWeight: 700, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: "8px", marginBottom: "16px" }}>
+          <Users style={{ width: "16px", height: "16px", color: "var(--accent)" }} />
+          Stakeholder Power / Interest Grid (2×2 Matrix)
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Key Players (High Power, High Interest) */}
-          <div className="bg-indigo-950/40 border border-indigo-500/30 p-4 rounded-xl space-y-2">
-            <div className="flex items-center justify-between border-b border-indigo-500/20 pb-2">
-              <span className="text-xs font-bold text-indigo-300 uppercase tracking-wider">Key Players (Manage Closely)</span>
-              <span className="text-[10px] bg-[var(--accent-glow)]0/20 text-indigo-300 px-2 py-0.5 rounded font-mono">
-                High Power / High Interest
-              </span>
+          <div style={{ background: "rgba(139,92,246,0.08)", border: "1px solid rgba(139,92,246,0.25)", padding: "16px", borderRadius: "12px" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid rgba(139,92,246,0.20)", paddingBottom: "8px", marginBottom: "12px" }}>
+              <span style={{ fontSize: "var(--text-xs)", fontWeight: 700, color: "var(--accent)", textTransform: "uppercase", letterSpacing: "0.08em" }}>Key Players (Manage Closely)</span>
+              <span className="badge-violet" style={{ fontFamily: "monospace" }}>High Power / High Interest</span>
             </div>
             <div className="space-y-2 text-xs">
-              {keyPlayers.map((s) => (
-                <div key={s.id} className="bg-slate-900/80 p-2.5 rounded-lg border border-indigo-500/20 flex items-center justify-between">
+              {keyPlayers.length > 0 ? keyPlayers.map((s) => (
+                <div key={s.id} style={{ background: "var(--bg-card)", padding: "10px", borderRadius: "8px", border: "1px solid rgba(139,92,246,0.20)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                   <div>
-                    <p className="font-bold text-white">{s.name}</p>
-                    <p className="text-[10px] text-[var(--text-muted)]">{s.position} ({s.department})</p>
+                    <p style={{ fontWeight: 700, color: "var(--text-primary)", fontSize: "var(--text-sm)" }}>{s.name}</p>
+                    <p style={{ fontSize: "10px", color: "var(--text-muted)" }}>{s.position} ({s.department})</p>
                   </div>
-                  <span className="text-[10px] bg-[var(--accent)]/40 text-indigo-200 px-2 py-0.5 rounded border border-indigo-500/40">
-                    {s.communicationPreference}
-                  </span>
+                  <span className="badge-violet" style={{ fontFamily: "monospace" }}>{s.communicationPreference}</span>
                 </div>
-              ))}
+              )) : (
+                <p style={{ fontSize: "11px", color: "var(--text-secondary)", fontStyle: "italic" }}>No stakeholders mapped in this quadrant.</p>
+              )}
             </div>
           </div>
 
           {/* Keep Satisfied (High Power, Low/Med Interest) */}
-          <div className="bg-amber-950/30 border border-amber-500/30 p-4 rounded-xl space-y-2">
-            <div className="flex items-center justify-between border-b border-amber-500/20 pb-2">
-              <span className="text-xs font-bold text-amber-300 uppercase tracking-wider">Keep Satisfied</span>
-              <span className="text-[10px] bg-[var(--amber-dim)]0/20 text-amber-300 px-2 py-0.5 rounded font-mono">
-                High Power / Low-Med Interest
-              </span>
+          <div style={{ background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.25)", padding: "16px", borderRadius: "12px" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid rgba(245,158,11,0.20)", paddingBottom: "8px", marginBottom: "12px" }}>
+              <span style={{ fontSize: "var(--text-xs)", fontWeight: 700, color: "var(--amber)", textTransform: "uppercase", letterSpacing: "0.08em" }}>Keep Satisfied</span>
+              <span className="badge-amber" style={{ fontFamily: "monospace" }}>High Power / Low-Med Interest</span>
             </div>
             <div className="space-y-2 text-xs">
               {keepSatisfied.length > 0 ? (
                 keepSatisfied.map((s) => (
-                  <div key={s.id} className="bg-slate-900/80 p-2.5 rounded-lg border border-amber-500/20">
-                    <p className="font-bold text-white">{s.name}</p>
-                    <p className="text-[10px] text-[var(--text-muted)]">{s.position}</p>
+                  <div key={s.id} style={{ background: "var(--bg-card)", padding: "10px", borderRadius: "8px", border: "1px solid rgba(245,158,11,0.20)" }}>
+                    <p style={{ fontWeight: 700, color: "var(--text-primary)", fontSize: "var(--text-sm)" }}>{s.name}</p>
+                    <p style={{ fontSize: "10px", color: "var(--text-muted)" }}>{s.position}</p>
                   </div>
                 ))
               ) : (
-                <p className="text-[11px] text-[var(--text-secondary)] italic">No stakeholders currently mapped in this quadrant.</p>
+                <p style={{ fontSize: "11px", color: "var(--text-secondary)", fontStyle: "italic" }}>No stakeholders currently mapped in this quadrant.</p>
               )}
             </div>
           </div>
 
           {/* Keep Informed (Low/Med Power, High Interest) */}
-          <div className="bg-emerald-950/30 border border-emerald-500/30 p-4 rounded-xl space-y-2">
-            <div className="flex items-center justify-between border-b border-emerald-500/20 pb-2">
-              <span className="text-xs font-bold text-emerald-300 uppercase tracking-wider">Keep Informed</span>
-              <span className="text-[10px] bg-[var(--green-dim)]0/20 text-emerald-300 px-2 py-0.5 rounded font-mono">
-                Low Power / High Interest
-              </span>
+          <div style={{ background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.25)", padding: "16px", borderRadius: "12px" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid rgba(16,185,129,0.20)", paddingBottom: "8px", marginBottom: "12px" }}>
+              <span style={{ fontSize: "var(--text-xs)", fontWeight: 700, color: "var(--green)", textTransform: "uppercase", letterSpacing: "0.08em" }}>Keep Informed</span>
+              <span className="badge-green" style={{ fontFamily: "monospace" }}>Low Power / High Interest</span>
             </div>
             <div className="space-y-2 text-xs">
-              {keepInformed.map((s) => (
-                <div key={s.id} className="bg-slate-900/80 p-2.5 rounded-lg border border-emerald-500/20">
-                  <p className="font-bold text-white">{s.name}</p>
-                  <p className="text-[10px] text-[var(--text-muted)]">{s.position}</p>
+              {keepInformed.length > 0 ? keepInformed.map((s) => (
+                <div key={s.id} style={{ background: "var(--bg-card)", padding: "10px", borderRadius: "8px", border: "1px solid rgba(16,185,129,0.20)" }}>
+                  <p style={{ fontWeight: 700, color: "var(--text-primary)", fontSize: "var(--text-sm)" }}>{s.name}</p>
+                  <p style={{ fontSize: "10px", color: "var(--text-muted)" }}>{s.position}</p>
                 </div>
-              ))}
+              )) : (
+                <p style={{ fontSize: "11px", color: "var(--text-secondary)", fontStyle: "italic" }}>No stakeholders currently mapped in this quadrant.</p>
+              )}
             </div>
           </div>
 
           {/* Monitor Only */}
-          <div className="bg-slate-800/40 border border-slate-700/60 p-4 rounded-xl space-y-2">
-            <div className="flex items-center justify-between border-b border-slate-700/60 pb-2">
-              <span className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider">Monitor (Minimal Effort)</span>
-              <span className="text-[10px] bg-slate-800 text-[var(--text-muted)] px-2 py-0.5 rounded font-mono">
-                Low Power / Low Interest
-              </span>
+          <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid var(--border)", padding: "16px", borderRadius: "12px" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid var(--border)", paddingBottom: "8px", marginBottom: "12px" }}>
+              <span style={{ fontSize: "var(--text-xs)", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.08em" }}>Monitor (Minimal Effort)</span>
+              <span className="badge-slate" style={{ fontFamily: "monospace" }}>Low Power / Low Interest</span>
             </div>
             <div className="space-y-2 text-xs">
               {monitorOnly.length > 0 ? (
                 monitorOnly.map((s) => (
-                  <div key={s.id} className="bg-slate-900/80 p-2.5 rounded-lg border border-slate-800">
-                    <p className="font-bold text-white">{s.name}</p>
+                  <div key={s.id} style={{ background: "var(--bg-card)", padding: "10px", borderRadius: "8px", border: "1px solid var(--border)" }}>
+                    <p style={{ fontWeight: 700, color: "var(--text-primary)", fontSize: "var(--text-sm)" }}>{s.name}</p>
                   </div>
                 ))
               ) : (
-                <p className="text-[11px] text-[var(--text-secondary)] italic">No stakeholders currently mapped in this quadrant.</p>
+                <p style={{ fontSize: "11px", color: "var(--text-secondary)", fontStyle: "italic" }}>No stakeholders currently mapped in this quadrant.</p>
               )}
             </div>
           </div>
@@ -261,36 +241,39 @@ export const StakeholderView: React.FC = () => {
       </div>
 
       {/* Stakeholder Register Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
-        <h3 className="text-sm font-bold text-white">Stakeholder Register & Engagement Strategy</h3>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
+      <div className="glass-card" style={{ overflow: "hidden" }}>
+        <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border)" }}>
+          <h3 style={{ fontSize: "var(--text-md)", fontWeight: 700, color: "var(--text-primary)" }}>
+            Stakeholder Register &amp; Engagement Strategy
+          </h3>
+        </div>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
-              <tr className="border-b border-slate-800 text-[var(--text-muted)] font-bold uppercase tracking-wider text-[10px]">
-                <th className="p-3">Stakeholder</th>
-                <th className="p-3">Role & Dept</th>
-                <th className="p-3">Power / Interest</th>
-                <th className="p-3">Comm Channel</th>
-                <th className="p-3">Engagement Strategy</th>
+              <tr style={{ borderBottom: "1px solid var(--border)" }}>
+                {["Stakeholder", "Role & Dept", "Power / Interest", "Comm Channel", "Engagement Strategy"].map(h => (
+                  <th key={h} className="section-label" style={{ padding: "10px 16px", textAlign: "left" }}>{h}</th>
+                ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody>
               {stakeholders.map((s) => (
-                <tr key={s.id} className="hover:bg-slate-800/40 transition-colors">
-                  <td className="p-3 font-semibold text-white">
-                    <div>{s.name}</div>
-                    <div className="text-[10px] text-[var(--text-muted)]">{s.position}</div>
+                <tr key={s.id} className="table-row-dark">
+                  <td style={{ padding: "12px 16px" }}>
+                    <div style={{ fontWeight: 700, color: "var(--text-primary)", fontSize: "var(--text-sm)" }}>{s.name}</div>
+                    <div style={{ fontSize: "10px", color: "var(--text-muted)" }}>{s.position}</div>
                   </td>
-                  <td className="p-3 text-[var(--text-muted)]">
-                    <div>{s.role}</div>
-                    <div className="text-[10px] text-[var(--text-secondary)]">{s.department}</div>
+                  <td style={{ padding: "12px 16px" }}>
+                    <div style={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>{s.role}</div>
+                    <div style={{ fontSize: "10px", color: "var(--text-muted)" }}>{s.department}</div>
                   </td>
-                  <td className="p-3 font-mono">
-                    <span className="text-indigo-400">{s.influence} Influence</span> /{" "}
-                    <span className="text-emerald-400">{s.interest} Interest</span>
+                  <td style={{ padding: "12px 16px", fontFamily: "monospace" }}>
+                    <span style={{ color: "var(--accent)" }}>{s.influence} Influence</span>
+                    {" / "}
+                    <span style={{ color: "var(--green)" }}>{s.interest} Interest</span>
                   </td>
-                  <td className="p-3 text-[var(--text-muted)]">{s.communicationPreference}</td>
-                  <td className="p-3 text-[var(--text-muted)] max-w-xs leading-relaxed">{s.engagementStrategy}</td>
+                  <td style={{ padding: "12px 16px", fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>{s.communicationPreference}</td>
+                  <td style={{ padding: "12px 16px", fontSize: "var(--text-sm)", color: "var(--text-muted)", maxWidth: "240px", lineHeight: 1.6 }}>{s.engagementStrategy}</td>
                 </tr>
               ))}
             </tbody>

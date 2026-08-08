@@ -145,7 +145,7 @@ ${risks
       </div>
 
       {/* Document Selector Tabs */}
-      <div className="flex bg-slate-900 p-1.5 rounded-2xl border border-slate-800 text-xs gap-2">
+      <div className="flex glass-card p-1.5 rounded-2xl text-xs gap-2">
         {[
           { id: "charter", label: "Project Charter" },
           { id: "wbs", label: "WBS Dictionary" },
@@ -165,11 +165,12 @@ ${risks
       </div>
 
       {/* Formatted Document Markdown Viewer */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
-        <pre className="whitespace-pre-wrap font-mono text-xs text-slate-200 bg-slate-950 p-6 rounded-xl border border-slate-800/80 leading-relaxed overflow-x-auto">
+      <div className="glass-card p-6 space-y-4">
+        <pre className="whitespace-pre-wrap font-mono text-xs text-[var(--text-primary)] bg-[var(--bg-base)] p-6 rounded-xl border border-[var(--border)] leading-relaxed overflow-x-auto">
           {getDocContent()}
         </pre>
       </div>
     </div>
   );
 };
+

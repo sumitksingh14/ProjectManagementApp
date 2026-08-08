@@ -83,21 +83,21 @@ const defaultVendors: VendorItem[] = [
 ];
 
 const statusConfig = {
-  Active: "bg-[var(--green-dim)] text-[var(--green)] border-emerald-300",
-  "On Hold": "bg-amber-100 text-[var(--amber)] border-amber-300",
-  Completed: "bg-[var(--bg-card-hover)] text-[var(--text-secondary)] border-[var(--border)]",
-  Terminated: "bg-red-100 text-[var(--pink)] border-red-300"
+  Active: "badge-green",
+  "On Hold": "badge-amber",
+  Completed: "badge-slate",
+  Terminated: "badge-red"
 };
 
 const deliverableStatusConfig: Record<VendorDeliverable["status"], string> = {
-  Pending: "bg-[var(--bg-card-hover)] text-[var(--text-secondary)] border-[var(--border)]",
-  Delivered: "bg-blue-100 text-blue-700 border-blue-300",
-  Accepted: "bg-[var(--green-dim)] text-[var(--green)] border-emerald-300",
-  Overdue: "bg-red-100 text-[var(--pink)] border-red-300"
+  Pending: "badge-slate",
+  Delivered: "badge-blue",
+  Accepted: "badge-green",
+  Overdue: "badge-red"
 };
 
 const ScoreMeter: React.FC<{ score: number }> = ({ score }) => {
-  const color = score >= 90 ? "bg-[var(--green-dim)]0" : score >= 70 ? "bg-[var(--amber-dim)]0" : "bg-[var(--pink-dim)]0";
+  const barColor = score >= 90 ? "var(--green)" : score >= 70 ? "var(--amber)" : "var(--pink)";
   return (
     <div className="space-y-1">
       <div className="flex justify-between text-[10px]">
@@ -105,7 +105,7 @@ const ScoreMeter: React.FC<{ score: number }> = ({ score }) => {
         <span className="font-bold text-[var(--text-primary)]">{score}/100</span>
       </div>
       <div className="h-1.5 w-full bg-[var(--bg-card-hover)] rounded-full overflow-hidden">
-        <div className={`h-full rounded-full ${color}`} style={{ width: `${score}%` }} />
+        <div style={{ height: "100%", width: `${score}%`, background: barColor, borderRadius: "99px" }} />
       </div>
     </div>
   );
@@ -218,8 +218,8 @@ export const VendorView: React.FC = () => {
 
       {/* Add Form */}
       {showAddForm && (
-        <div className="bg-[var(--bg-card)] border border-purple-200 rounded-xl p-5 shadow-sm space-y-4">
-          <h3 className="text-sm font-bold text-[var(--text-primary)]">Register New Vendor</h3>
+        <div className="glass-card animate-fadeIn" style={{ padding: "24px", borderColor: "var(--accent-border)", background: "linear-gradient(145deg, rgba(109,40,217,0.08) 0%, var(--bg-card) 100%)" }}>
+          <h3 style={{ fontSize: "var(--text-md)", fontWeight: 700, color: "var(--text-primary)", marginBottom: "16px" }}>Register New Vendor</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             {[
               { label: "Vendor Name *", key: "vendorName", type: "text" },
@@ -231,29 +231,29 @@ export const VendorView: React.FC = () => {
               { label: "SLA Terms", key: "slaTerms", type: "text" }
             ].map(f => (
               <div key={f.key}>
-                <label className="block text-[var(--text-secondary)] font-bold mb-1">{f.label}</label>
+                <label className="section-label" style={{ display: "block", marginBottom: "6px" }}>{f.label}</label>
                 <input type={f.type} value={(newVendor as any)[f.key] || ""} onChange={e => setNewVendor(p => ({ ...p, [f.key]: e.target.value }))}
-                  className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-[var(--text-primary)] outline-none focus:ring-2 focus:ring-purple-500" />
+                  className="form-input-dark" />
               </div>
             ))}
             <div>
-              <label className="block text-[var(--text-secondary)] font-bold mb-1 text-xs">Category</label>
+              <label className="section-label" style={{ display: "block", marginBottom: "6px" }}>Category</label>
               <select value={newVendor.category} onChange={e => setNewVendor(p => ({ ...p, category: e.target.value as VendorItem["category"] }))}
-                className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-xs text-[var(--text-primary)] outline-none">
+                className="form-input-dark">
                 {["Software", "Hardware", "Consulting", "Cloud Services", "Staffing", "Other"].map(c => <option key={c}>{c}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-[var(--text-secondary)] font-bold mb-1 text-xs">Contract Type</label>
+              <label className="section-label" style={{ display: "block", marginBottom: "6px" }}>Contract Type</label>
               <select value={newVendor.contractType} onChange={e => setNewVendor(p => ({ ...p, contractType: e.target.value as VendorItem["contractType"] }))}
-                className="w-full border border-[var(--border)] rounded-lg px-3 py-2 text-xs text-[var(--text-primary)] outline-none">
+                className="form-input-dark">
                 {["Fixed Price", "Time & Materials", "Retainer", "SLA-Based"].map(c => <option key={c}>{c}</option>)}
               </select>
             </div>
           </div>
           <div className="flex gap-3">
-            <button onClick={handleAddVendor} className="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold px-4 py-2 rounded-lg">Register Vendor</button>
-            <button onClick={() => setShowAddForm(false)} className="text-[var(--text-secondary)] text-xs font-bold px-4 py-2 rounded-lg border border-[var(--border)] hover:bg-[var(--bg-card)]">Cancel</button>
+            <button onClick={handleAddVendor} className="btn-accent">Register Vendor</button>
+            <button onClick={() => setShowAddForm(false)} style={{ background: "rgba(255,255,255,0.05)", border: "1px solid var(--border)", color: "var(--text-muted)", fontSize: "var(--text-xs)", fontWeight: 700, padding: "8px 16px", borderRadius: "8px", cursor: "pointer" }}>Cancel</button>
           </div>
         </div>
       )}
@@ -264,17 +264,17 @@ export const VendorView: React.FC = () => {
           const isEx = expandedId === vendor.id;
           const overdueCount = vendor.deliverables.filter(d => d.status === "Overdue").length;
           return (
-            <div key={vendor.id} className={`bg-[var(--bg-card)] border rounded-xl shadow-sm overflow-hidden ${overdueCount > 0 ? "border-red-200" : "border-[var(--border)]"}`}>
+            <div key={vendor.id} className={`glass-card overflow-hidden ${overdueCount > 0 ? "border-[var(--pink)]" : ""}`}>
               <div className="flex items-center justify-between p-5 cursor-pointer hover:bg-[var(--bg-card)] gap-4" onClick={() => setExpandedId(isEx ? null : vendor.id)}>
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-center text-purple-700 font-black text-sm">
+                  <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "var(--accent-glow)", border: "1px solid var(--accent-border)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--accent)", fontWeight: 900, fontSize: "var(--text-md)" }}>
                     {vendor.vendorName.charAt(0)}
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-0.5">
                       <span className="font-bold text-[var(--text-primary)]">{vendor.vendorName}</span>
                       <span className="text-[10px] font-mono bg-[var(--bg-card-hover)] text-[var(--text-secondary)] px-1.5 py-0.5 rounded">{vendor.vendorCode}</span>
-                      {overdueCount > 0 && <span className="text-[10px] font-bold bg-red-100 text-[var(--pink)] border border-red-300 px-2 py-0.5 rounded flex items-center gap-1"><AlertTriangle className="w-3 h-3" />{overdueCount} Overdue</span>}
+                      {overdueCount > 0 && <span className="badge-red flex items-center gap-1"><AlertTriangle className="w-3 h-3" />{overdueCount} Overdue</span>}
                     </div>
                     <div className="text-[10px] text-[var(--text-secondary)]">{vendor.category} · {vendor.contractType} · Manager: {vendor.accountManager}</div>
                   </div>
@@ -286,10 +286,10 @@ export const VendorView: React.FC = () => {
                   </div>
                   <div className="flex items-center gap-1">
                     {[1,2,3,4,5].map(s => (
-                      <Star key={s} className={`w-3 h-3 ${s <= Math.round(vendor.performanceScore / 20) ? "text-amber-400 fill-amber-400" : "text-slate-200"}`} />
+                      <Star key={s} className={`w-3 h-3 ${s <= Math.round(vendor.performanceScore / 20) ? "text-amber-400 fill-amber-400" : "text-[var(--border)]"}`} />
                     ))}
                   </div>
-                  <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${statusConfig[vendor.status]}`}>{vendor.status}</span>
+                  <span className={statusConfig[vendor.status]}>{vendor.status}</span>
                   {isEx ? <ChevronUp className="w-4 h-4 text-[var(--text-muted)]" /> : <ChevronDown className="w-4 h-4 text-[var(--text-muted)]" />}
                 </div>
               </div>
