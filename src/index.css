@@ -62,14 +62,14 @@
 
   /* Type Scale (rem-based, root = 16px) */
   --text-xs:    0.75rem;     /* 12px  — labels, micro badges              */
-  --text-sm:    0.875rem;    /* 14px  — table cells, nav items, sub-labels */
-  --text-base:  1rem;        /* 16px  — body / default readable text       */
-  --text-md:    1.125rem;    /* 18px  — card body, list items              */
-  --text-lg:    1.25rem;     /* 20px  — card headings                      */
-  --text-xl:    1.5rem;      /* 24px  — page section headings              */
-  --text-2xl:   1.875rem;    /* 30px  — module page titles                 */
-  --text-3xl:   2.25rem;     /* 36px  — KPI values (large metrics)         */
-  --text-4xl:   3rem;        /* 48px  — hero headings                      */
+  --text-sm:    0.8125rem;   /* 13px  — table sub-text, caption            */
+  --text-base:  0.875rem;    /* 14px  — body / default readable text       */
+  --text-md:    1rem;        /* 16px  — card subheaders, inputs            */
+  --text-lg:    1.125rem;    /* 18px  — card headings                      */
+  --text-xl:    1.25rem;     /* 20px  — section headings                   */
+  --text-2xl:   1.5rem;      /* 24px  — module page titles                 */
+  --text-3xl:   1.875rem;    /* 30px  — KPI values (large metrics)         */
+  --text-4xl:   2.25rem;     /* 36px  — hero headings                      */
 
   /* Font weights */
   --fw-regular:  400;
@@ -253,7 +253,7 @@ button, [role="button"], a {
   border-radius: 10px;
   font-family: var(--font-family);
   font-weight: var(--fw-semibold);
-  font-size: var(--text-sm);         /* 12px */
+  font-size: var(--text-base);        /* 14px */
   padding: 9px 18px;                 /* ≥ 36px height with padding */
   cursor: pointer;
   box-shadow: 0 4px 14px rgba(139,92,246,0.35);
@@ -357,7 +357,7 @@ button, [role="button"], a {
 }
 .input-dark::placeholder {
   color: var(--text-muted);
-  font-size: var(--text-sm);         /* 12px placeholders OK */
+  font-size: var(--text-base);       /* 14px */
 }
 .input-dark:focus {
   border-color: var(--accent);
@@ -379,7 +379,7 @@ button, [role="button"], a {
   border-radius: 8px;
   color: var(--text-primary);
   font-family: var(--font-family);
-  font-size: var(--text-sm);
+  font-size: var(--text-base);        /* 14px */
   padding: 8px 10px;
   outline: none;
   width: 100%;
@@ -441,10 +441,10 @@ button, [role="button"], a {
   color: var(--text-secondary);
 }
 
-/* ─── Table text — 13px minimum for dense data ───────────────────────────────── */
+/* ─── Table text — 14px standard ─────────────────────────────────────────────── */
 .table-text {
   font-family: var(--font-family);
-  font-size: 0.875rem;               /* 14px */
+  font-size: var(--text-base);       /* 14px */
   color: var(--text-secondary);
   line-height: var(--lh-normal);
 }
@@ -452,7 +452,7 @@ button, [role="button"], a {
 /* ─── Nav item text (sidebar, header) ───────────────────────────────────────── */
 .nav-text {
   font-family: var(--font-family);
-  font-size: var(--text-sm);         /* 12px */
+  font-size: var(--text-base);       /* 14px */
   font-weight: var(--fw-medium);
   line-height: var(--lh-snug);
 }
@@ -460,7 +460,7 @@ button, [role="button"], a {
 /* ─── Tooltip / helper text ──────────────────────────────────────────────────── */
 .helper-text {
   font-family: var(--font-family);
-  font-size: var(--text-xs);         /* 12px */
+  font-size: var(--text-sm);         /* 13px */
   color: var(--text-muted);
   line-height: var(--lh-normal);
 }
