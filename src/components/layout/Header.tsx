@@ -1,18 +1,14 @@
 import React from "react";
 import { useProject } from "../../context/ProjectContext";
-
 import {
   Sparkles,
   Search,
   PlusCircle,
   Briefcase,
-  ChevronDown,
   UserCheck,
-  ShieldCheck,
   Bell,
-  Layers,
   LogOut,
-  User
+  ChevronDown,
 } from "lucide-react";
 
 export const Header: React.FC = () => {
@@ -30,115 +26,180 @@ export const Header: React.FC = () => {
     logout
   } = useProject();
 
-
-
-
   return (
-    <header className="h-14 bg-white border-b border-slate-200 text-slate-800 flex items-center justify-between px-4 sticky top-0 z-40 shadow-sm shrink-0">
-      {/* Brand & Project Switcher */}
-      <div className="flex items-center gap-5">
-        <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => setActiveTab("dashboard")}>
-          <div className="h-8 w-8 rounded-lg bg-indigo-600 text-white shadow-sm flex items-center justify-center">
-            <Layers className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-1">
-              <span className="text-lg font-bold tracking-tight text-slate-800">ProjectPlanner</span>
-              <span className="text-indigo-600 font-bold text-lg">AI</span>
-            </div>
-            <p className="text-[10px] text-slate-400 font-medium">Enterprise PMO & Portfolio Platform</p>
-          </div>
-        </div>
-
-        {/* Project Selector */}
-        <div className="hidden lg:flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-md px-2.5 py-1">
-          <Briefcase className="w-3.5 h-3.5 text-indigo-600" />
-          <span className="text-xs text-slate-500 font-medium">Project:</span>
+    <header
+      className="flex items-center justify-between px-5 shrink-0"
+      style={{
+        height: "56px",
+        background: "var(--bg-header)",
+        borderBottom: "1px solid var(--border)",
+        position: "sticky",
+        top: 0,
+        zIndex: 40,
+      }}
+    >
+      {/* Left: Project Switcher */}
+      <div className="flex items-center gap-3">
+        <div
+          className="flex items-center gap-2 px-3 py-1.5 rounded-xl cursor-pointer"
+          style={{
+            background: "rgba(255,255,255,0.04)",
+            border: "1px solid var(--border)",
+            minWidth: "180px"
+          }}
+        >
+          <Briefcase style={{ width: "13px", height: "13px", color: "var(--accent)", flexShrink: 0 }} />
           <select
-            value={activeProject.id}
+            value={activeProject?.id || ""}
             onChange={(e) => setActiveProjectById(e.target.value)}
-            className="bg-transparent text-xs font-semibold text-slate-800 outline-none cursor-pointer pr-1"
+            className="bg-transparent outline-none cursor-pointer flex-1 truncate"
+            style={{ fontSize: "var(--text-sm)", fontWeight: 600, color: "var(--text-primary)" }}
           >
             {projects.map((p) => (
-              <option key={p.id} value={p.id} className="bg-white text-slate-800">
-                {p.code} - {p.name}
+              <option key={p.id} value={p.id} style={{ background: "var(--bg-card)", color: "var(--text-primary)" }}>
+                {p.code} — {p.name}
               </option>
             ))}
           </select>
+          <ChevronDown style={{ width: "11px", height: "11px", color: "var(--text-muted)", flexShrink: 0 }} />
         </div>
       </div>
 
-      {/* Center Search Bar */}
-      <div className="hidden md:flex items-center w-64 bg-slate-50 border border-slate-200 rounded-md px-3 py-1.5 text-xs focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500 transition-all">
-        <Search className="w-3.5 h-3.5 text-slate-400 mr-2 shrink-0" />
+      {/* Center: Search */}
+      <div
+        className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl flex-1 mx-6"
+        style={{
+          maxWidth: "360px",
+          background: "var(--bg-input)",
+          border: "1px solid var(--border)",
+        }}
+      >
+        <Search style={{ width: "13px", height: "13px", color: "var(--text-muted)", flexShrink: 0 }} />
         <input
           type="text"
-          placeholder="Search projects, tasks, risks..."
+          placeholder="Search projects, tasks, risks…"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="bg-transparent text-slate-800 placeholder-slate-400 outline-none w-full text-xs"
+          className="bg-transparent outline-none w-full"
+          style={{ fontSize: "var(--text-base)", color: "var(--text-primary)" }}
         />
       </div>
 
-      {/* Right Controls: Role Switcher, AI Copilot, Intake Action */}
-      <div className="flex items-center gap-3">
-        {/* Role Badge (read-only, set at login) */}
-        <div className="hidden md:flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-md px-2.5 py-1">
-          <UserCheck className="w-3.5 h-3.5 text-emerald-600" />
-          <div className="flex flex-col">
-            <span className="text-[8px] text-slate-400 uppercase font-bold tracking-wider">Role View</span>
-            <span className="text-xs font-semibold text-slate-800">{currentRole}</span>
-          </div>
+      {/* Right: Actions + User */}
+      <div className="flex items-center gap-2">
+
+        {/* Role badge (read-only) */}
+        <div
+          className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-lg"
+          style={{
+            background: "rgba(139,92,246,0.08)",
+            border: "1px solid var(--accent-border)",
+          }}
+        >
+          <UserCheck style={{ width: "12px", height: "12px", color: "var(--accent)" }} />
+          <span style={{ fontSize: "var(--text-xs)", fontWeight: 600, color: "var(--accent)" }}>{currentRole}</span>
         </div>
 
-
-        {/* AI Copilot Button */}
+        {/* AI Copilot */}
         <button
           onClick={() => setCopilotOpen(true)}
-          className="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold px-3 py-1.5 rounded-md shadow-sm transition-all"
+          className="btn-accent flex items-center gap-1.5"
+          style={{ padding: "6px 14px" }}
         >
-          <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
+          <Sparkles className="w-3.5 h-3.5" style={{ color: "#FCD34D" }} />
           <span>AI Copilot</span>
         </button>
 
-        {/* New Intake Quick Action */}
+        {/* New Intake */}
         <button
           onClick={() => setActiveTab("intake")}
-          className="flex items-center gap-1.5 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium px-3 py-1.5 rounded-md border border-slate-200 shadow-sm transition-colors"
+          className="flex items-center gap-1.5 rounded-xl transition-all cursor-pointer"
+          style={{
+            background: "rgba(255,255,255,0.04)",
+            border: "1px solid var(--border)",
+            padding: "6px 12px",
+            fontSize: "11px",
+            fontWeight: 600,
+            color: "var(--text-secondary)",
+          }}
+          onMouseEnter={e => (e.currentTarget.style.borderColor = "var(--accent-border)")}
+          onMouseLeave={e => (e.currentTarget.style.borderColor = "var(--border)")}
         >
-          <PlusCircle className="w-3.5 h-3.5 text-indigo-600" />
+          <PlusCircle style={{ width: "13px", height: "13px", color: "var(--accent)" }} />
           <span className="hidden sm:inline">New Intake</span>
         </button>
 
-        {/* Notification bell */}
-        <div className="relative p-1.5 text-slate-400 hover:text-slate-600 cursor-pointer rounded-md hover:bg-slate-100">
-          <Bell className="w-4 h-4" />
-          <span className="absolute top-1 right-1 w-2 h-2 bg-emerald-500 rounded-full"></span>
-        </div>
+        {/* Bell */}
+        <button
+          className="relative rounded-xl flex items-center justify-center transition-all cursor-pointer"
+          style={{
+            width: "32px", height: "32px",
+            background: "rgba(255,255,255,0.04)",
+            border: "1px solid var(--border)",
+            color: "var(--text-muted)",
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.borderColor = "var(--accent-border)";
+            e.currentTarget.style.color = "var(--text-primary)";
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.borderColor = "var(--border)";
+            e.currentTarget.style.color = "var(--text-muted)";
+          }}
+        >
+          <Bell style={{ width: "14px", height: "14px" }} />
+          <span
+            className="absolute top-1.5 right-1.5 rounded-full"
+            style={{ width: "6px", height: "6px", background: "var(--pink)" }}
+          />
+        </button>
 
-        {/* User Profile Badge & Logout */}
-        <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
-          <div className="flex items-center gap-2">
-            {/* Avatar */}
-            <div className={`w-7 h-7 rounded-lg ${authUser?.roleColor || "bg-indigo-600"} text-white text-[10px] font-bold flex items-center justify-center shadow shrink-0`}>
-              {authUser?.avatarInitials || (authUsername ? authUsername.charAt(0).toUpperCase() : "S")}
-            </div>
-            {/* Name + Role pill */}
-            <div className="hidden lg:flex flex-col">
-              <span className="text-xs font-semibold text-slate-800 leading-tight">{authUsername || "Sumit"}</span>
-              <span className="text-[9px] text-slate-400 leading-tight">{currentRole}</span>
-            </div>
+        {/* Divider */}
+        <div style={{ width: "1px", height: "24px", background: "var(--border)" }} />
+
+        {/* User badge */}
+        <div className="flex items-center gap-2">
+          <div
+            className="rounded-xl flex items-center justify-center text-white font-bold shrink-0 animate-float"
+            style={{
+              width: "32px", height: "32px",
+              background: authUser?.roleColor || "var(--grad-primary)",
+              fontSize: "10px",
+              boxShadow: "0 2px 10px var(--accent-glow)",
+            }}
+          >
+            {authUser?.avatarInitials || (authUsername ? authUsername.charAt(0).toUpperCase() : "S")}
           </div>
-
+          <div className="hidden lg:flex flex-col">
+            <span style={{ fontSize: "var(--text-sm)", fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.2 }}>
+              {authUsername || "Sumit"}
+            </span>
+            <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", lineHeight: 1.3 }}>
+              {currentRole}
+            </span>
+          </div>
           <button
             onClick={logout}
             title="Sign Out"
-            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors cursor-pointer"
+            className="rounded-lg flex items-center justify-center transition-all cursor-pointer"
+            style={{
+              width: "28px", height: "28px",
+              background: "transparent",
+              color: "var(--text-muted)",
+              border: "none",
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = "rgba(236,72,153,0.12)";
+              e.currentTarget.style.color = "var(--pink)";
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.color = "var(--text-muted)";
+            }}
           >
-            <LogOut className="w-4 h-4" />
+            <LogOut style={{ width: "14px", height: "14px" }} />
           </button>
         </div>
-
       </div>
     </header>
   );

@@ -2,272 +2,398 @@ import React from "react";
 import { useProject } from "../../context/ProjectContext";
 import {
   TrendingUp,
-  DollarSign,
-  Calendar,
   AlertTriangle,
-  Activity,
-  CheckCircle2,
-  Clock,
   Sparkles,
   ArrowUpRight,
-  PieChart,
-  ShieldAlert,
-  Edit3
+  ArrowDownRight,
+  Edit3,
+  Activity,
+  Users,
+  CheckCircle2,
+  Clock,
 } from "lucide-react";
 
 export const DashboardView: React.FC = () => {
-  const { activeProject, activePortfolio, currentRole, setActiveTab } = useProject();
+  const { activeProject, currentRole, setActiveTab } = useProject();
   const {
     evm = { BAC: 0, PV: 0, EV: 0, AC: 0, CPI: 1.0, SPI: 1.0, EAC: 0, VAC: 0, SV: 0, CV: 0 },
-    health = { overallHealth: "Green", scheduleHealth: "Green", budgetHealth: "Green", scopeHealth: "Green", qualityHealth: "Green", riskHealth: "Green", resourceHealth: "Green", aiHealthCommentary: "" },
+    health = {
+      overallHealth: "Green", scheduleHealth: "Green", budgetHealth: "Green",
+      scopeHealth: "Green", qualityHealth: "Green", riskHealth: "Green",
+      resourceHealth: "Green", aiHealthCommentary: ""
+    },
     intake = { executiveSummary: "", strategicObjective: "" },
     risks = [],
     lifecyclePhases = [],
-    name = "Project",
-    code = "PRJ"
   } = activeProject || {};
 
   const totalTasks = (lifecyclePhases || []).reduce(
-    (acc, ph) => acc + (ph.workPackages || []).reduce((wpAcc, wp) => wpAcc + (wp.tasks || []).length, 0),
-    0
+    (acc, ph) => acc + (ph.workPackages || []).reduce((wpAcc, wp) => wpAcc + (wp.tasks || []).length, 0), 0
   );
   const completedTasks = (lifecyclePhases || []).reduce(
-    (acc, ph) =>
-      acc +
-      (ph.workPackages || []).reduce(
-        (wpAcc, wp) => wpAcc + (wp.tasks || []).filter((t) => t?.status === "Completed").length,
-        0
-      ),
-    0
+    (acc, ph) => acc + (ph.workPackages || []).reduce(
+      (wpAcc, wp) => wpAcc + (wp.tasks || []).filter((t) => t?.status === "Completed").length, 0
+    ), 0
   );
   const overallProgress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 68;
+  const cpi = evm.CPI || 1.0;
+  const spi = evm.SPI || 1.0;
+  const openRisks = (risks || []).filter(r => r?.status === "Open").length;
 
-  const getHealthBadge = (status: string) => {
-    switch (status) {
-      case "Green":
-        return "bg-emerald-50 text-emerald-600 border border-emerald-200 font-bold";
-      case "Amber":
-        return "bg-amber-50 text-amber-600 border border-amber-200 font-bold";
-      default:
-        return "bg-red-50 text-red-600 border border-red-200 font-bold";
-    }
+  const healthColor = (s: string) => {
+    if (s === "Green") return { bg: "var(--green-dim)", text: "var(--green)", border: "rgba(16,185,129,0.25)" };
+    if (s === "Amber") return { bg: "var(--amber-dim)", text: "var(--amber)", border: "rgba(245,158,11,0.25)" };
+    return { bg: "var(--pink-dim)", text: "var(--pink)", border: "rgba(236,72,153,0.25)" };
   };
 
+  // Mini sparkline-style bars for Gantt
+  const ganttBars = [
+    { label: "Architecture Design", left: "5%",  width: "35%", color: "var(--accent)" },
+    { label: "Core Engine Build",   left: "40%", width: "35%", color: "var(--green)" },
+    { label: "Integration Testing", left: "70%", width: "20%", color: "var(--cyan)" },
+    { label: "Global Deployment",   left: "90%", width: "10%", color: "var(--text-muted)", opacity: 0.4 },
+  ];
+
+  const kpis = [
+    {
+      label: "Portfolio Health",
+      value: `${overallProgress}%`,
+      delta: "+2.4%",
+      up: true,
+      sub: "Overall project health",
+      icon: Activity,
+      accentColor: "var(--green)",
+      glowColor: "rgba(16,185,129,0.15)",
+    },
+    {
+      label: "Cost Performance (CPI)",
+      value: cpi.toFixed(2),
+      delta: cpi >= 1 ? "On Budget" : "Over Budget",
+      up: cpi >= 1,
+      sub: `EAC: $${((evm.EAC || evm.BAC || 0) / 1000).toFixed(0)}k · BAC: $${((evm.BAC || 0) / 1000).toFixed(0)}k`,
+      icon: TrendingUp,
+      accentColor: cpi >= 1 ? "var(--green)" : "var(--pink)",
+      glowColor: cpi >= 1 ? "rgba(16,185,129,0.15)" : "rgba(236,72,153,0.15)",
+    },
+    {
+      label: "Schedule Risk",
+      value: String(openRisks),
+      delta: "Open risks",
+      up: openRisks === 0,
+      sub: "Predictively identified by AI",
+      icon: AlertTriangle,
+      accentColor: openRisks > 2 ? "var(--pink)" : "var(--amber)",
+      glowColor: openRisks > 2 ? "rgba(236,72,153,0.15)" : "rgba(245,158,11,0.15)",
+    },
+    {
+      label: "Resource Utilization",
+      value: "92%",
+      delta: "Optimal",
+      up: true,
+      sub: "Targeting capacity balance",
+      icon: Users,
+      accentColor: "var(--cyan)",
+      glowColor: "rgba(6,182,212,0.15)",
+    },
+  ];
+
   return (
-    <div className="p-6 space-y-6 max-w-7xl mx-auto text-slate-900 font-sans">
-      {/* Top Banner / Portfolio Header */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 mb-1.5">
-            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-200">
+    <div style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", fontFamily: "Inter, sans-serif" }}>
+
+      {/* ── Hero Banner ──────────────────────────────────────────────────────── */}
+      <div
+        className="hero-banner animate-fadeIn"
+        style={{ padding: "24px 28px", marginBottom: "24px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "16px" }}
+      >
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+            <span
+              className="badge-violet"
+              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+            >
               {activeProject?.code || "PRJ"}
             </span>
-            <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${getHealthBadge(health.overallHealth)}`}>
-              Overall Health: {health.overallHealth}
+            {(() => {
+              const c = healthColor(health.overallHealth);
+              return (
+                <span style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", background: c.bg, color: c.text, border: `1px solid ${c.border}` }}>
+                  ● {health.overallHealth} Health
+                </span>
+              );
+            })()}
+            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>
+              Role: <strong style={{ color: "rgba(255,255,255,0.85)" }}>{currentRole}</strong>
             </span>
-            <span className="text-xs text-slate-500">| View Role: <strong className="text-slate-800">{currentRole}</strong></span>
           </div>
-          <h1 className="text-xl font-bold text-slate-800 tracking-tight">{activeProject?.name}</h1>
-          <p className="text-xs text-slate-500 mt-1 max-w-2xl">{intake.executiveSummary || intake.strategicObjective}</p>
+          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px" }}>
+            {activeProject?.name || "Project Dashboard"}
+          </h1>
+          <p style={{ fontSize: "var(--text-base)", color: "rgba(255,255,255,0.65)", maxWidth: "580px", lineHeight: 1.6 }}>
+            {intake.executiveSummary || intake.strategicObjective || "Enterprise PMO — Monitor performance, costs, risks and deliverables in real-time."}
+          </p>
         </div>
-
-        <div className="flex items-center gap-2.5">
+        <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
           <button
             onClick={() => setActiveTab("edit-project")}
-            className="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-2 rounded-md border border-slate-200 shadow-sm flex items-center gap-1.5 transition-all cursor-pointer"
+            style={{
+              display: "flex", alignItems: "center", gap: "6px",
+              background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.20)",
+              color: "#fff", borderRadius: "10px", padding: "8px 16px",
+              fontSize: "12px", fontWeight: 600, cursor: "pointer",
+              backdropFilter: "blur(10px)",
+            }}
           >
-            <Edit3 className="w-3.5 h-3.5 text-indigo-600" />
-            <span>Edit Project Details</span>
+            <Edit3 style={{ width: "13px", height: "13px" }} />
+            Edit Project
           </button>
           <button
             onClick={() => setActiveTab("ai-planner")}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3.5 py-2 rounded-md shadow-sm flex items-center gap-2 transition-all cursor-pointer"
+            className="btn-accent"
+            style={{ display: "flex", alignItems: "center", gap: "6px" }}
           >
-            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-            <span>AI WBS Generator</span>
+            <Sparkles style={{ width: "13px", height: "13px", color: "#FCD34D" }} />
+            AI WBS Generator
           </button>
         </div>
       </div>
 
-      {/* KPI Header Grid - 4 Columns */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm space-y-1.5">
-          <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Portfolio Health</p>
-          <p className="text-2xl font-bold text-slate-800">84% <span className="text-xs font-medium text-emerald-500 ml-1">+2.4%</span></p>
-          <div className="mt-2 h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-            <div className="h-full bg-emerald-500 w-[84%]"></div>
-          </div>
-        </div>
-
-        <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm space-y-1.5">
-          <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Cost Performance (CPI)</p>
-          <p className="text-2xl font-bold text-slate-800">
-            {evm.CPI?.toFixed(2) || "1.00"}
-            <span className={`text-xs font-medium ml-2 ${(evm.CPI || 1) >= 1 ? "text-emerald-500" : "text-red-500"}`}>
-              CPI {(evm.CPI || 1) >= 1 ? "✓ On Budget" : "⚠ Over Budget"}
-            </span>
-          </p>
-          <p className="text-[10px] text-slate-500">
-            EAC: ${(evm.EAC || evm.BAC || 0).toLocaleString()} · BAC: ${(evm.BAC || 0).toLocaleString()}
-          </p>
-        </div>
-
-
-        <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm space-y-1.5">
-          <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Schedule Risk Exposure</p>
-          <div className="flex items-baseline gap-2">
-            <p className="text-2xl font-bold text-slate-800">{(risks || []).filter(r => r?.status === "Open").length}</p>
-            <span className="text-[10px] font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded border border-red-200">High Criticality</span>
-          </div>
-          <p className="text-[10px] text-slate-500">Predictively identified by AI</p>
-        </div>
-
-        <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm space-y-1.5">
-          <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Resource Utilization</p>
-          <p className="text-2xl font-bold text-slate-800">92%</p>
-          <p className="text-[10px] text-slate-500">Targeting optimal balance</p>
-        </div>
+      {/* ── KPI Cards ────────────────────────────────────────────────────────── */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px", marginBottom: "24px" }} className="animate-fadeIn">
+        {kpis.map((kpi, i) => {
+          const Icon = kpi.icon;
+          return (
+            <div
+              key={i}
+              className="glass-card"
+              style={{
+                padding: "20px",
+                background: `linear-gradient(135deg, ${kpi.glowColor} 0%, var(--bg-card) 60%)`,
+              }}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
+                <p className="section-label">{kpi.label}</p>
+                <div style={{
+                  width: "32px", height: "32px", borderRadius: "10px",
+                  background: kpi.glowColor, border: `1px solid ${kpi.accentColor}40`,
+                  display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0
+                }}>
+                  <Icon style={{ width: "15px", height: "15px", color: kpi.accentColor }} />
+                </div>
+              </div>
+              <div className="kpi-value" style={{ marginBottom: "4px" }}>{kpi.value}</div>
+              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                {kpi.up
+                  ? <ArrowUpRight style={{ width: "13px", height: "13px", color: "var(--green)" }} />
+                  : <ArrowDownRight style={{ width: "13px", height: "13px", color: "var(--pink)" }} />
+                }
+                <span style={{ fontSize: "var(--text-sm)", fontWeight: 600, color: kpi.up ? "var(--green)" : "var(--pink)" }}>{kpi.delta}</span>
+              </div>
+              <p style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", marginTop: "6px" }}>{kpi.sub}</p>
+            </div>
+          );
+        })}
       </div>
 
-      {/* Main Split: Gantt & Resource Allocation / AI commentary */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-6">
-          {/* Schedule View */}
-          <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden flex flex-col">
-            <div className="border-b border-slate-100 p-3.5 flex justify-between items-center bg-slate-50">
-              <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider">Project Schedule: {activeProject.name}</h3>
-              <div className="flex gap-1.5">
-                <button className="px-2.5 py-1 text-[10px] font-bold bg-white border border-slate-200 rounded shadow-sm text-slate-700">Day</button>
-                <button className="px-2.5 py-1 text-[10px] font-bold bg-indigo-600 text-white rounded shadow-sm">Week</button>
+      {/* ── Main Body: Gantt + Resources | AI Panel ────────────────────────── */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: "20px" }}>
+
+        {/* Left column */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+
+          {/* Gantt-style Schedule */}
+          <div className="glass-card" style={{ overflow: "hidden" }}>
+            <div style={{
+              display: "flex", justifyContent: "space-between", alignItems: "center",
+              padding: "14px 18px", borderBottom: "1px solid var(--border)"
+            }}>
+              <h3 style={{ fontSize: "11px", fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                Project Schedule
+              </h3>
+              <div style={{ display: "flex", gap: "6px" }}>
+                {["Day", "Week"].map((t) => (
+                  <button key={t} style={{
+                    fontSize: "10px", fontWeight: 600, padding: "4px 10px", borderRadius: "6px", cursor: "pointer",
+                    background: t === "Week" ? "var(--grad-primary)" : "rgba(255,255,255,0.05)",
+                    color: t === "Week" ? "#fff" : "var(--text-muted)",
+                    border: t === "Week" ? "none" : "1px solid var(--border)",
+                  }}>{t}</button>
+                ))}
               </div>
             </div>
-            <div className="p-4 overflow-x-auto">
-              <div className="grid grid-cols-12 gap-0 border-b border-slate-100 pb-2 text-[10px] font-bold text-slate-400 uppercase min-w-[500px]">
-                <div className="col-span-4">Phase / Task Name</div>
-                <div className="col-span-8 flex justify-between">
-                  <span>Oct 01</span><span>Oct 15</span><span>Nov 01</span><span>Nov 15</span><span>Dec 01</span>
+            <div style={{ padding: "16px 18px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "150px 1fr", gap: "0", borderBottom: "1px solid var(--border)", paddingBottom: "8px", marginBottom: "14px" }}>
+                <span className="section-label">Phase / Task</span>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  {["Oct 01", "Oct 15", "Nov 01", "Nov 15", "Dec 01"].map(d => (
+                    <span key={d} className="section-label">{d}</span>
+                  ))}
                 </div>
               </div>
-              <div className="space-y-3.5 mt-3 min-w-[500px]">
-                <div className="grid grid-cols-12 items-center text-xs">
-                  <div className="col-span-4 font-semibold text-slate-700 truncate pr-2">Phase 1: Architecture Design</div>
-                  <div className="col-span-8 relative h-4 bg-slate-100 rounded">
-                    <div className="absolute left-[5%] w-[35%] h-full bg-indigo-500 rounded-sm opacity-90 shadow-sm"></div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                {ganttBars.map((bar, i) => (
+                  <div key={i} style={{ display: "grid", gridTemplateColumns: "150px 1fr", alignItems: "center", gap: "12px", opacity: bar.opacity || 1 }}>
+                    <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--text-secondary)", truncate: "true", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{bar.label}</span>
+                    <div style={{ position: "relative", height: "14px", background: "rgba(255,255,255,0.04)", borderRadius: "4px", overflow: "hidden" }}>
+                      <div style={{
+                        position: "absolute", left: bar.left, width: bar.width, height: "100%",
+                        background: bar.color, borderRadius: "4px",
+                        boxShadow: `0 0 8px ${bar.color}60`
+                      }} />
+                    </div>
                   </div>
-                </div>
-                <div className="grid grid-cols-12 items-center text-xs">
-                  <div className="col-span-4 font-semibold text-slate-700 truncate pr-2">Phase 2: Core Engine Build</div>
-                  <div className="col-span-8 relative h-4 bg-slate-100 rounded">
-                    <div className="absolute left-[40%] w-[35%] h-full bg-emerald-500 rounded-sm shadow-sm"></div>
-                  </div>
-                </div>
-                <div className="grid grid-cols-12 items-center text-xs">
-                  <div className="col-span-4 font-semibold text-slate-700 truncate pr-2">Phase 3: Integration Testing</div>
-                  <div className="col-span-8 relative h-4 bg-slate-100 rounded">
-                    <div className="absolute left-[70%] w-[20%] h-full bg-slate-300 rounded-sm shadow-sm"></div>
-                  </div>
-                </div>
-                <div className="grid grid-cols-12 items-center text-xs opacity-60">
-                  <div className="col-span-4 font-semibold text-slate-700 truncate pr-2">Phase 4: Global Deployment</div>
-                  <div className="col-span-8 relative h-4 bg-slate-100 rounded">
-                    <div className="absolute left-[90%] w-[10%] h-full bg-slate-300 rounded-sm"></div>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
 
-          {/* Resource Load Heatmap Table */}
-          <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-            <div className="p-3.5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-              <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider">Portfolio Resource Allocation</h3>
-              <span className="text-[10px] text-slate-400 font-semibold uppercase">Heatmap View</span>
+          {/* Resource Allocation Table */}
+          <div className="glass-card" style={{ overflow: "hidden" }}>
+            <div style={{ padding: "14px 18px", borderBottom: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <h3 style={{ fontSize: "11px", fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                Portfolio Resource Allocation
+              </h3>
+              <span style={{ fontSize: "9px", color: "var(--text-muted)", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase" }}>Heatmap View</span>
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="text-[10px] font-bold text-slate-400 uppercase bg-white border-b border-slate-100">
-                    <th className="p-3">Resource Name</th>
-                    <th className="p-3">Role</th>
-                    <th className="p-3">Capacity</th>
-                    <th className="p-3">Projects</th>
-                    <th className="p-3">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 text-[11px] text-slate-700">
-                  <tr>
-                    <td className="p-3 font-bold text-slate-800">Sarah Jenkins</td>
-                    <td className="p-3">Lead Architect</td>
-                    <td className="p-3">
-                      <div className="flex gap-1">
-                        <div className="h-3.5 w-3.5 bg-red-500 rounded-xs"></div>
-                        <div className="h-3.5 w-3.5 bg-red-500 rounded-xs"></div>
-                        <div className="h-3.5 w-3.5 bg-amber-500 rounded-xs"></div>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr style={{ borderBottom: "1px solid var(--border)" }}>
+                  {["Resource Name", "Role", "Capacity", "Projects", "Status"].map(h => (
+                    <th key={h} className="section-label" style={{ padding: "10px 18px", textAlign: "left" }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { name: "Sarah Jenkins",  role: "Lead Architect",   dots: ["pink","pink","amber"], projects: "3 Active", status: "Overloaded", statusColor: "badge-red" },
+                  { name: "Marcus Wong",    role: "Senior Frontend",  dots: ["green","green","dim"], projects: "1 Active", status: "Available",  statusColor: "badge-green" },
+                  { name: "Priya Sharma",   role: "Program Manager",  dots: ["cyan","cyan","dim"],   projects: "2 Active", status: "Optimal",    statusColor: "badge-cyan" },
+                ].map((row, i) => (
+                  <tr key={i} className="table-row-dark">
+                    <td style={{ padding: "12px 18px", fontSize: "12px", fontWeight: 700, color: "var(--text-primary)" }}>{row.name}</td>
+                    <td style={{ padding: "12px 18px", fontSize: "11px", color: "var(--text-secondary)" }}>{row.role}</td>
+                    <td style={{ padding: "12px 18px" }}>
+                      <div style={{ display: "flex", gap: "4px" }}>
+                        {row.dots.map((d, di) => (
+                          <div key={di} style={{
+                            width: "12px", height: "12px", borderRadius: "3px",
+                            background: d === "pink" ? "var(--pink)" : d === "green" ? "var(--green)" : d === "amber" ? "var(--amber)" : d === "cyan" ? "var(--cyan)" : "rgba(255,255,255,0.08)"
+                          }} />
+                        ))}
                       </div>
                     </td>
-                    <td className="p-3">3 Active</td>
-                    <td className="p-3"><span className="text-red-600 font-bold uppercase text-[10px] bg-red-50 px-1.5 py-0.5 rounded border border-red-200">Overloaded</span></td>
-                  </tr>
-                  <tr>
-                    <td className="p-3 font-bold text-slate-800">Marcus Wong</td>
-                    <td className="p-3">Senior Frontend</td>
-                    <td className="p-3">
-                      <div className="flex gap-1">
-                        <div className="h-3.5 w-3.5 bg-emerald-500 rounded-xs"></div>
-                        <div className="h-3.5 w-3.5 bg-emerald-500 rounded-xs"></div>
-                        <div className="h-3.5 w-3.5 bg-slate-200 rounded-xs"></div>
-                      </div>
+                    <td style={{ padding: "12px 18px", fontSize: "11px", color: "var(--text-secondary)" }}>{row.projects}</td>
+                    <td style={{ padding: "12px 18px" }}>
+                      <span className={row.statusColor} style={{ fontSize: "9px", fontWeight: 700, padding: "3px 8px", borderRadius: "6px", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                        {row.status}
+                      </span>
                     </td>
-                    <td className="p-3">1 Active</td>
-                    <td className="p-3"><span className="text-emerald-600 font-bold uppercase text-[10px] bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">Available</span></td>
                   </tr>
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
 
-        {/* Right Column: AI Health Analysis & Executive Score */}
-        <div className="flex flex-col gap-6">
-          <div className="bg-indigo-900 rounded-xl overflow-hidden shadow-md text-white p-4 space-y-4 border border-indigo-800">
-            <div className="flex items-center justify-between border-b border-white/10 pb-3">
-              <div className="flex items-center gap-2">
-                <div className="h-6 w-6 rounded bg-white flex items-center justify-center text-indigo-900 font-bold">
-                  <Sparkles className="h-3.5 h-3.5 text-indigo-900" />
+        {/* Right column — AI Copilot + Health Matrix */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+
+          {/* AI Copilot Card */}
+          <div
+            className="glass-card animate-glow"
+            style={{
+              padding: "20px",
+              background: "linear-gradient(145deg, rgba(109,40,217,0.25) 0%, var(--bg-card) 100%)",
+              borderColor: "var(--accent-border)",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", paddingBottom: "12px", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <div style={{
+                  width: "28px", height: "28px", borderRadius: "8px",
+                  background: "var(--grad-primary)",
+                  display: "flex", alignItems: "center", justifyContent: "center"
+                }}>
+                  <Sparkles style={{ width: "14px", height: "14px", color: "#fff" }} />
                 </div>
-                <span className="font-bold text-xs tracking-wider uppercase">Copilot Predictive AI</span>
+                <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--text-primary)", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+                  Copilot Predictive AI
+                </span>
               </div>
-              <span className="text-[9px] bg-white/20 px-2 py-0.5 rounded font-mono">v4.2</span>
+              <span style={{ fontSize: "9px", background: "var(--accent-glow)", color: "var(--accent)", border: "1px solid var(--accent-border)", padding: "2px 8px", borderRadius: "6px", fontFamily: "monospace" }}>
+                v4.2
+              </span>
             </div>
 
-            <div className="bg-white/10 rounded-lg p-3 text-[11px] leading-relaxed">
-              <span className="text-indigo-200 font-bold mb-1 block uppercase text-[10px]">PREDICTIVE RISK ANALYSIS</span>
-              {health.aiHealthCommentary}
+            <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: "10px", padding: "12px", marginBottom: "10px" }}>
+              <p className="section-label" style={{ marginBottom: "6px" }}>Predictive Risk Analysis</p>
+              <p style={{ fontSize: "11px", color: "var(--text-secondary)", lineHeight: 1.7 }}>
+                {health.aiHealthCommentary || "AI is analyzing your project data. Run the AI WBS Generator to get predictive insights."}
+              </p>
             </div>
-
-            <div className="bg-indigo-950/60 rounded-lg p-3 text-[11px] leading-relaxed italic border border-white/10">
-              "Generate a mitigation plan for the Resource Gap identified in Mobile Banking V2."
+            <div style={{ background: "rgba(139,92,246,0.08)", borderRadius: "10px", padding: "10px", border: "1px solid var(--accent-border)" }}>
+              <p style={{ fontSize: "11px", color: "var(--accent)", fontStyle: "italic", lineHeight: 1.6 }}>
+                "Generate a mitigation plan for the Resource Gap identified in {activeProject?.name || "this project"}."
+              </p>
             </div>
           </div>
 
-          <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm space-y-3">
-            <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Executive Summary AI Health Matrix</h3>
-            <div className="grid grid-cols-2 gap-2 text-xs">
+          {/* Health Matrix */}
+          <div className="glass-card" style={{ padding: "20px" }}>
+            <h3 style={{ fontSize: "11px", fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "14px" }}>
+              Executive AI Health Matrix
+            </h3>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
               {[
                 { label: "Schedule Health", status: health.scheduleHealth },
-                { label: "Budget Health", status: health.budgetHealth },
-                { label: "Scope Health", status: health.scopeHealth },
-                { label: "Quality Health", status: health.qualityHealth },
-                { label: "Risk Health", status: health.riskHealth },
-                { label: "Resource Health", status: health.resourceHealth }
-              ].map((item, idx) => (
-                <div key={idx} className="bg-slate-50 p-2.5 rounded-md border border-slate-200 flex items-center justify-between">
-                  <span className="text-slate-600 font-medium text-[11px]">{item.label}</span>
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded ${getHealthBadge(item.status)}`}>
-                    {item.status}
-                  </span>
-                </div>
-              ))}
+                { label: "Budget Health",   status: health.budgetHealth },
+                { label: "Scope Health",    status: health.scopeHealth },
+                { label: "Quality Health",  status: health.qualityHealth },
+                { label: "Risk Health",     status: health.riskHealth },
+                { label: "Resource Health", status: health.resourceHealth },
+              ].map((item, idx) => {
+                const c = healthColor(item.status);
+                return (
+                  <div key={idx} style={{
+                    padding: "10px", borderRadius: "10px",
+                    background: "rgba(255,255,255,0.03)",
+                    border: "1px solid var(--border)",
+                    display: "flex", flexDirection: "column", gap: "4px"
+                  }}>
+                    <span style={{ fontSize: "10px", color: "var(--text-muted)", fontWeight: 500 }}>{item.label}</span>
+                    <span style={{ fontSize: "10px", fontWeight: 700, padding: "2px 8px", borderRadius: "6px", background: c.bg, color: c.text, border: `1px solid ${c.border}`, alignSelf: "flex-start" }}>
+                      {item.status}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Progress Card */}
+          <div className="glass-card" style={{ padding: "20px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
+              <h3 style={{ fontSize: "11px", fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                Overall Progress
+              </h3>
+              <span className="kpi-value" style={{ fontSize: "22px", color: "var(--accent)" }}>{overallProgress}%</span>
+            </div>
+            <div style={{ height: "6px", background: "rgba(255,255,255,0.06)", borderRadius: "99px", overflow: "hidden", marginBottom: "14px" }}>
+              <div style={{
+                height: "100%", width: `${overallProgress}%`,
+                background: "var(--grad-primary)", borderRadius: "99px",
+                boxShadow: "0 0 10px var(--accent-glow)",
+                transition: "width 1s ease",
+              }} />
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                <CheckCircle2 style={{ width: "12px", height: "12px", color: "var(--green)" }} />
+                <span style={{ fontSize: "10px", color: "var(--text-muted)" }}>{completedTasks} tasks done</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                <Clock style={{ width: "12px", height: "12px", color: "var(--amber)" }} />
+                <span style={{ fontSize: "10px", color: "var(--text-muted)" }}>{totalTasks - completedTasks} remaining</span>
+              </div>
             </div>
           </div>
         </div>

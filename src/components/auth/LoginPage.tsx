@@ -3,22 +3,72 @@ import { useProject } from "../../context/ProjectContext";
 import { AUTH_USERS, AuthUser } from "../../auth/roleConfig";
 import {
   Layers, Lock, User, Eye, EyeOff, ArrowRight,
-  AlertCircle, ChevronRight, Users
+  AlertCircle, ChevronRight, Users, ShieldCheck
 } from "lucide-react";
 
-// Role color pill helper
-const rolePillClass: Record<string, string> = {
-  "Executive Sponsor": "bg-purple-900/60 text-purple-300 border-purple-500/40",
-  "PMO Admin": "bg-indigo-900/60 text-indigo-300 border-indigo-500/40",
-  "Portfolio Manager": "bg-blue-900/60 text-blue-300 border-blue-500/40",
-  "Program Manager": "bg-cyan-900/60 text-cyan-300 border-cyan-500/40",
-  "Project Manager": "bg-emerald-900/60 text-emerald-300 border-emerald-500/40",
-  "Team Member": "bg-amber-900/60 text-amber-300 border-amber-500/40",
-  "Stakeholder": "bg-rose-900/60 text-rose-300 border-rose-500/40",
+// Role color pill styles — aligned to design token colors
+const rolePillStyle: Record<string, { bg: string; text: string; border: string }> = {
+  "Executive Sponsor": { bg: "rgba(139,92,246,0.15)",  text: "#A78BFA", border: "rgba(139,92,246,0.35)" },
+  "PMO Admin":         { bg: "rgba(6,182,212,0.12)",   text: "#22D3EE", border: "rgba(6,182,212,0.30)" },
+  "Portfolio Manager": { bg: "rgba(59,130,246,0.12)",  text: "#93C5FD", border: "rgba(59,130,246,0.30)" },
+  "Program Manager":   { bg: "rgba(6,182,212,0.12)",   text: "#67E8F9", border: "rgba(6,182,212,0.30)" },
+  "Project Manager":   { bg: "rgba(16,185,129,0.12)",  text: "#6EE7B7", border: "rgba(16,185,129,0.30)" },
+  "Team Member":       { bg: "rgba(245,158,11,0.12)",  text: "#FCD34D", border: "rgba(245,158,11,0.30)" },
+  "Stakeholder":       { bg: "rgba(236,72,153,0.12)",  text: "#F9A8D4", border: "rgba(236,72,153,0.30)" },
 };
 
 // Unique users (exclude the Sumit legacy duplicate for display)
 const DISPLAY_USERS = AUTH_USERS.filter(u => u.username !== "sumit");
+
+// ── Shared style helpers ────────────────────────────────────────────────────────
+const S = {
+  panel: {
+    background: "var(--bg-sidebar)",
+    borderRight: "1px solid var(--border)",
+  } as React.CSSProperties,
+  rightPanel: {
+    background: "var(--bg-page)",
+    flex: 1,
+    display: "flex",
+    flexDirection: "column" as const,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: "48px 24px",
+    position: "relative" as const,
+    overflow: "hidden",
+  },
+  card: {
+    background: "var(--bg-card)",
+    border: "1px solid var(--border)",
+    borderRadius: "14px",
+    transition: "border-color 0.15s, background 0.15s",
+  } as React.CSSProperties,
+  input: {
+    width: "100%",
+    paddingLeft: "40px",
+    paddingRight: "16px",
+    paddingTop: "11px",
+    paddingBottom: "11px",
+    background: "var(--bg-input)",
+    border: "1px solid var(--border)",
+    borderRadius: "10px",
+    color: "var(--text-primary)",
+    fontFamily: "var(--font-family)",
+    fontSize: "var(--text-base)",   // 14px — WCAG readable
+    outline: "none",
+    transition: "border-color 0.2s, box-shadow 0.2s",
+  } as React.CSSProperties,
+  label: {
+    display: "block",
+    fontFamily: "var(--font-family)",
+    fontSize: "var(--text-xs)",     // 11px
+    fontWeight: 700,
+    color: "var(--text-secondary)",
+    textTransform: "uppercase" as const,
+    letterSpacing: "0.1em",
+    marginBottom: "6px",
+  } as React.CSSProperties,
+};
 
 export const LoginPage: React.FC = () => {
   const { login } = useProject();
@@ -28,31 +78,27 @@ export const LoginPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showUserList, setShowUserList] = useState<boolean>(false);
+  const [hoveredUser, setHoveredUser] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage("");
-
     if (!username.trim() || !password) {
       setErrorMessage("Please enter both username and password.");
       return;
     }
-
     setIsLoading(true);
     setTimeout(() => {
       const success = login(username, password);
       setIsLoading(false);
       if (!success) {
-        setErrorMessage("Invalid credentials. Select a user from the list below to quick-login.");
+        setErrorMessage("Invalid credentials. Select a user from the list to quick-login.");
       }
     }, 400);
   };
 
   const handleQuickLogin = (user: AuthUser) => {
-    setUsername(user.username);
-    setPassword(user.password);
     setErrorMessage("");
-    // Auto-submit
     setIsLoading(true);
     setTimeout(() => {
       const success = login(user.username, user.password);
@@ -62,124 +108,308 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col lg:flex-row font-sans selection:bg-indigo-500 selection:text-white">
-      {/* Left panel – Role User List */}
-      <div className="hidden lg:flex lg:w-[420px] xl:w-[480px] bg-slate-900 border-r border-slate-800 flex-col p-8 shrink-0">
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        fontFamily: "var(--font-family)",
+        background: "var(--bg-page)",
+        color: "var(--text-primary)",
+      }}
+    >
+      {/* ── LEFT PANEL — User cards ───────────────────────────────────────────── */}
+      <div
+        style={{
+          width: "400px",
+          flexShrink: 0,
+          display: "flex",
+          flexDirection: "column",
+          ...S.panel,
+        }}
+        className="hidden lg:flex"
+      >
         {/* Brand */}
-        <div className="flex items-center gap-3 mb-8">
-          <div className="h-10 w-10 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-600/30">
-            <Layers className="w-5 h-5 text-white" />
-          </div>
-          <div>
-            <span className="text-lg font-extrabold text-white tracking-tight">ProjectPlanner</span>
-            <span className="text-indigo-400 font-extrabold text-lg">AI</span>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2 mb-4">
-          <Users className="w-4 h-4 text-slate-400" />
-          <h2 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Demo User Accounts</h2>
-        </div>
-
-        <div className="space-y-2 overflow-y-auto flex-1 pr-1">
-          {DISPLAY_USERS.map((user) => (
-            <button
-              key={user.userId + user.username}
-              onClick={() => handleQuickLogin(user)}
-              disabled={isLoading}
-              className="w-full text-left group flex items-center gap-3 bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 hover:border-slate-600 rounded-xl p-3 transition-all cursor-pointer disabled:opacity-50"
+        <div style={{ padding: "24px", borderBottom: "1px solid var(--border)", flexShrink: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <div
+              style={{
+                width: "38px", height: "38px", borderRadius: "12px",
+                background: "var(--grad-primary)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                boxShadow: "0 4px 14px var(--accent-glow)", flexShrink: 0,
+              }}
             >
-              {/* Avatar */}
-              <div className={`w-9 h-9 rounded-lg ${user.roleColor} flex items-center justify-center text-white text-xs font-bold shrink-0 shadow`}>
-                {user.avatarInitials}
-              </div>
-
-              {/* Info */}
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-white truncate">{user.displayName}</p>
-                <span className={`inline-block text-[10px] font-semibold px-1.5 py-0.5 rounded border mt-0.5 ${rolePillClass[user.role] || "bg-slate-700 text-slate-300"}`}>
-                  {user.role}
+              <Layers style={{ width: "18px", height: "18px", color: "#fff" }} />
+            </div>
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: "2px", lineHeight: 1.1 }}>
+                <span style={{ fontSize: "var(--text-lg)", fontWeight: 800, color: "var(--text-primary)" }}>
+                  ProjectPlanner
+                </span>
+                <span style={{ fontSize: "var(--text-lg)", fontWeight: 800, color: "var(--accent)" }}>
+                  AI
                 </span>
               </div>
-
-              {/* Credentials */}
-              <div className="text-right shrink-0">
-                <p className="text-[10px] text-slate-400 font-mono">{user.username}</p>
-                <ChevronRight className="w-3.5 h-3.5 text-slate-600 group-hover:text-indigo-400 ml-auto mt-0.5 transition-colors" />
-              </div>
-            </button>
-          ))}
+              <p style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", fontWeight: 500, marginTop: "1px" }}>
+                Enterprise PMO Suite
+              </p>
+            </div>
+          </div>
         </div>
 
-        <div className="mt-6 pt-4 border-t border-slate-800">
-          <p className="text-[10px] text-slate-500 leading-relaxed">
-            Click any user to instantly log in with that role. Each role sees a tailored set of modules and lands on the most relevant page.
+        {/* Section heading */}
+        <div style={{ padding: "16px 20px 10px", flexShrink: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <Users style={{ width: "14px", height: "14px", color: "var(--text-muted)" }} />
+            <span className="section-label">Demo User Accounts</span>
+          </div>
+        </div>
+
+        {/* User cards list */}
+        <div style={{ flex: 1, overflowY: "auto", padding: "0 16px 16px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+            {DISPLAY_USERS.map((user) => {
+              const pill = rolePillStyle[user.role] || { bg: "rgba(255,255,255,0.05)", text: "var(--text-secondary)", border: "var(--border)" };
+              const isHovered = hoveredUser === user.username;
+              return (
+                <button
+                  key={user.userId + user.username}
+                  onClick={() => handleQuickLogin(user)}
+                  onMouseEnter={() => setHoveredUser(user.username)}
+                  onMouseLeave={() => setHoveredUser(null)}
+                  disabled={isLoading}
+                  style={{
+                    width: "100%", textAlign: "left",
+                    display: "flex", alignItems: "center", gap: "12px",
+                    background: isHovered ? "rgba(139,92,246,0.08)" : "rgba(255,255,255,0.03)",
+                    border: `1px solid ${isHovered ? "var(--accent-border)" : "var(--border)"}`,
+                    borderRadius: "12px",
+                    padding: "12px 14px",
+                    cursor: "pointer",
+                    transition: "all 0.15s ease",
+                    opacity: isLoading ? 0.5 : 1,
+                  }}
+                >
+                  {/* Avatar */}
+                  <div
+                    style={{
+                      width: "38px", height: "38px", borderRadius: "10px",
+                      background: user.roleColor || "var(--grad-primary)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      color: "#fff", fontSize: "var(--text-xs)", fontWeight: 700,
+                      flexShrink: 0,
+                      boxShadow: isHovered ? "0 2px 10px var(--accent-glow)" : "none",
+                    }}
+                  >
+                    {user.avatarInitials}
+                  </div>
+
+                  {/* Name + Role pill */}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{
+                      fontSize: "var(--text-base)",   // 14px — primary label
+                      fontWeight: 600,
+                      color: "var(--text-primary)",
+                      marginBottom: "4px",
+                      overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                    }}>
+                      {user.displayName}
+                    </p>
+                    <span style={{
+                      display: "inline-block",
+                      fontSize: "var(--text-xs)",     // 11px badge
+                      fontWeight: 600,
+                      padding: "2px 8px",
+                      borderRadius: "6px",
+                      background: pill.bg,
+                      color: pill.text,
+                      border: `1px solid ${pill.border}`,
+                      letterSpacing: "0.02em",
+                    }}>
+                      {user.role}
+                    </span>
+                  </div>
+
+                  {/* Username + arrow */}
+                  <div style={{ textAlign: "right", flexShrink: 0 }}>
+                    <p style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", fontFamily: "monospace" }}>
+                      {user.username}
+                    </p>
+                    <ChevronRight style={{
+                      width: "14px", height: "14px",
+                      color: isHovered ? "var(--accent)" : "var(--text-muted)",
+                      marginLeft: "auto", marginTop: "4px",
+                      transition: "color 0.15s",
+                    }} />
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Footer hint */}
+        <div style={{
+          padding: "14px 20px",
+          borderTop: "1px solid var(--border)",
+          flexShrink: 0,
+        }}>
+          <p style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", lineHeight: "var(--lh-relaxed)" }}>
+            Click any user to instantly log in with that role. Each role sees a tailored set of modules.
           </p>
         </div>
       </div>
 
-      {/* Right panel – Login Form */}
-      <div className="flex-1 flex flex-col justify-center items-center px-4 py-12 relative overflow-hidden">
-        {/* BG effects */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-10 right-10 w-[300px] h-[300px] bg-violet-600/8 rounded-full blur-3xl pointer-events-none" />
+      {/* ── RIGHT PANEL — Sign-in form ────────────────────────────────────────── */}
+      <div style={S.rightPanel}>
+        {/* Ambient glows */}
+        <div style={{
+          position: "absolute", top: "25%", left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "480px", height: "480px",
+          background: "radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }} />
+        <div style={{
+          position: "absolute", bottom: "10%", right: "5%",
+          width: "280px", height: "280px",
+          background: "radial-gradient(circle, rgba(6,182,212,0.06) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }} />
 
-        <div className="w-full max-w-md relative z-10">
-          {/* Brand (mobile only) */}
-          <div className="flex flex-col items-center text-center mb-8 lg:hidden">
-            <div className="h-14 w-14 rounded-2xl bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 flex items-center justify-center mb-3">
-              <Layers className="w-8 h-8" />
+        <div style={{ width: "100%", maxWidth: "420px", position: "relative", zIndex: 10 }}>
+
+          {/* Mobile brand (hidden on large screens) */}
+          <div className="lg:hidden" style={{ textAlign: "center", marginBottom: "32px" }}>
+            <div style={{
+              width: "52px", height: "52px", borderRadius: "16px",
+              background: "var(--grad-primary)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              margin: "0 auto 12px",
+              boxShadow: "0 6px 20px var(--accent-glow)",
+            }}>
+              <Layers style={{ width: "24px", height: "24px", color: "#fff" }} />
             </div>
-            <div className="flex items-center gap-1">
-              <span className="text-2xl font-extrabold tracking-tight text-white">ProjectPlanner</span>
-              <span className="text-indigo-400 font-extrabold text-2xl">AI</span>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "2px" }}>
+              <span style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "var(--text-primary)" }}>ProjectPlanner</span>
+              <span style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "var(--accent)" }}>AI</span>
             </div>
-            <p className="text-xs text-slate-400 font-medium mt-1">Enterprise PMO & Portfolio Management Platform</p>
+            <p style={{ fontSize: "var(--text-sm)", color: "var(--text-muted)", marginTop: "4px" }}>
+              Enterprise PMO & Portfolio Platform
+            </p>
           </div>
 
-          {/* Desktop heading */}
-          <div className="hidden lg:block mb-8">
-            <h1 className="text-3xl font-extrabold text-white tracking-tight">Sign in</h1>
-            <p className="text-slate-400 text-sm mt-1">Select a user from the list, or enter credentials manually.</p>
+          {/* Heading */}
+          <div style={{ marginBottom: "28px" }}>
+            <h1 style={{
+              fontSize: "var(--text-4xl)",    // 36px — prominent
+              fontWeight: 800,
+              color: "var(--text-primary)",
+              letterSpacing: "-0.5px",
+              lineHeight: "var(--lh-tight)",
+              marginBottom: "8px",
+            }}>
+              Sign in
+            </h1>
+            <p style={{
+              fontSize: "var(--text-base)",   // 14px — readable subtitle
+              color: "var(--text-secondary)",
+              lineHeight: "var(--lh-normal)",
+            }}>
+              Select a user from the list, or enter credentials manually.
+            </p>
           </div>
 
-          {/* Error */}
+          {/* Error message */}
           {errorMessage && (
-            <div className="mb-5 p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-start gap-2.5 animate-fadeIn">
-              <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
-              <span>{errorMessage}</span>
+            <div
+              className="animate-fadeIn"
+              style={{
+                marginBottom: "20px",
+                padding: "12px 14px",
+                borderRadius: "10px",
+                background: "var(--pink-dim)",
+                border: "1px solid rgba(236,72,153,0.30)",
+                display: "flex", alignItems: "flex-start", gap: "10px",
+              }}
+            >
+              <AlertCircle style={{ width: "16px", height: "16px", color: "var(--pink)", flexShrink: 0, marginTop: "1px" }} />
+              <span style={{ fontSize: "var(--text-base)", color: "var(--pink)", lineHeight: "var(--lh-normal)" }}>
+                {errorMessage}
+              </span>
             </div>
           )}
 
           {/* Mobile quick-login toggle */}
-          <div className="lg:hidden mb-4">
+          <div className="lg:hidden" style={{ marginBottom: "16px" }}>
             <button
               type="button"
               onClick={() => setShowUserList(!showUserList)}
-              className="w-full flex items-center justify-between bg-slate-800/80 border border-slate-700 rounded-xl px-4 py-3 text-sm font-semibold text-slate-300 hover:border-indigo-500 transition-colors cursor-pointer"
+              style={{
+                width: "100%",
+                display: "flex", alignItems: "center", justifyContent: "space-between",
+                background: "var(--bg-card)",
+                border: "1px solid var(--border)",
+                borderRadius: "10px",
+                padding: "12px 16px",
+                color: "var(--text-secondary)",
+                fontSize: "var(--text-base)",
+                fontWeight: 600,
+                cursor: "pointer",
+                fontFamily: "var(--font-family)",
+                transition: "border-color 0.15s",
+              }}
             >
-              <span className="flex items-center gap-2">
-                <Users className="w-4 h-4 text-indigo-400" />
+              <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <Users style={{ width: "15px", height: "15px", color: "var(--accent)" }} />
                 Quick Login — Select a Role
               </span>
-              <ChevronRight className={`w-4 h-4 text-slate-400 transition-transform ${showUserList ? "rotate-90" : ""}`} />
+              <ChevronRight style={{
+                width: "15px", height: "15px", color: "var(--text-muted)",
+                transform: showUserList ? "rotate(90deg)" : "none",
+                transition: "transform 0.2s",
+              }} />
             </button>
 
             {showUserList && (
-              <div className="mt-2 space-y-1.5 bg-slate-900/80 border border-slate-800 rounded-xl p-2">
+              <div style={{
+                marginTop: "8px",
+                background: "var(--bg-card)",
+                border: "1px solid var(--border)",
+                borderRadius: "10px",
+                padding: "8px",
+                display: "flex", flexDirection: "column", gap: "4px",
+              }}>
                 {DISPLAY_USERS.map((user) => (
                   <button
                     key={user.username}
                     onClick={() => { handleQuickLogin(user); setShowUserList(false); }}
                     disabled={isLoading}
-                    className="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer disabled:opacity-50"
+                    style={{
+                      width: "100%", textAlign: "left",
+                      display: "flex", alignItems: "center", gap: "10px",
+                      padding: "10px 12px", borderRadius: "8px",
+                      background: "transparent", border: "none",
+                      cursor: "pointer", fontFamily: "var(--font-family)",
+                      transition: "background 0.15s",
+                      opacity: isLoading ? 0.5 : 1,
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.background = "rgba(139,92,246,0.08)")}
+                    onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
                   >
-                    <div className={`w-7 h-7 rounded-md ${user.roleColor} flex items-center justify-center text-white text-[10px] font-bold shrink-0`}>
+                    <div style={{
+                      width: "30px", height: "30px", borderRadius: "8px",
+                      background: user.roleColor || "var(--grad-primary)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      color: "#fff", fontSize: "var(--text-xs)", fontWeight: 700, flexShrink: 0,
+                    }}>
                       {user.avatarInitials}
                     </div>
                     <div>
-                      <p className="text-xs font-semibold text-white">{user.displayName}</p>
-                      <p className="text-[10px] text-slate-400">{user.role}</p>
+                      <p style={{ fontSize: "var(--text-sm)", fontWeight: 600, color: "var(--text-primary)" }}>
+                        {user.displayName}
+                      </p>
+                      <p style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>{user.role}</p>
                     </div>
                   </button>
                 ))}
@@ -188,81 +418,157 @@ export const LoginPage: React.FC = () => {
           </div>
 
           {/* Divider */}
-          <div className="flex items-center gap-3 mb-5">
-            <div className="flex-1 h-px bg-slate-800" />
-            <span className="text-[11px] text-slate-500 font-medium">or sign in manually</span>
-            <div className="flex-1 h-px bg-slate-800" />
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px" }}>
+            <div style={{ flex: 1, height: "1px", background: "var(--border)" }} />
+            <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", fontWeight: 500, whiteSpace: "nowrap" }}>
+              or sign in manually
+            </span>
+            <div style={{ flex: 1, height: "1px", background: "var(--border)" }} />
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+
+            {/* Username */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Username</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <User className="w-4 h-4" />
+              <label style={S.label} htmlFor="login-username">Username</label>
+              <div style={{ position: "relative" }}>
+                <div style={{
+                  position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)",
+                  color: "var(--text-muted)", pointerEvents: "none",
+                }}>
+                  <User style={{ width: "15px", height: "15px" }} />
                 </div>
                 <input
+                  id="login-username"
                   type="text"
                   required
+                  autoComplete="username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="e.g. sarah, david, priya…"
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                  style={S.input}
+                  onFocus={e => {
+                    e.currentTarget.style.borderColor = "var(--accent)";
+                    e.currentTarget.style.boxShadow = "0 0 0 3px var(--accent-glow)";
+                  }}
+                  onBlur={e => {
+                    e.currentTarget.style.borderColor = "var(--border)";
+                    e.currentTarget.style.boxShadow = "none";
+                  }}
                 />
               </div>
             </div>
 
+            {/* Password */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Password</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <Lock className="w-4 h-4" />
+              <label style={S.label} htmlFor="login-password">Password</label>
+              <div style={{ position: "relative" }}>
+                <div style={{
+                  position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)",
+                  color: "var(--text-muted)", pointerEvents: "none",
+                }}>
+                  <Lock style={{ width: "15px", height: "15px" }} />
                 </div>
                 <input
+                  id="login-password"
                   type={showPassword ? "text" : "password"}
                   required
+                  autoComplete="current-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter password"
-                  className="w-full pl-10 pr-10 py-2.5 bg-slate-900/80 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                  style={{ ...S.input, paddingRight: "44px" }}
+                  onFocus={e => {
+                    e.currentTarget.style.borderColor = "var(--accent)";
+                    e.currentTarget.style.boxShadow = "0 0 0 3px var(--accent-glow)";
+                  }}
+                  onBlur={e => {
+                    e.currentTarget.style.borderColor = "var(--border)";
+                    e.currentTarget.style.boxShadow = "none";
+                  }}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-200 cursor-pointer"
+                  style={{
+                    position: "absolute", right: "12px", top: "50%",
+                    transform: "translateY(-50%)",
+                    background: "none", border: "none",
+                    color: "var(--text-muted)", cursor: "pointer",
+                    display: "flex", alignItems: "center",
+                    padding: "4px",
+                  }}
+                  title={showPassword ? "Hide password" : "Show password"}
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword
+                    ? <EyeOff style={{ width: "15px", height: "15px" }} />
+                    : <Eye style={{ width: "15px", height: "15px" }} />
+                  }
                 </button>
               </div>
             </div>
 
+            {/* Submit */}
             <button
               type="submit"
+              id="btn-sign-in"
               disabled={isLoading}
-              className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold rounded-lg shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:pointer-events-none cursor-pointer text-sm mt-2"
+              className="btn-accent"
+              style={{
+                width: "100%",
+                padding: "13px 18px",                // tall enough touch target
+                marginTop: "4px",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
+                fontSize: "var(--text-base)",         // 14px — readable CTA
+                opacity: isLoading ? 0.6 : 1,
+                pointerEvents: isLoading ? "none" : "auto",
+              }}
             >
               {isLoading ? (
-                <span className="inline-block w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <span style={{
+                  display: "inline-block", width: "18px", height: "18px",
+                  border: "2px solid rgba(255,255,255,0.3)",
+                  borderTopColor: "#fff",
+                  borderRadius: "50%",
+                  animation: "spin 0.7s linear infinite",
+                }} />
               ) : (
                 <>
                   <span>Sign In</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight style={{ width: "15px", height: "15px" }} />
                 </>
               )}
             </button>
           </form>
 
-          {/* Credentials hint */}
-          <p className="mt-5 text-center text-[11px] text-slate-600">
-            Legacy access: <span className="font-mono text-slate-500">sumit / Passwd12345</span>
-          </p>
+          {/* Security badge */}
+          <div style={{
+            marginTop: "24px",
+            display: "flex", alignItems: "center", justifyContent: "center", gap: "6px",
+          }}>
+            <ShieldCheck style={{ width: "13px", height: "13px", color: "var(--green)" }} />
+            <p style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", textAlign: "center" }}>
+              Legacy access:{" "}
+              <span style={{ fontFamily: "monospace", color: "var(--text-secondary)" }}>sumit / Passwd12345</span>
+            </p>
+          </div>
         </div>
 
-        <footer className="mt-8 text-center text-xs text-slate-600">
+        {/* Footer */}
+        <footer style={{
+          position: "absolute", bottom: "20px",
+          fontSize: "var(--text-xs)",
+          color: "var(--text-muted)",
+          textAlign: "center",
+          width: "100%",
+        }}>
           © {new Date().getFullYear()} ProjectPlanner AI Enterprise Suite. All rights reserved.
         </footer>
       </div>
+
+      {/* Spin keyframe (inline) */}
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 };

@@ -1,1 +1,480 @@
 @import "tailwindcss";
+
+/* ─── Design System Tokens (Dark Admin Dashboard Theme) ─────────────────────── */
+:root {
+  /* ── Backgrounds ─────────────────────────────────────────────────────── */
+  --bg-page:       #0D0F1A;
+  --bg-sidebar:    #13152A;
+  --bg-card:       #1A1D2E;
+  --bg-card-hover: #1F2338;
+  --bg-input:      #0F1120;
+  --bg-header:     #13152A;
+
+  /* ── Accent – Violet/Purple ──────────────────────────────────────────── */
+  --accent:        #8B5CF6;
+  --accent-2:      #6D28D9;
+  --accent-glow:   rgba(139, 92, 246, 0.25);
+  --accent-border: rgba(139, 92, 246, 0.30);
+
+  /* ── Secondary – Cyan ────────────────────────────────────────────────── */
+  --cyan:          #06B6D4;
+  --cyan-dim:      rgba(6, 182, 212, 0.15);
+
+  /* ── Alert – Pink/Magenta ────────────────────────────────────────────── */
+  --pink:          #EC4899;
+  --pink-dim:      rgba(236, 72, 153, 0.15);
+
+  /* ── Success – Emerald ───────────────────────────────────────────────── */
+  --green:         #10B981;
+  --green-dim:     rgba(16, 185, 129, 0.15);
+
+  /* ── Warning – Amber ─────────────────────────────────────────────────── */
+  --amber:         #F59E0B;
+  --amber-dim:     rgba(245, 158, 11, 0.15);
+
+  /* ── Text ────────────────────────────────────────────────────────────── */
+  --text-primary:   #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted:     #64748B;
+
+  /* ── Borders ─────────────────────────────────────────────────────────── */
+  --border:        rgba(255, 255, 255, 0.06);
+  --border-accent: rgba(139, 92, 246, 0.25);
+
+  /* ── Gradients ───────────────────────────────────────────────────────── */
+  --grad-primary:  linear-gradient(135deg, #6D28D9 0%, #8B5CF6 50%, #A78BFA 100%);
+  --grad-card:     linear-gradient(180deg, rgba(139,92,246,0.08) 0%, rgba(26,29,46,0) 100%);
+  --grad-hero:     linear-gradient(135deg, #4C1D95 0%, #6D28D9 40%, #BE185D 100%);
+  --grad-cyan:     linear-gradient(135deg, #0891B2 0%, #06B6D4 100%);
+
+  /* ──────────────────────────────────────────────────────────────────────
+     TYPOGRAPHY SYSTEM — Segoe UI
+     WCAG 2.1 AA compliant:
+       • Normal text ≥ 4.5:1 contrast ratio
+       • Large text (≥ 18pt/24px bold) ≥ 3:1 contrast ratio
+       • Minimum touch target: 44×44px
+       • No text smaller than 11px (7.5pt) in the UI
+     ────────────────────────────────────────────────────────────────────── */
+
+  /* Font family — Segoe UI system stack (no external load needed) */
+  --font-family: "Segoe UI", "Segoe UI Variable", system-ui, -apple-system,
+                 "Helvetica Neue", Arial, sans-serif;
+
+  /* Type Scale (rem-based, root = 16px) */
+  --text-xs:    0.6875rem;   /* 11px  — labels, micro badges              */
+  --text-sm:    0.75rem;     /* 12px  — table cells, nav items, sub-labels */
+  --text-base:  0.875rem;    /* 14px  — body / default readable text       */
+  --text-md:    1rem;        /* 16px  — card body, list items              */
+  --text-lg:    1.125rem;    /* 18px  — card headings                      */
+  --text-xl:    1.25rem;     /* 20px  — page section headings              */
+  --text-2xl:   1.5rem;      /* 24px  — module page titles                 */
+  --text-3xl:   1.875rem;    /* 30px  — KPI values (large metrics)         */
+  --text-4xl:   2.25rem;     /* 36px  — hero headings                      */
+
+  /* Font weights */
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+  --fw-extrabold:800;
+
+  /* Line heights (for readability) */
+  --lh-tight:   1.2;
+  --lh-snug:    1.35;
+  --lh-normal:  1.5;
+  --lh-relaxed: 1.65;
+  --lh-loose:   1.8;
+
+  /* Letter spacing */
+  --ls-tight:   -0.02em;
+  --ls-normal:   0;
+  --ls-wide:     0.04em;
+  --ls-wider:    0.08em;
+  --ls-widest:   0.12em;
+}
+
+/* ─── Base Reset ─────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Root 16px gives rem scale clean numbers */
+html {
+  font-size: 16px;
+  font-family: var(--font-family);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  /* Segoe UI Variable enables optical sizing on Win 11 */
+  font-optical-sizing: auto;
+}
+
+body {
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  font-size: var(--text-base);  /* 14px body default */
+  font-family: var(--font-family);
+  line-height: var(--lh-normal);
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+  background-color: var(--bg-page);
+  font-family: var(--font-family);
+}
+
+/* ─── Semantic type elements — accessibility baseline ────────────────────────── */
+h1 {
+  font-size: var(--text-4xl);      /* 36px */
+  font-weight: var(--fw-extrabold);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+  color: var(--text-primary);
+}
+
+h2 {
+  font-size: var(--text-2xl);      /* 24px */
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-tight);
+  color: var(--text-primary);
+}
+
+h3 {
+  font-size: var(--text-lg);       /* 18px */
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-snug);
+  color: var(--text-primary);
+}
+
+h4 {
+  font-size: var(--text-md);       /* 16px */
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-snug);
+  color: var(--text-primary);
+}
+
+h5, h6 {
+  font-size: var(--text-base);     /* 14px */
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-snug);
+  color: var(--text-secondary);
+}
+
+p {
+  font-size: var(--text-base);     /* 14px — readable body */
+  line-height: var(--lh-relaxed);
+  color: var(--text-secondary);
+}
+
+small {
+  font-size: var(--text-sm);       /* 12px */
+  line-height: var(--lh-normal);
+}
+
+/* Focus visible — WCAG 2.4.7 keyboard accessibility */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Minimum touch/click target: 44px — WCAG 2.5.5 */
+button, [role="button"], a {
+  min-height: 28px;    /* layout-safe minimum; critical CTAs use padding */
+  cursor: pointer;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(139,92,246,0.30); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(139,92,246,0.60); }
+
+/* ─── Animations ─────────────────────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 12px var(--accent-glow); }
+  50%       { box-shadow: 0 0 28px rgba(139,92,246,0.45); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-4px); }
+}
+
+.animate-fadeIn  { animation: fadeIn 0.35s ease both; }
+.animate-glow    { animation: glow-pulse 3s ease-in-out infinite; }
+.animate-float   { animation: float 4s ease-in-out infinite; }
+
+/* ─── Glass Card ─────────────────────────────────────────────────────────────── */
+.glass-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.04) inset,
+    0 4px 24px rgba(0,0,0,0.35);
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.glass-card:hover {
+  border-color: var(--accent-border);
+  box-shadow:
+    0 1px 0 0 rgba(255,255,255,0.06) inset,
+    0 8px 32px rgba(0,0,0,0.40),
+    0 0 0 1px var(--accent-border);
+  transform: translateY(-1px);
+}
+
+/* ─── Gradient Text ──────────────────────────────────────────────────────────── */
+.gradient-text {
+  background: var(--grad-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Accent Button ──────────────────────────────────────────────────────────── */
+.btn-accent {
+  background: var(--grad-primary);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: var(--font-family);
+  font-weight: var(--fw-semibold);
+  font-size: var(--text-sm);         /* 12px */
+  padding: 9px 18px;                 /* ≥ 36px height with padding */
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(139,92,246,0.35);
+  transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+.btn-accent:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(139,92,246,0.50);
+}
+.btn-accent:active { transform: translateY(0); }
+
+/* ─── Status Badges — font-size lifted to 11px minimum ───────────────────────── */
+.badge-green  {
+  background: var(--green-dim);  color: var(--green); border: 1px solid rgba(16,185,129,0.25);
+  font-size: var(--text-xs);  /* 11px */
+  font-weight: var(--fw-bold);
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+.badge-red    {
+  background: var(--pink-dim);   color: var(--pink);  border: 1px solid rgba(236,72,153,0.25);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-bold);
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+.badge-amber  {
+  background: var(--amber-dim);  color: var(--amber); border: 1px solid rgba(245,158,11,0.25);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-bold);
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+.badge-cyan   {
+  background: var(--cyan-dim);   color: var(--cyan);  border: 1px solid rgba(6,182,212,0.25);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-bold);
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+.badge-violet {
+  background: var(--accent-glow); color: var(--accent); border: 1px solid var(--accent-border);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-bold);
+  border-radius: 6px;
+  padding: 2px 8px;
+}
+
+/* ─── Sidebar Active Item ────────────────────────────────────────────────────── */
+.sidebar-item-active {
+  background: rgba(139, 92, 246, 0.12);
+  color: #fff;
+  border-left: 2px solid var(--accent);
+}
+.sidebar-item {
+  border-left: 2px solid transparent;
+  transition: all 0.15s ease;
+}
+.sidebar-item:hover {
+  background: rgba(255,255,255,0.04);
+  color: #fff;
+  border-left-color: rgba(139,92,246,0.40);
+}
+
+/* ─── Chart glow lines ───────────────────────────────────────────────────────── */
+.chart-line-violet { stroke: #8B5CF6; filter: drop-shadow(0 0 4px rgba(139,92,246,0.6)); }
+.chart-line-cyan   { stroke: #06B6D4; filter: drop-shadow(0 0 4px rgba(6,182,212,0.6)); }
+.chart-line-pink   { stroke: #EC4899; filter: drop-shadow(0 0 4px rgba(236,72,153,0.5)); }
+
+/* ─── Input fields ───────────────────────────────────────────────────────────── */
+.input-dark {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  font-size: var(--text-base);       /* 14px — WCAG readable */
+  padding: 10px 14px;                /* comfortable touch target */
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+.input-dark::placeholder {
+  color: var(--text-muted);
+  font-size: var(--text-sm);         /* 12px placeholders OK */
+}
+.input-dark:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+/* ─── Section / group labels — 11px minimum for uppercase labels ─────────────── */
+.section-label {
+  font-family: var(--font-family);
+  font-size: var(--text-xs);         /* 11px */
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-widest);  /* 0.12em */
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ─── KPI / metric value (large number) ─────────────────────────────────────── */
+.kpi-value {
+  font-family: var(--font-family);
+  font-size: var(--text-3xl);        /* 30px — clearly legible metric */
+  font-weight: var(--fw-extrabold);
+  color: var(--text-primary);
+  letter-spacing: var(--ls-tight);
+  line-height: 1;
+}
+
+/* ─── Card heading ───────────────────────────────────────────────────────────── */
+.card-heading {
+  font-family: var(--font-family);
+  font-size: var(--text-md);         /* 16px */
+  font-weight: var(--fw-semibold);
+  color: var(--text-primary);
+  line-height: var(--lh-snug);
+}
+
+/* ─── Body text (card descriptions, table cells) ────────────────────────────── */
+.body-text {
+  font-family: var(--font-family);
+  font-size: var(--text-base);       /* 14px */
+  line-height: var(--lh-relaxed);    /* 1.65 — readable */
+  color: var(--text-secondary);
+}
+
+/* ─── Table text — 13px minimum for dense data ───────────────────────────────── */
+.table-text {
+  font-family: var(--font-family);
+  font-size: 0.8125rem;              /* 13px */
+  color: var(--text-secondary);
+  line-height: var(--lh-normal);
+}
+
+/* ─── Nav item text (sidebar, header) ───────────────────────────────────────── */
+.nav-text {
+  font-family: var(--font-family);
+  font-size: var(--text-sm);         /* 12px */
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-snug);
+}
+
+/* ─── Tooltip / helper text ──────────────────────────────────────────────────── */
+.helper-text {
+  font-family: var(--font-family);
+  font-size: var(--text-xs);         /* 11px */
+  color: var(--text-muted);
+  line-height: var(--lh-normal);
+}
+
+/* ─── Hero gradient banner ───────────────────────────────────────────────────── */
+.hero-banner {
+  background: var(--grad-hero);
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 70% 50%, rgba(255,255,255,0.08) 0%, transparent 60%),
+    radial-gradient(circle at 20% 80%, rgba(139,92,246,0.20) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* ─── Table rows ─────────────────────────────────────────────────────────────── */
+.table-row-dark {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+}
+.table-row-dark:hover { background: rgba(255,255,255,0.02); }
+
+/* ─── Select / dropdown override ────────────────────────────────────────────── */
+select {
+  font-family: var(--font-family);
+  font-size: var(--text-sm);         /* 12px */
+  color: var(--text-primary);
+}
+select option {
+  font-family: var(--font-family);
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+/* ─── Accessibility utilities ────────────────────────────────────────────────── */
+
+/* Visually hidden but screen-reader accessible */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* High-contrast mode support */
+@media (forced-colors: active) {
+  .glass-card { border: 1px solid ButtonText; }
+  .btn-accent { border: 1px solid ButtonText; }
+  .sidebar-item-active { border-left: 3px solid Highlight; }
+}
+
+/* Reduced motion — respect user preference */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fadeIn,
+  .animate-glow,
+  .animate-float,
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

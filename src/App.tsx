@@ -101,17 +101,34 @@ const MainContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
-      <Header />
-      <div className="flex flex-1 overflow-hidden">
-        <Sidebar />
-        <main className="flex-1 overflow-y-auto bg-slate-50 pb-16">
+    <div
+      className="font-sans selection:bg-violet-500 selection:text-white"
+      style={{
+        display: "flex",
+        height: "100vh",
+        overflow: "hidden",
+        background: "var(--bg-page)",
+        color: "var(--text-primary)",
+      }}
+    >
+      <Sidebar />
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+        <Header />
+        <main
+          style={{
+            flex: 1,
+            overflowY: "auto",
+            background: "var(--bg-page)",
+            paddingBottom: "32px",
+          }}
+        >
           {renderModuleView()}
         </main>
       </div>
       <CopilotDrawer />
     </div>
   );
+
 };
 
 export default function App() {
