@@ -169,7 +169,7 @@ export const ProjectOnboardingView: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", fontFamily: "Inter, sans-serif" }} className="space-y-6 animate-fadeIn">
+    <div style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", fontFamily: "Inter, sans-serif", display: "flex", flexDirection: "column", gap: "25px" }} className="animate-fadeIn">
       {/* Header */}
       <div
         className="hero-banner animate-fadeIn"
@@ -216,9 +216,8 @@ export const ProjectOnboardingView: React.FC = () => {
                     value={formData.projectName}
                     onChange={handleChange}
                     placeholder="e.g. Next-Gen Payment Gateway Modernization"
-                    className={`w-full px-3.5 py-2.5 border rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:ring-1 transition-colors ${
-                      errors.projectName ? "border-rose-500 focus:ring-rose-500" : "border-[var(--border)] focus:border-indigo-500 focus:ring-indigo-500"
-                    }`}
+                    className={`w-full px-3.5 py-2.5 border rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:ring-1 transition-colors ${errors.projectName ? "border-rose-500 focus:ring-rose-500" : "border-[var(--border)] focus:border-indigo-500 focus:ring-indigo-500"
+                      }`}
                   />
                   {errors.projectName && <p className="text-xs text-rose-500 mt-1">{errors.projectName}</p>}
                 </div>
@@ -232,9 +231,8 @@ export const ProjectOnboardingView: React.FC = () => {
                     name="projectCode"
                     value={formData.projectCode}
                     onChange={handleChange}
-                    className={`w-full px-3.5 py-2.5 border rounded-lg text-sm font-mono text-[var(--text-primary)] focus:outline-none focus:ring-1 transition-colors ${
-                      errors.projectCode ? "border-rose-500 focus:ring-rose-500" : "border-[var(--border)] focus:border-indigo-500 focus:ring-indigo-500"
-                    }`}
+                    className={`w-full px-3.5 py-2.5 border rounded-lg text-sm font-mono text-[var(--text-primary)] focus:outline-none focus:ring-1 transition-colors ${errors.projectCode ? "border-rose-500 focus:ring-rose-500" : "border-[var(--border)] focus:border-indigo-500 focus:ring-indigo-500"
+                      }`}
                   />
                   {errors.projectCode && <p className="text-xs text-rose-500 mt-1">{errors.projectCode}</p>}
                 </div>
@@ -350,9 +348,8 @@ export const ProjectOnboardingView: React.FC = () => {
                     value={formData.problemStatement}
                     onChange={handleChange}
                     placeholder="Describe the operational pain point or market opportunity..."
-                    className={`w-full px-3.5 py-2.5 border rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:ring-1 transition-colors ${
-                      errors.problemStatement ? "border-rose-500 focus:ring-rose-500" : "border-[var(--border)] focus:border-indigo-500 focus:ring-indigo-500"
-                    }`}
+                    className={`w-full px-3.5 py-2.5 border rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:ring-1 transition-colors ${errors.problemStatement ? "border-rose-500 focus:ring-rose-500" : "border-[var(--border)] focus:border-indigo-500 focus:ring-indigo-500"
+                      }`}
                   />
                   {errors.problemStatement && <p className="text-xs text-rose-500 mt-1">{errors.problemStatement}</p>}
                 </div>
@@ -367,9 +364,8 @@ export const ProjectOnboardingView: React.FC = () => {
                     value={formData.executiveSummary}
                     onChange={handleChange}
                     placeholder="High-level solution architecture and core deliverable summary..."
-                    className={`w-full px-3.5 py-2.5 border rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:ring-1 transition-colors ${
-                      errors.executiveSummary ? "border-rose-500 focus:ring-rose-500" : "border-[var(--border)] focus:border-indigo-500 focus:ring-indigo-500"
-                    }`}
+                    className={`w-full px-3.5 py-2.5 border rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:ring-1 transition-colors ${errors.executiveSummary ? "border-rose-500 focus:ring-rose-500" : "border-[var(--border)] focus:border-indigo-500 focus:ring-indigo-500"
+                      }`}
                   />
                   {errors.executiveSummary && <p className="text-xs text-rose-500 mt-1">{errors.executiveSummary}</p>}
                 </div>
@@ -383,9 +379,8 @@ export const ProjectOnboardingView: React.FC = () => {
                     name="estimatedBudget"
                     value={formData.estimatedBudget}
                     onChange={handleChange}
-                    className={`w-full px-3.5 py-2.5 border rounded-lg text-sm font-mono text-[var(--text-primary)] focus:outline-none focus:ring-1 transition-colors ${
-                      errors.estimatedBudget ? "border-rose-500 focus:ring-rose-500" : "border-[var(--border)] focus:border-indigo-500 focus:ring-indigo-500"
-                    }`}
+                    className={`w-full px-3.5 py-2.5 border rounded-lg text-sm font-mono text-[var(--text-primary)] focus:outline-none focus:ring-1 transition-colors ${errors.estimatedBudget ? "border-rose-500 focus:ring-rose-500" : "border-[var(--border)] focus:border-indigo-500 focus:ring-indigo-500"
+                      }`}
                   />
                   {errors.estimatedBudget && <p className="text-xs text-rose-500 mt-1">{errors.estimatedBudget}</p>}
                 </div>
@@ -438,9 +433,8 @@ export const ProjectOnboardingView: React.FC = () => {
                     value={formData.primaryObjective}
                     onChange={handleChange}
                     placeholder="Clear quantitative objective statement..."
-                    className={`w-full px-3.5 py-2.5 border rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:ring-1 transition-colors ${
-                      errors.primaryObjective ? "border-rose-500 focus:ring-rose-500" : "border-[var(--border)] focus:border-indigo-500 focus:ring-indigo-500"
-                    }`}
+                    className={`w-full px-3.5 py-2.5 border rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:ring-1 transition-colors ${errors.primaryObjective ? "border-rose-500 focus:ring-rose-500" : "border-[var(--border)] focus:border-indigo-500 focus:ring-indigo-500"
+                      }`}
                   />
                   {errors.primaryObjective && <p className="text-xs text-rose-500 mt-1">{errors.primaryObjective}</p>}
                 </div>
@@ -456,9 +450,8 @@ export const ProjectOnboardingView: React.FC = () => {
                       value={formData.inScope}
                       onChange={handleChange}
                       placeholder="Native mobile iOS and Android app&#10;OAuth2 login service"
-                      className={`w-full px-3.5 py-2.5 border rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:ring-1 transition-colors ${
-                        errors.inScope ? "border-rose-500 focus:ring-rose-500" : "border-[var(--border)] focus:border-indigo-500 focus:ring-indigo-500"
-                      }`}
+                      className={`w-full px-3.5 py-2.5 border rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:ring-1 transition-colors ${errors.inScope ? "border-rose-500 focus:ring-rose-500" : "border-[var(--border)] focus:border-indigo-500 focus:ring-indigo-500"
+                        }`}
                     />
                     {errors.inScope && <p className="text-xs text-rose-500 mt-1">{errors.inScope}</p>}
                   </div>
@@ -528,9 +521,8 @@ export const ProjectOnboardingView: React.FC = () => {
                     value={formData.sponsor}
                     onChange={handleChange}
                     placeholder="e.g. Sarah Jenkins"
-                    className={`w-full px-3.5 py-2.5 border rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:ring-1 transition-colors ${
-                      errors.sponsor ? "border-rose-500 focus:ring-rose-500" : "border-[var(--border)] focus:border-indigo-500 focus:ring-indigo-500"
-                    }`}
+                    className={`w-full px-3.5 py-2.5 border rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:ring-1 transition-colors ${errors.sponsor ? "border-rose-500 focus:ring-rose-500" : "border-[var(--border)] focus:border-indigo-500 focus:ring-indigo-500"
+                      }`}
                   />
                   {errors.sponsor && <p className="text-xs text-rose-500 mt-1">{errors.sponsor}</p>}
                 </div>
@@ -545,9 +537,8 @@ export const ProjectOnboardingView: React.FC = () => {
                     value={formData.projectManager}
                     onChange={handleChange}
                     placeholder="e.g. David Chen"
-                    className={`w-full px-3.5 py-2.5 border rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:ring-1 transition-colors ${
-                      errors.projectManager ? "border-rose-500 focus:ring-rose-500" : "border-[var(--border)] focus:border-indigo-500 focus:ring-indigo-500"
-                    }`}
+                    className={`w-full px-3.5 py-2.5 border rounded-lg text-sm text-[var(--text-primary)] focus:outline-none focus:ring-1 transition-colors ${errors.projectManager ? "border-rose-500 focus:ring-rose-500" : "border-[var(--border)] focus:border-indigo-500 focus:ring-indigo-500"
+                      }`}
                   />
                   {errors.projectManager && <p className="text-xs text-rose-500 mt-1">{errors.projectManager}</p>}
                 </div>
@@ -597,7 +588,7 @@ export const ProjectOnboardingView: React.FC = () => {
               </div>
 
               {/* Summary Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+              <div className="grid grid-cols-1 md:grid-cols-2 text-sm" style={{ gap: "25px" }}>
                 <div className="bg-[var(--bg-card)] border border-[var(--border)] p-4 rounded-xl space-y-6">
                   <h4 className="font-bold text-[var(--text-primary)] text-sm flex items-center gap-1.5">
                     <Briefcase className="w-4 h-4 text-[var(--accent)]" /> Project Identity

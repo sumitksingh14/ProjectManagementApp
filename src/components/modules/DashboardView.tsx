@@ -103,7 +103,7 @@ export const DashboardView: React.FC = () => {
       {/* ── Hero Banner ──────────────────────────────────────────────────────── */}
       <div
         className="hero-banner animate-fadeIn"
-        style={{ padding: "24px 28px", marginBottom: "24px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "16px" }}
+        style={{ padding: "24px 28px", marginBottom: "25px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "16px" }}
       >
         <div style={{ flex: 1 }}>
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
