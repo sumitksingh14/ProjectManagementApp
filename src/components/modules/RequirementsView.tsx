@@ -58,8 +58,17 @@ export const RequirementsView: React.FC = () => {
     }
   };
 
+  const mustHaveCount = (requirements || []).filter(r => r.priority === "Must Have").length;
+  const approvedCount = (requirements || []).filter(r => r.status === "Approved" || r.status === "Verified").length;
+
+  const kpis = [
+    { label: "Total Tracked Requirements", value: String(requirements.length), delta: "RTM Repository", up: true, sub: "Traceability matrix items", accentColor: "var(--accent)", glowColor: "rgba(139,92,246,0.15)" },
+    { label: "Must-Have Critical Requirements", value: String(mustHaveCount), delta: "Core Scope Baseline", up: true, sub: "High business priority items", accentColor: "var(--pink)", glowColor: "rgba(236,72,153,0.15)" },
+    { label: "Approved & Verified", value: `${approvedCount} / ${requirements.length}`, delta: "Acceptance Ready", up: approvedCount === requirements.length, sub: "Passed criteria validation", accentColor: "var(--green)", glowColor: "rgba(16,185,129,0.15)" },
+  ];
+
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
+    <div style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", fontFamily: "Inter, sans-serif" }} className="space-y-6 animate-fadeIn">
       {/* Header */}
       <div
         className="hero-banner animate-fadeIn"
@@ -69,13 +78,13 @@ export const RequirementsView: React.FC = () => {
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
             <span
               className="badge-violet"
-              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+              style={{ fontSize: "12px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
             >
               Module 3
             </span>
-            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>Requirement Traceability Matrix (RTM)</span>
+            <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)" }}>Requirement Traceability Matrix (RTM)</span>
           </div>
-          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
+          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "10px", display: "flex", alignItems: "center", gap: "8px" }}>
             Requirements Management
           </h1>
           <p style={{ fontSize: "var(--text-base)", color: "rgba(255,255,255,0.65)", maxWidth: "580px", lineHeight: 1.6 }}>
@@ -83,15 +92,43 @@ export const RequirementsView: React.FC = () => {
           </p>
         </div>
         <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
-          <Plus style={{ width: "32px", height: "32px", color: "#fff" }} />
+          <button
+            onClick={() => setShowForm(!showForm)}
+            className="flex items-center gap-1.5 rounded-xl transition-all cursor-pointer"
+            style={{
+              background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.20)",
+              color: "#fff", padding: "8px 14px", fontSize: "12px", fontWeight: 600, backdropFilter: "blur(10px)"
+            }}
+          >
+            <Plus style={{ width: "14px", height: "14px" }} />
+            Add Requirement
+          </button>
         </div>
+      </div>
+
+      {/* KPI Cards */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px" }} className="animate-fadeIn">
+        {kpis.map((kpi, i) => (
+          <div
+            key={i}
+            className="glass-card"
+            style={{
+              padding: "20px",
+              background: `linear-gradient(135deg, ${kpi.glowColor} 0%, var(--bg-card) 60%)`,
+            }}
+          >
+            <p className="section-label" style={{ marginBottom: "12px" }}>{kpi.label}</p>
+            <div className="kpi-value" style={{ marginBottom: "10px" }}>{kpi.value}</div>
+            <p style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>{kpi.sub}</p>
+          </div>
+        ))}
       </div>
 
       {/* Add Form Modal */}
       {showForm && (
-        <form onSubmit={handleAddRequirement} className="bg-slate-900 border border-indigo-500/40 rounded-2xl p-6 shadow-2xl space-y-4 text-xs">
+        <form onSubmit={handleAddRequirement} className="bg-slate-900 border border-indigo-500/40 rounded-2xl p-6 shadow-2xl space-y-6 text-sm">
           <h3 className="text-sm font-bold text-white">Create New Requirement</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <label className="block text-[var(--text-muted)] mb-1">Requirement Code *</label>
               <input
@@ -185,16 +222,16 @@ export const RequirementsView: React.FC = () => {
       )}
 
       {/* RTM Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
         <h3 className="text-sm font-bold text-white flex items-center gap-2">
           <CheckSquare className="w-4 h-4 text-indigo-400" />
           Requirement Traceability Matrix (RTM)
         </h3>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
+          <table className="w-full text-left text-sm border-collapse">
             <thead>
-              <tr className="border-b border-slate-800 text-[var(--text-muted)] font-bold uppercase tracking-wider text-[10px]">
+              <tr className="border-b border-slate-800 text-[var(--text-muted)] font-bold uppercase tracking-wider text-[12px]">
                 <th className="p-3">Req ID</th>
                 <th className="p-3">Title & Description</th>
                 <th className="p-3">Type & Category</th>
@@ -209,18 +246,18 @@ export const RequirementsView: React.FC = () => {
                   <td className="p-3 font-mono font-bold text-indigo-400">{req.code}</td>
                   <td className="p-3 font-semibold text-white max-w-xs">
                     <div>{req.title}</div>
-                    <div className="text-[10px] text-[var(--text-muted)] font-normal leading-relaxed">{req.description}</div>
+                    <div className="text-[12px] text-[var(--text-muted)] font-normal leading-relaxed">{req.description}</div>
                   </td>
                   <td className="p-3">
                     <span className="text-[var(--text-muted)] font-medium">{req.type}</span>
-                    {req.category && <div className="text-[10px] text-[var(--text-secondary)]">{req.category}</div>}
+                    {req.category && <div className="text-[12px] text-[var(--text-secondary)]">{req.category}</div>}
                   </td>
                   <td className="p-3">
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${getPriorityBadge(req.priority)}`}>
+                    <span className={`text-[12px] font-bold px-2 py-0.5 rounded border ${getPriorityBadge(req.priority)}`}>
                       {req.priority}
                     </span>
                   </td>
-                  <td className="p-3 text-[var(--text-muted)] text-[11px] max-w-xs">
+                  <td className="p-3 text-[var(--text-muted)] text-[12px] max-w-xs">
                     <ul className="list-disc list-inside space-y-0.5">
                       {req.acceptanceCriteria.map((ac, idx) => (
                         <li key={idx} className="truncate">{ac}</li>
@@ -229,7 +266,7 @@ export const RequirementsView: React.FC = () => {
                   </td>
                   <td className="p-3">
                     <span
-                      className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${
+                      className={`text-[12px] font-bold px-2.5 py-1 rounded-full ${
                         req.status === "Verified"
                           ? "bg-[var(--green-dim)]0/20 text-emerald-300 border border-emerald-500/40"
                           : req.status === "In Development"

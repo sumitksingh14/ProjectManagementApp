@@ -118,7 +118,7 @@ export const Header: React.FC = () => {
             background: "rgba(255,255,255,0.04)",
             border: "1px solid var(--border)",
             padding: "6px 12px",
-            fontSize: "11px",
+            fontSize: "12px",
             fontWeight: 600,
             color: "var(--text-secondary)",
           }}
@@ -164,7 +164,7 @@ export const Header: React.FC = () => {
             style={{
               width: "32px", height: "32px",
               background: authUser?.roleColor || "var(--grad-primary)",
-              fontSize: "10px",
+              fontSize: "12px",
               boxShadow: "0 2px 10px var(--accent-glow)",
             }}
           >

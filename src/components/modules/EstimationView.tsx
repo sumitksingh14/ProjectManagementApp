@@ -12,7 +12,7 @@ export const EstimationView: React.FC = () => {
   const variance = Number((standardDeviation * standardDeviation).toFixed(2));
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
+    <div style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", fontFamily: "Inter, sans-serif" }} className="space-y-6 animate-fadeIn">
       {/* Header */}
       <div
         className="hero-banner animate-fadeIn"
@@ -22,86 +22,92 @@ export const EstimationView: React.FC = () => {
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
             <span
               className="badge-violet"
-              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+              style={{ fontSize: "12px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
             >
               Module 7
             </span>
-            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>PMP Estimation Standards</span>
+            <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)" }}>PMP Estimation Standards</span>
           </div>
-          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
+          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "10px", display: "flex", alignItems: "center", gap: "8px" }}>
             Estimation Engine & PERT Analysis
           </h1>
           <p style={{ fontSize: "var(--text-base)", color: "rgba(255,255,255,0.65)", maxWidth: "580px", lineHeight: 1.6 }}>
             Calculate probabilistic estimates using 3-Point PERT, Bottom-Up WBS rollup, Analogous metrics, and Expert Judgement.
           </p>
         </div>
-        <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
-          
-        </div>
       </div>
 
       {/* Interactive PERT Calculator */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="glass-card p-6 space-y-4 md:col-span-2">
-          <h3 className="text-sm font-bold text-white flex items-center gap-2">
-            <Calculator className="w-4 h-4 text-indigo-400" />
-            3-Point PERT Effort Estimator
-          </h3>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-            <div>
-              <label className="block text-[var(--text-muted)] mb-1 font-semibold">Optimistic Days (a)</label>
-              <input
-                type="number"
-                value={optimistic}
-                onChange={(e) => setOptimistic(Number(e.target.value))}
-                className="w-full form-input-dark text-[var(--green)] font-mono font-bold"
-              />
-            </div>
-            <div>
-              <label className="block text-[var(--text-muted)] mb-1 font-semibold">Most Likely Days (m)</label>
-              <input
-                type="number"
-                value={mostLikely}
-                onChange={(e) => setMostLikely(Number(e.target.value))}
-                className="w-full form-input-dark text-[var(--accent)] font-mono font-bold"
-              />
-            </div>
-            <div>
-              <label className="block text-[var(--text-muted)] mb-1 font-semibold">Pessimistic Days (b)</label>
-              <input
-                type="number"
-                value={pessimistic}
-                onChange={(e) => setPessimistic(Number(e.target.value))}
-                className="w-full form-input-dark text-[var(--pink)] font-mono font-bold"
-              />
-            </div>
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-6">
+        <div className="glass-card" style={{ overflow: "hidden" }}>
+          <div style={{ padding: "14px 18px", borderBottom: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <h3 style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em", display: "flex", alignItems: "center", gap: "8px" }}>
+              <Calculator style={{ width: "14px", height: "14px", color: "var(--accent)" }} />
+              3-Point PERT Effort Estimator
+            </h3>
+            <span style={{ fontSize: "12px", color: "var(--text-muted)", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase" }}>Standard Formula</span>
           </div>
 
-          <div className="p-4 rounded-xl border border-[var(--border)] space-y-2 text-xs">
-            <p className="text-[var(--text-muted)] font-mono">PMP Formula: Expected Effort E = (a + 4m + b) / 6</p>
-            <p className="text-[var(--text-muted)] font-mono">Standard Deviation σ = (b - a) / 6 = {standardDeviation}</p>
+          <div style={{ padding: "20px" }} className="space-y-5 text-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <div>
+                <label className="block section-label mb-1.5">Optimistic Days (a)</label>
+                <input
+                  type="number"
+                  value={optimistic}
+                  onChange={(e) => setOptimistic(Number(e.target.value))}
+                  className="input-dark font-mono font-bold"
+                  style={{ color: "var(--green)" }}
+                />
+              </div>
+              <div>
+                <label className="block section-label mb-1.5">Most Likely Days (m)</label>
+                <input
+                  type="number"
+                  value={mostLikely}
+                  onChange={(e) => setMostLikely(Number(e.target.value))}
+                  className="input-dark font-mono font-bold"
+                  style={{ color: "var(--accent)" }}
+                />
+              </div>
+              <div>
+                <label className="block section-label mb-1.5">Pessimistic Days (b)</label>
+                <input
+                  type="number"
+                  value={pessimistic}
+                  onChange={(e) => setPessimistic(Number(e.target.value))}
+                  className="input-dark font-mono font-bold"
+                  style={{ color: "var(--pink)" }}
+                />
+              </div>
+            </div>
+
+            <div className="p-4 rounded-xl space-y-6 text-sm" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--border)" }}>
+              <p className="font-mono text-slate-300">PMP Formula: Expected Effort E = (a + 4m + b) / 6</p>
+              <p className="font-mono text-slate-400">Standard Deviation σ = (b - a) / 6 = <strong className="text-white">{standardDeviation}</strong></p>
+            </div>
           </div>
         </div>
 
         {/* Calculated Output Card */}
-        <div className="bg-gradient-to-br from-indigo-950 via-slate-900 to-indigo-950 border border-indigo-500/30 rounded-2xl p-6 shadow-xl flex flex-col justify-between space-y-4">
+        <div className="glass-card flex flex-col justify-between" style={{ padding: "24px", background: "linear-gradient(135deg, rgba(139,92,246,0.18) 0%, var(--bg-card) 60%)" }}>
           <div>
-            <span className="text-[10px] uppercase font-bold text-indigo-300 tracking-wider">PERT Expected Estimate</span>
-            <div className="text-4xl font-black text-white mt-2 font-mono">
-              {pertEstimate} <span className="text-sm text-indigo-300 font-normal">Days</span>
+            <p className="section-label" style={{ color: "var(--accent)" }}>PERT Expected Estimate</p>
+            <div className="kpi-value" style={{ fontSize: "2.5rem", marginTop: "12px", marginBottom: "8px" }}>
+              {pertEstimate} <span style={{ fontSize: "1rem", color: "var(--text-secondary)", fontWeight: 500 }}>Days</span>
             </div>
-            <p className="text-xs text-[var(--text-muted)] mt-2">
-              68% Confidence Interval: <strong className="text-white">{(pertEstimate - standardDeviation).toFixed(1)} - {(pertEstimate + standardDeviation).toFixed(1)} Days</strong>
+            <p style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", marginTop: "8px" }}>
+              68% Confidence Interval: <strong style={{ color: "var(--text-primary)" }}>{(pertEstimate - standardDeviation).toFixed(1)} - {(pertEstimate + standardDeviation).toFixed(1)} Days</strong>
             </p>
           </div>
 
-          <div className="pt-3 border-t border-indigo-500/20 text-xs text-[var(--text-muted)]">
-            Statistical Variance: <strong className="text-amber-300">{variance}</strong>
+          <div style={{ paddingTop: "12px", borderTop: "1px solid var(--border)", fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>
+            Statistical Variance: <strong style={{ color: "var(--amber)" }}>{variance}</strong>
           </div>
         </div>
       </div>
     </div>
   );
 };
+
 

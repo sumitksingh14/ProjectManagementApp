@@ -137,11 +137,11 @@ export const BenefitsView: React.FC = () => {
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
             <span
               className="badge-violet"
-              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+              style={{ fontSize: "12px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
             >
               Benefits Realization Management
             </span>
-            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>Enterprise PMO</span>
+            <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)" }}>Enterprise PMO</span>
           </div>
           <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
             Benefits Realization Tracker
@@ -156,7 +156,7 @@ export const BenefitsView: React.FC = () => {
       </div>
 
       {/* KPI Summary */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
         {[
           { label: "Total Benefits", value: benefits.length, color: "text-[var(--text-primary)]" },
           { label: "Fully Realized", value: realized, color: "text-[var(--green)]" },
@@ -165,7 +165,7 @@ export const BenefitsView: React.FC = () => {
           { label: "Realization Rate", value: `${realizationRate}%`, color: realizationRate >= 50 ? "text-[var(--green)]" : "text-[var(--amber)]" }
         ].map((kpi, i) => (
           <div key={i} className="glass-card rounded-xl p-4 shadow-sm text-center">
-            <p className="text-[10px] text-[var(--text-secondary)] uppercase font-bold tracking-wide">{kpi.label}</p>
+            <p className="text-[12px] text-[var(--text-secondary)] uppercase font-bold tracking-wide">{kpi.label}</p>
             <div className={`text-2xl font-extrabold font-mono mt-1 ${kpi.color}`}>{kpi.value}</div>
           </div>
         ))}
@@ -180,7 +180,7 @@ export const BenefitsView: React.FC = () => {
         <div className="h-3 w-full bg-[var(--bg-card-hover)] rounded-full overflow-hidden">
           <div className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400 transition-all" style={{ width: `${realizationRate}%` }} />
         </div>
-        <div className="flex gap-4 mt-2 text-[10px] text-[var(--text-secondary)]">
+        <div className="flex gap-6 mt-2 text-[12px] text-[var(--text-secondary)]">
           <span className="flex items-center gap-1"><span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "var(--green)", display: "inline-block" }} />{realized} Realized</span>
           <span className="flex items-center gap-1"><span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "var(--cyan)", display: "inline-block" }} />{inProgress} In Progress</span>
           <span className="flex items-center gap-1"><span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "var(--text-muted)", display: "inline-block" }} />{notStarted} Not Started</span>
@@ -191,8 +191,8 @@ export const BenefitsView: React.FC = () => {
       {/* Add Form */}
       {showAddForm && (
         <div className="glass-card animate-fadeIn" style={{ padding: "24px", borderColor: "var(--accent-border)", background: "linear-gradient(145deg, rgba(109,40,217,0.08) 0%, var(--bg-card) 100%)" }}>
-          <h3 style={{ fontSize: "var(--text-md)", fontWeight: 700, color: "var(--text-primary)", marginBottom: "16px" }}>Add New Benefit</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <h3 style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "16px" }}>Add New Benefit</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
             {[
               { label: "Benefit Title *", key: "title", type: "text" },
               { label: "Owner *", key: "owner", type: "text" },
@@ -233,7 +233,7 @@ export const BenefitsView: React.FC = () => {
       )}
 
       {/* Benefits List */}
-      <div className="space-y-3">
+      <div className="space-y-6">
         {benefits.map(benefit => {
           const cfg = statusConfig[benefit.realizationStatus];
           const isExpanded = expandedId === benefit.id;
@@ -249,7 +249,7 @@ export const BenefitsView: React.FC = () => {
                   </div>
                   <div>
                     <div className="text-sm font-bold text-[var(--text-primary)]">{benefit.title}</div>
-                    <div className="text-[10px] text-[var(--text-secondary)]">{benefit.category} · Owner: {benefit.owner}</div>
+                    <div className="text-[12px] text-[var(--text-secondary)]">{benefit.category} · Owner: {benefit.owner}</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -264,14 +264,14 @@ export const BenefitsView: React.FC = () => {
                       </>
                     )}
                   </div>
-                  <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${cfg.color}`}>{cfg.label}</span>
+                  <span className={`text-[12px] font-bold px-2.5 py-1 rounded-full border ${cfg.color}`}>{cfg.label}</span>
                   {isExpanded ? <ChevronUp className="w-4 h-4 text-[var(--text-muted)]" /> : <ChevronDown className="w-4 h-4 text-[var(--text-muted)]" />}
                 </div>
               </div>
               {isExpanded && (
-                <div className="border-t border-[var(--border)] p-4 bg-[var(--bg-card)]/50 space-y-3">
+                <div className="border-t border-[var(--border)] p-4 bg-[var(--bg-card)]/50 space-y-6">
                   <p className="text-xs text-[var(--text-secondary)]">{benefit.description}</p>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-xs">
                     <div><span className="text-[var(--text-secondary)] font-medium">Target Date</span><div className="font-bold text-[var(--text-primary)]">{benefit.targetDate}</div></div>
                     <div><span className="text-[var(--text-secondary)] font-medium">Measurement</span><div className="font-bold text-[var(--text-primary)]">{benefit.measurementMethod || "—"}</div></div>
                     <div><span className="text-[var(--text-secondary)] font-medium">Target Value</span><div className="font-bold text-[var(--text-primary)]">{benefit.targetValue}</div></div>
@@ -283,7 +283,7 @@ export const BenefitsView: React.FC = () => {
                       <button
                         key={s}
                         onClick={() => updateBenefitStatus(benefit.id, s)}
-                        className={`text-[10px] font-bold px-2.5 py-1 rounded-full border transition-all ${benefit.realizationStatus === s ? statusConfig[s].color : "badge-slate hover:border-[var(--accent-border)]"}`}
+                        className={`text-[12px] font-bold px-2.5 py-1 rounded-full border transition-all ${benefit.realizationStatus === s ? statusConfig[s].color : "badge-slate hover:border-[var(--accent-border)]"}`}
                       >
                         {s}
                       </button>

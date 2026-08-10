@@ -169,7 +169,7 @@ export const ProjectOnboardingView: React.FC = () => {
   };
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-6 text-[var(--text-primary)] font-sans selection:bg-[var(--accent-glow)]0 selection:text-white">
+    <div style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", fontFamily: "Inter, sans-serif" }} className="space-y-6 animate-fadeIn">
       {/* Header */}
       <div
         className="hero-banner animate-fadeIn"
@@ -179,22 +179,18 @@ export const ProjectOnboardingView: React.FC = () => {
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
             <span
               className="badge-violet"
-              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+              style={{ fontSize: "12px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
             >
-              Interactive Onboarding
+              Module 1
             </span>
-            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>Step {step} of 5</span>
+            <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)" }}>Step {step} of 5 • Onboarding Wizard</span>
           </div>
-          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
-            
+          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "10px", display: "flex", alignItems: "center", gap: "8px" }}>
             New Project Onboarding Wizard
           </h1>
           <p style={{ fontSize: "var(--text-base)", color: "rgba(255,255,255,0.65)", maxWidth: "580px", lineHeight: 1.6 }}>
             Capture project charter, scope bounds, financial baseline, and team governance into the SQLite database.
           </p>
-        </div>
-        <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
-          <Sparkles style={{ width: "32px", height: "32px", color: "#fff" }} />
         </div>
       </div>
 
@@ -211,7 +207,7 @@ export const ProjectOnboardingView: React.FC = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                  <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                     Project Name *
                   </label>
                   <input
@@ -228,7 +224,7 @@ export const ProjectOnboardingView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                  <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                     Project Code *
                   </label>
                   <input
@@ -244,7 +240,7 @@ export const ProjectOnboardingView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                  <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                     Project Type
                   </label>
                   <select
@@ -262,7 +258,7 @@ export const ProjectOnboardingView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                  <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                     Priority Level
                   </label>
                   <select
@@ -279,7 +275,7 @@ export const ProjectOnboardingView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                  <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                     Department
                   </label>
                   <input
@@ -292,7 +288,7 @@ export const ProjectOnboardingView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                  <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                     Business Unit
                   </label>
                   <input
@@ -305,7 +301,7 @@ export const ProjectOnboardingView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                  <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                     Planned Start Date *
                   </label>
                   <input
@@ -319,7 +315,7 @@ export const ProjectOnboardingView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                  <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                     Planned Target End Date *
                   </label>
                   <input
@@ -345,7 +341,7 @@ export const ProjectOnboardingView: React.FC = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="md:col-span-2">
-                  <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                  <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                     Problem Statement *
                   </label>
                   <textarea
@@ -362,7 +358,7 @@ export const ProjectOnboardingView: React.FC = () => {
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                  <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                     Executive Summary & Solution Scope *
                   </label>
                   <textarea
@@ -379,7 +375,7 @@ export const ProjectOnboardingView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                  <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                     Estimated Total Budget ($) *
                   </label>
                   <input
@@ -395,7 +391,7 @@ export const ProjectOnboardingView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                  <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                     Expected ROI (%)
                   </label>
                   <input
@@ -408,7 +404,7 @@ export const ProjectOnboardingView: React.FC = () => {
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                  <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                     Strategic Alignment Notes
                   </label>
                   <input
@@ -431,9 +427,9 @@ export const ProjectOnboardingView: React.FC = () => {
                 <h2 className="text-base font-bold text-[var(--text-primary)]">Step 3: Scope Bounds & Project Objectives</h2>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-6">
                 <div>
-                  <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                  <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                     Primary Success Objective *
                   </label>
                   <input
@@ -451,7 +447,7 @@ export const ProjectOnboardingView: React.FC = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-xs font-semibold text-[var(--green)] uppercase tracking-wider mb-1">
+                    <label className="block text-sm font-semibold text-[var(--green)] uppercase tracking-wider mb-1">
                       In-Scope Deliverables (1 per line) *
                     </label>
                     <textarea
@@ -468,7 +464,7 @@ export const ProjectOnboardingView: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-rose-700 uppercase tracking-wider mb-1">
+                    <label className="block text-sm font-semibold text-rose-700 uppercase tracking-wider mb-1">
                       Out-of-Scope Items (1 per line)
                     </label>
                     <textarea
@@ -484,7 +480,7 @@ export const ProjectOnboardingView: React.FC = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                    <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                       Key Assumptions
                     </label>
                     <input
@@ -497,7 +493,7 @@ export const ProjectOnboardingView: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                    <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                       Project Constraints & Regulatory Mandates
                     </label>
                     <input
@@ -523,7 +519,7 @@ export const ProjectOnboardingView: React.FC = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                  <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                     Executive Sponsor *
                   </label>
                   <input
@@ -540,7 +536,7 @@ export const ProjectOnboardingView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                  <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                     Project Manager Lead *
                   </label>
                   <input
@@ -557,7 +553,7 @@ export const ProjectOnboardingView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                  <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                     Technical Lead Architect
                   </label>
                   <input
@@ -571,7 +567,7 @@ export const ProjectOnboardingView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                  <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                     Business Owner
                   </label>
                   <input
@@ -601,8 +597,8 @@ export const ProjectOnboardingView: React.FC = () => {
               </div>
 
               {/* Summary Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                <div className="bg-[var(--bg-card)] border border-[var(--border)] p-4 rounded-xl space-y-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                <div className="bg-[var(--bg-card)] border border-[var(--border)] p-4 rounded-xl space-y-6">
                   <h4 className="font-bold text-[var(--text-primary)] text-sm flex items-center gap-1.5">
                     <Briefcase className="w-4 h-4 text-[var(--accent)]" /> Project Identity
                   </h4>
@@ -614,7 +610,7 @@ export const ProjectOnboardingView: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="bg-[var(--bg-card)] border border-[var(--border)] p-4 rounded-xl space-y-2">
+                <div className="bg-[var(--bg-card)] border border-[var(--border)] p-4 rounded-xl space-y-6">
                   <h4 className="font-bold text-[var(--text-primary)] text-sm flex items-center gap-1.5">
                     <DollarSign className="w-4 h-4 text-[var(--green)]" /> Financials & Schedule
                   </h4>
@@ -626,7 +622,7 @@ export const ProjectOnboardingView: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="bg-[var(--bg-card)] border border-[var(--border)] p-4 rounded-xl space-y-2 md:col-span-2">
+                <div className="bg-[var(--bg-card)] border border-[var(--border)] p-4 rounded-xl space-y-6 md:col-span-2">
                   <h4 className="font-bold text-[var(--text-primary)] text-sm flex items-center gap-1.5">
                     <Target className="w-4 h-4 text-[var(--accent)]" /> Primary Executive Summary
                   </h4>
@@ -642,7 +638,7 @@ export const ProjectOnboardingView: React.FC = () => {
               <button
                 type="button"
                 onClick={handleBack}
-                className="px-4 py-2 bg-[var(--bg-card-hover)] hover:bg-slate-200 text-[var(--text-primary)] text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
+                className="px-4 py-2 bg-[var(--bg-card-hover)] hover:bg-slate-200 text-[var(--text-primary)] text-sm font-semibold rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4" /> Previous
               </button>
@@ -654,7 +650,7 @@ export const ProjectOnboardingView: React.FC = () => {
               <button
                 type="button"
                 onClick={handleNext}
-                className="px-5 py-2.5 bg-[var(--accent)] hover:bg-[var(--accent-2)] text-white text-xs font-semibold rounded-lg shadow-sm flex items-center gap-1.5 transition-colors cursor-pointer"
+                className="px-5 py-2.5 bg-[var(--accent)] hover:bg-[var(--accent-2)] text-white text-sm font-semibold rounded-lg shadow-sm flex items-center gap-1.5 transition-colors cursor-pointer"
               >
                 Continue to Step {step + 1} <ArrowRight className="w-4 h-4" />
               </button>

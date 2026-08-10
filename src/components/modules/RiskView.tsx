@@ -53,8 +53,17 @@ export const RiskView: React.FC = () => {
     setNewRisk({ description: "", mitigation: "" });
   };
 
+  const openRisksCount = (risks || []).filter(r => r?.status === "Open").length;
+  const highSeverityCount = (risks || []).filter(r => (r?.severityScore || 0) >= 15).length;
+
+  const kpis = [
+    { label: "Total Registered Risks", value: String(risks.length), delta: `${openRisksCount} Open Risks`, up: openRisksCount === 0, sub: "Risk Register Repository", accentColor: "var(--accent)", glowColor: "rgba(139,92,246,0.15)" },
+    { label: "High Severity Threats", value: String(highSeverityCount), delta: "Immediate Focus", up: highSeverityCount === 0, sub: "Severity score >= 15", accentColor: "var(--pink)", glowColor: "rgba(236,72,153,0.15)" },
+    { label: "AI Predictive Assessment", value: "Active", delta: "Continuous Scan", up: true, sub: "Automated threat detection", accentColor: "var(--cyan)", glowColor: "rgba(6,182,212,0.15)" },
+  ];
+
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
+    <div style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", fontFamily: "Inter, sans-serif" }} className="space-y-6 animate-fadeIn">
       {/* Header */}
       <div
         className="hero-banner animate-fadeIn"
@@ -64,14 +73,14 @@ export const RiskView: React.FC = () => {
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
             <span
               className="badge-violet"
-              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+              style={{ fontSize: "12px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
             >
               Module 10
             </span>
-            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>PMP Risk Governance Framework</span>
+            <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)" }}>PMP Risk Governance Framework</span>
           </div>
-          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
-            Risk Register &amp; Predictive Risk Engine
+          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "10px", display: "flex", alignItems: "center", gap: "8px" }}>
+            Risk Register & Predictive Risk Engine
           </h1>
           <p style={{ fontSize: "var(--text-base)", color: "rgba(255,255,255,0.65)", maxWidth: "580px", lineHeight: 1.6 }}>
             Capture root causes, triggers, mitigations, contingencies, severity heatmaps, and AI predictive risk analysis.
@@ -101,6 +110,24 @@ export const RiskView: React.FC = () => {
         </div>
       </div>
 
+      {/* KPI Cards */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px" }} className="animate-fadeIn">
+        {kpis.map((kpi, i) => (
+          <div
+            key={i}
+            className="glass-card"
+            style={{
+              padding: "20px",
+              background: `linear-gradient(135deg, ${kpi.glowColor} 0%, var(--bg-card) 60%)`,
+            }}
+          >
+            <p className="section-label" style={{ marginBottom: "12px" }}>{kpi.label}</p>
+            <div className="kpi-value" style={{ marginBottom: "10px" }}>{kpi.value}</div>
+            <p style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>{kpi.sub}</p>
+          </div>
+        ))}
+      </div>
+
       {/* Manual Risk Form */}
       {showForm && (
         <form
@@ -112,17 +139,17 @@ export const RiskView: React.FC = () => {
             background: "linear-gradient(145deg, rgba(109,40,217,0.08) 0%, var(--bg-card) 100%)"
           }}
         >
-          <h3 style={{ fontSize: "var(--text-md)", fontWeight: 700, color: "var(--text-primary)", marginBottom: "16px" }}>
+          <h3 style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "16px" }}>
             Add Risk to Register
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               { label: "Risk Category", key: "category", type: "select", options: ["Technical", "Schedule", "Financial", "Resource", "Vendor", "Scope"] },
               { label: "Probability", key: "probability", type: "select", options: ["High", "Medium", "Low"] },
               { label: "Impact", key: "impact", type: "select", options: ["High", "Medium", "Low"] },
             ].map(field => (
               <div key={field.key}>
-                <label className="section-label" style={{ display: "block", marginBottom: "6px" }}>{field.label}</label>
+                <label className="section-label" style={{ display: "block", marginBottom: "10px" }}>{field.label}</label>
                 <select
                   value={(newRisk as any)[field.key]}
                   onChange={(e) => setNewRisk({ ...newRisk, [field.key]: e.target.value as any })}
@@ -134,7 +161,7 @@ export const RiskView: React.FC = () => {
             ))}
           </div>
           <div style={{ marginTop: "16px" }}>
-            <label className="section-label" style={{ display: "block", marginBottom: "6px" }}>Risk Statement / Description *</label>
+            <label className="section-label" style={{ display: "block", marginBottom: "10px" }}>Risk Statement / Description *</label>
             <textarea
               required
               rows={2}
@@ -144,7 +171,7 @@ export const RiskView: React.FC = () => {
             />
           </div>
           <div style={{ marginTop: "16px" }}>
-            <label className="section-label" style={{ display: "block", marginBottom: "6px" }}>Proactive Mitigation Strategy</label>
+            <label className="section-label" style={{ display: "block", marginBottom: "10px" }}>Proactive Mitigation Strategy</label>
             <textarea
               rows={2}
               value={newRisk.mitigation}
@@ -172,7 +199,7 @@ export const RiskView: React.FC = () => {
       {/* Risk Register Table */}
       <div className="glass-card" style={{ overflow: "hidden" }}>
         <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border)" }}>
-          <h3 style={{ fontSize: "var(--text-md)", fontWeight: 700, color: "var(--text-primary)" }}>
+          <h3 style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
             Active Risk Register &amp; Mitigation Strategy
           </h3>
         </div>
@@ -181,31 +208,35 @@ export const RiskView: React.FC = () => {
             <thead>
               <tr style={{ borderBottom: "1px solid var(--border)" }}>
                 {["Risk ID", "Category & Description", "Prob / Impact", "Severity", "Proactive Mitigation", "Owner", "Status"].map(h => (
-                  <th key={h} className="section-label" style={{ padding: "10px 16px", textAlign: "left" }}>{h}</th>
+                  <th key={h} className="section-label" style={{ padding: "14px 20px", textAlign: "left" }}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {risks.map((r) => (
                 <tr key={r.id} className="table-row-dark">
-                  <td style={{ padding: "12px 16px", fontFamily: "monospace", fontWeight: 700, color: "var(--amber)" }}>{r.riskCode}</td>
-                  <td style={{ padding: "12px 16px", maxWidth: "200px" }}>
-                    <div style={{ fontWeight: 600, color: "var(--text-primary)", fontSize: "var(--text-sm)" }}>{r.description}</div>
-                    <div style={{ fontSize: "10px", color: "var(--text-muted)" }}>Category: {r.category}</div>
+                  <td style={{ padding: "14px 20px" }}>
+                    <span className="badge-amber" style={{ fontSize: "12px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}>
+                      {r.riskCode}
+                    </span>
                   </td>
-                  <td style={{ padding: "12px 16px", fontFamily: "monospace" }}>
+                  <td style={{ padding: "14px 20px", maxWidth: "200px" }}>
+                    <div style={{ fontWeight: 600, color: "var(--text-primary)", fontSize: "var(--text-sm)" }}>{r.description}</div>
+                    <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>Category: {r.category}</div>
+                  </td>
+                  <td style={{ padding: "14px 20px", fontFamily: "monospace" }}>
                     <span style={{ color: "var(--amber)" }}>{r.probability}</span>
                     {" / "}
                     <span style={{ color: "var(--pink)" }}>{r.impact}</span>
                   </td>
-                  <td style={{ padding: "12px 16px", fontFamily: "monospace" }}>
+                  <td style={{ padding: "14px 20px", fontFamily: "monospace" }}>
                     <span style={{ background: "var(--pink-dim)", color: "var(--pink)", fontWeight: 800, padding: "2px 8px", borderRadius: "6px", border: "1px solid rgba(236,72,153,0.25)" }}>
                       {r.severityScore} / 25
                     </span>
                   </td>
-                  <td style={{ padding: "12px 16px", fontSize: "var(--text-sm)", color: "var(--text-muted)", maxWidth: "200px", lineHeight: 1.6 }}>{r.mitigation}</td>
-                  <td style={{ padding: "12px 16px", fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>{r.owner}</td>
-                  <td style={{ padding: "12px 16px" }}>
+                  <td style={{ padding: "14px 20px", fontSize: "var(--text-sm)", color: "var(--text-muted)", maxWidth: "200px", lineHeight: 1.6 }}>{r.mitigation}</td>
+                  <td style={{ padding: "14px 20px", fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>{r.owner}</td>
+                  <td style={{ padding: "14px 20px" }}>
                     <span className={r.status === "Open" ? "badge-amber" : "badge-green"}>
                       {r.status}
                     </span>

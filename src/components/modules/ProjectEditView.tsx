@@ -143,7 +143,7 @@ export const ProjectEditView: React.FC = () => {
   };
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-6 text-[var(--text-primary)] font-sans selection:bg-[var(--accent-glow)]0 selection:text-white">
+    <div style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", fontFamily: "Inter, sans-serif" }} className="space-y-6 animate-fadeIn">
       {/* Header */}
       <div
         className="hero-banner animate-fadeIn"
@@ -153,22 +153,18 @@ export const ProjectEditView: React.FC = () => {
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
             <span
               className="badge-violet"
-              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+              style={{ fontSize: "12px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
             >
-              •
+              Project Configuration
             </span>
-            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>Settings & Modifications</span>
+            <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)" }}>Settings & Modifications</span>
           </div>
-          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
-            
+          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "10px", display: "flex", alignItems: "center", gap: "8px" }}>
             Edit Project Details ({activeProject?.code})
           </h1>
           <p style={{ fontSize: "var(--text-base)", color: "rgba(255,255,255,0.65)", maxWidth: "580px", lineHeight: 1.6 }}>
-            Update project metadata, scope boundaries, budget allocations, and health commentary in SQLite.
+            Update project metadata, scope boundaries, budget allocations, and health commentary.
           </p>
-        </div>
-        <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
-          <Edit3 style={{ width: "32px", height: "32px", color: "#fff" }} />
         </div>
       </div>
 
@@ -176,14 +172,14 @@ export const ProjectEditView: React.FC = () => {
       <div className="glass-card rounded-2xl p-8 shadow-lg">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Section 1: Identity & General */}
-          <div className="space-y-4">
+          <div className="space-y-6">
             <h3 className="text-sm font-bold text-[var(--text-primary)] border-b border-[var(--border)] pb-2 flex items-center gap-2">
               <Building2 className="w-4 h-4 text-[var(--accent)]" /> Core Project Identity
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                   Project Title *
                 </label>
                 <input
@@ -191,15 +187,14 @@ export const ProjectEditView: React.FC = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className={`w-full px-3.5 py-2 border rounded-lg text-sm text-[var(--text-primary)] outline-none ${
-                    errors.name ? "border-rose-500" : "border-[var(--border)] focus:border-indigo-500"
-                  }`}
+                  className={`w-full px-3.5 py-2 border rounded-lg text-sm text-[var(--text-primary)] outline-none ${errors.name ? "border-rose-500" : "border-[var(--border)] focus:border-indigo-500"
+                    }`}
                 />
                 {errors.name && <p className="text-xs text-rose-500 mt-1">{errors.name}</p>}
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                   Project Code *
                 </label>
                 <input
@@ -207,15 +202,14 @@ export const ProjectEditView: React.FC = () => {
                   name="code"
                   value={formData.code}
                   onChange={handleChange}
-                  className={`w-full px-3.5 py-2 border rounded-lg text-sm font-mono text-[var(--text-primary)] outline-none ${
-                    errors.code ? "border-rose-500" : "border-[var(--border)] focus:border-indigo-500"
-                  }`}
+                  className={`w-full px-3.5 py-2 border rounded-lg text-sm font-mono text-[var(--text-primary)] outline-none ${errors.code ? "border-rose-500" : "border-[var(--border)] focus:border-indigo-500"
+                    }`}
                 />
                 {errors.code && <p className="text-xs text-rose-500 mt-1">{errors.code}</p>}
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                   Department
                 </label>
                 <input
@@ -228,7 +222,7 @@ export const ProjectEditView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                   Priority Level
                 </label>
                 <select
@@ -247,14 +241,14 @@ export const ProjectEditView: React.FC = () => {
           </div>
 
           {/* Section 2: Budget & Timeline */}
-          <div className="space-y-4 pt-2">
+          <div className="space-y-6 pt-2">
             <h3 className="text-sm font-bold text-[var(--text-primary)] border-b border-[var(--border)] pb-2 flex items-center gap-2">
               <DollarSign className="w-4 h-4 text-[var(--green)]" /> Budget & Timeline
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               <div>
-                <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                   Estimated Budget ($) *
                 </label>
                 <input
@@ -262,15 +256,14 @@ export const ProjectEditView: React.FC = () => {
                   name="estimatedBudget"
                   value={formData.estimatedBudget}
                   onChange={handleChange}
-                  className={`w-full px-3.5 py-2 border rounded-lg text-sm font-mono text-[var(--text-primary)] outline-none ${
-                    errors.estimatedBudget ? "border-rose-500" : "border-[var(--border)] focus:border-indigo-500"
-                  }`}
+                  className={`w-full px-3.5 py-2 border rounded-lg text-sm font-mono text-[var(--text-primary)] outline-none ${errors.estimatedBudget ? "border-rose-500" : "border-[var(--border)] focus:border-indigo-500"
+                    }`}
                 />
                 {errors.estimatedBudget && <p className="text-xs text-rose-500 mt-1">{errors.estimatedBudget}</p>}
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                   Planned Start Date
                 </label>
                 <input
@@ -283,7 +276,7 @@ export const ProjectEditView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                   Target End Date
                 </label>
                 <input
@@ -299,14 +292,14 @@ export const ProjectEditView: React.FC = () => {
           </div>
 
           {/* Section 3: Executive Summary & Health */}
-          <div className="space-y-4 pt-2">
+          <div className="space-y-6 pt-2">
             <h3 className="text-sm font-bold text-[var(--text-primary)] border-b border-[var(--border)] pb-2 flex items-center gap-2">
               <Target className="w-4 h-4 text-[var(--accent)]" /> Executive Summary & Health Commentary
             </h3>
 
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div>
-                <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                   Executive Summary
                 </label>
                 <textarea
@@ -320,7 +313,7 @@ export const ProjectEditView: React.FC = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                 <div>
-                  <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                  <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                     Overall Project Health
                   </label>
                   <select
@@ -336,7 +329,7 @@ export const ProjectEditView: React.FC = () => {
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
+                  <label className="block text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-1">
                     PMO Health Commentary
                   </label>
                   <input
@@ -357,7 +350,7 @@ export const ProjectEditView: React.FC = () => {
             <button
               type="button"
               onClick={() => setActiveTab("dashboard")}
-              className="px-4 py-2 bg-[var(--bg-card-hover)] hover:bg-slate-200 text-[var(--text-primary)] text-xs font-semibold rounded-lg transition-colors cursor-pointer"
+              className="px-4 py-2 bg-[var(--bg-card-hover)] hover:bg-slate-200 text-[var(--text-primary)] text-sm font-semibold rounded-lg transition-colors cursor-pointer"
             >
               Cancel
             </button>
@@ -366,7 +359,7 @@ export const ProjectEditView: React.FC = () => {
               type="submit"
               className="px-6 py-2.5 bg-[var(--accent)] hover:bg-[var(--accent-2)] active:bg-indigo-800 text-white text-sm font-bold rounded-lg shadow-md shadow-indigo-600/30 flex items-center gap-2 transition-all cursor-pointer"
             >
-              <Save className="w-4 h-4" /> Save Changes to SQLite DB
+              <Save className="w-4 h-4" /> Save Changes
             </button>
           </div>
         </form>

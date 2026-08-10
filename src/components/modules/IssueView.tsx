@@ -42,11 +42,29 @@ export const IssueView: React.FC = () => {
     }));
 
     setShowForm(false);
-    setNewIss({ description: "" });
+    setNewIss({
+      description: "",
+      priority: "High",
+      severity: "Blocker",
+      owner: "Liam O'Connor",
+      reportedDate: new Date().toISOString().split("T")[0],
+      dueDate: "2026-08-15",
+      status: "Open",
+      daysOpen: 1
+    });
   };
 
+  const openIssuesCount = (issues || []).filter(i => i?.status !== "Resolved").length;
+  const blockerCount = (issues || []).filter(i => i?.severity === "Blocker" || i?.priority === "Critical").length;
+
+  const kpis = [
+    { label: "Total Logged Issues", value: String(issues.length), delta: `${openIssuesCount} Active Issues`, up: openIssuesCount === 0, sub: "Issue Management Log", accentColor: "var(--accent)", glowColor: "rgba(139,92,246,0.15)" },
+    { label: "Critical Blockers", value: String(blockerCount), delta: "Immediate Action Required", up: blockerCount === 0, sub: "Blocker severity items", accentColor: "var(--pink)", glowColor: "rgba(236,72,153,0.15)" },
+    { label: "Mean Time to Resolve", value: "2.4 Days", delta: "Optimal Resolution Rate", up: true, sub: "SLA compliance tracking", accentColor: "var(--cyan)", glowColor: "rgba(6,182,212,0.15)" },
+  ];
+
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
+    <div style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", fontFamily: "Inter, sans-serif" }} className="space-y-6 animate-fadeIn">
       {/* Header */}
       <div
         className="hero-banner animate-fadeIn"
@@ -56,22 +74,50 @@ export const IssueView: React.FC = () => {
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
             <span
               className="badge-violet"
-              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+              style={{ fontSize: "12px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
             >
               Module 11
             </span>
-            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>Issue Management & Aging Analytics</span>
+            <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)" }}>PMP Issue Resolution Standard</span>
           </div>
-          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
-            Issue Register & Escalation
+          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "10px", display: "flex", alignItems: "center", gap: "8px" }}>
+            Issue Tracking & Impediment Log
           </h1>
           <p style={{ fontSize: "var(--text-base)", color: "rgba(255,255,255,0.65)", maxWidth: "580px", lineHeight: 1.6 }}>
-            Track active impediments, issue aging, owner assignments, and resolution SLAs.
+            Track active impediments, blockers, priority levels, assignment owners, and resolution target dates.
           </p>
         </div>
         <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
-          <Plus style={{ width: "32px", height: "32px", color: "#fff" }} />
+          <button
+            onClick={() => setShowForm(!showForm)}
+            className="flex items-center gap-1.5 rounded-xl transition-all cursor-pointer"
+            style={{
+              background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.20)",
+              color: "#fff", padding: "8px 14px", fontSize: "12px", fontWeight: 600, backdropFilter: "blur(10px)"
+            }}
+          >
+            <Plus style={{ width: "14px", height: "14px" }} />
+            Add Issue
+          </button>
         </div>
+      </div>
+
+      {/* KPI Cards */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px" }} className="animate-fadeIn">
+        {kpis.map((kpi, i) => (
+          <div
+            key={i}
+            className="glass-card"
+            style={{
+              padding: "20px",
+              background: `linear-gradient(135deg, ${kpi.glowColor} 0%, var(--bg-card) 60%)`,
+            }}
+          >
+            <p className="section-label" style={{ marginBottom: "12px" }}>{kpi.label}</p>
+            <div className="kpi-value" style={{ marginBottom: "10px" }}>{kpi.value}</div>
+            <p style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>{kpi.sub}</p>
+          </div>
+        ))}
       </div>
 
       {/* Add Issue Modal */}
@@ -81,10 +127,10 @@ export const IssueView: React.FC = () => {
           className="glass-card animate-fadeIn"
           style={{ padding: "24px", borderColor: "var(--accent-border)", background: "linear-gradient(145deg, rgba(109,40,217,0.08) 0%, var(--bg-card) 100%)" }}
         >
-          <h3 style={{ fontSize: "var(--text-md)", fontWeight: 700, color: "var(--text-primary)", marginBottom: "16px" }}>Report New Issue</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <h3 style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "16px" }}>Report New Issue</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
-              <label className="section-label" style={{ display: "block", marginBottom: "6px" }}>Priority</label>
+              <label className="section-label" style={{ display: "block", marginBottom: "10px" }}>Priority</label>
               <select
                 value={newIss.priority}
                 onChange={(e) => setNewIss({ ...newIss, priority: e.target.value as any })}
@@ -97,7 +143,7 @@ export const IssueView: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="section-label" style={{ display: "block", marginBottom: "6px" }}>Severity</label>
+              <label className="section-label" style={{ display: "block", marginBottom: "10px" }}>Severity</label>
               <select
                 value={newIss.severity}
                 onChange={(e) => setNewIss({ ...newIss, severity: e.target.value as any })}
@@ -109,7 +155,7 @@ export const IssueView: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="section-label" style={{ display: "block", marginBottom: "6px" }}>Assigned Owner</label>
+              <label className="section-label" style={{ display: "block", marginBottom: "10px" }}>Assigned Owner</label>
               <input
                 type="text"
                 value={newIss.owner}
@@ -119,7 +165,7 @@ export const IssueView: React.FC = () => {
             </div>
           </div>
           <div style={{ marginTop: "16px" }}>
-            <label className="section-label" style={{ display: "block", marginBottom: "6px" }}>Issue Description *</label>
+            <label className="section-label" style={{ display: "block", marginBottom: "10px" }}>Issue Description *</label>
             <textarea
               required
               rows={2}
@@ -144,7 +190,7 @@ export const IssueView: React.FC = () => {
       {/* Issues Table */}
       <div className="glass-card" style={{ overflow: "hidden" }}>
         <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <h3 style={{ fontSize: "var(--text-md)", fontWeight: 700, color: "var(--text-primary)" }}>Active Issue Log &amp; Aging Report</h3>
+          <h3 style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em" }}>Active Issue Log &amp; Aging Report</h3>
           <button onClick={() => setShowForm(!showForm)} className="btn-accent flex items-center gap-1.5" style={{ padding: "6px 12px" }}>
             <Plus className="w-3.5 h-3.5" /> Add Issue
           </button>
@@ -154,23 +200,27 @@ export const IssueView: React.FC = () => {
             <thead>
               <tr style={{ borderBottom: "1px solid var(--border)" }}>
                 {["Issue ID", "Description", "Priority / Severity", "Days Open", "Owner", "Status"].map(h => (
-                  <th key={h} className="section-label" style={{ padding: "10px 16px", textAlign: "left" }}>{h}</th>
+                  <th key={h} className="section-label" style={{ padding: "14px 20px", textAlign: "left" }}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {issues.map((iss) => (
                 <tr key={iss.id} className="table-row-dark">
-                  <td style={{ padding: "12px 16px", fontFamily: "monospace", fontWeight: 700, color: "var(--pink)" }}>{iss.issueCode}</td>
-                  <td style={{ padding: "12px 16px", fontWeight: 600, color: "var(--text-primary)", maxWidth: "280px", fontSize: "var(--text-sm)" }}>{iss.description}</td>
-                  <td style={{ padding: "12px 16px" }}>
+                  <td style={{ padding: "14px 20px" }}>
+                    <span className="badge-pink" style={{ fontSize: "12px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}>
+                      {iss.issueCode}
+                    </span>
+                  </td>
+                  <td style={{ padding: "14px 20px", fontWeight: 600, color: "var(--text-primary)", maxWidth: "280px", fontSize: "var(--text-sm)" }}>{iss.description}</td>
+                  <td style={{ padding: "14px 20px" }}>
                     <span style={{ color: "var(--pink)", fontWeight: 700 }}>{iss.priority}</span>
                     {" / "}
                     <span style={{ color: "var(--amber)", fontWeight: 500 }}>{iss.severity}</span>
                   </td>
-                  <td style={{ padding: "12px 16px", fontFamily: "monospace", fontWeight: 700, color: "var(--text-primary)" }}>{iss.daysOpen} Days</td>
-                  <td style={{ padding: "12px 16px", fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>{iss.owner}</td>
-                  <td style={{ padding: "12px 16px" }}>
+                  <td style={{ padding: "14px 20px", fontFamily: "monospace", fontWeight: 700, color: "var(--text-primary)" }}>{iss.daysOpen} Days</td>
+                  <td style={{ padding: "14px 20px", fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>{iss.owner}</td>
+                  <td style={{ padding: "14px 20px" }}>
                     <span className="badge-red">{iss.status}</span>
                   </td>
                 </tr>

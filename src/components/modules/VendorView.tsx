@@ -100,7 +100,7 @@ const ScoreMeter: React.FC<{ score: number }> = ({ score }) => {
   const barColor = score >= 90 ? "var(--green)" : score >= 70 ? "var(--amber)" : "var(--pink)";
   return (
     <div className="space-y-1">
-      <div className="flex justify-between text-[10px]">
+      <div className="flex justify-between text-[12px]">
         <span className="text-[var(--text-secondary)]">Performance Score</span>
         <span className="font-bold text-[var(--text-primary)]">{score}/100</span>
       </div>
@@ -170,11 +170,11 @@ export const VendorView: React.FC = () => {
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
             <span
               className="badge-violet"
-              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+              style={{ fontSize: "12px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
             >
               Vendor & Third-Party Management
             </span>
-            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>Enterprise PMO</span>
+            <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)" }}>Enterprise PMO</span>
           </div>
           <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
             Vendor Management & SLA Tracker
@@ -189,7 +189,7 @@ export const VendorView: React.FC = () => {
       </div>
 
       {/* KPI Bar */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {[
           { label: "Total Contract Value", value: `$${(totalContractValue / 1000).toFixed(0)}K`, color: "text-[var(--text-primary)]" },
           { label: "Active Vendors", value: activeCount, color: "text-[var(--accent)]" },
@@ -197,7 +197,7 @@ export const VendorView: React.FC = () => {
           { label: "Avg Performance Score", value: `${avgScore}/100`, color: avgScore >= 80 ? "text-[var(--green)]" : "text-[var(--amber)]" }
         ].map((kpi, i) => (
           <div key={i} className="glass-card rounded-xl p-4 shadow-sm">
-            <p className="text-[10px] text-[var(--text-secondary)] uppercase font-bold tracking-wide">{kpi.label}</p>
+            <p className="text-[12px] text-[var(--text-secondary)] uppercase font-bold tracking-wide">{kpi.label}</p>
             <div className={`text-2xl font-extrabold font-mono mt-1 ${kpi.color}`}>{kpi.value}</div>
           </div>
         ))}
@@ -219,8 +219,8 @@ export const VendorView: React.FC = () => {
       {/* Add Form */}
       {showAddForm && (
         <div className="glass-card animate-fadeIn" style={{ padding: "24px", borderColor: "var(--accent-border)", background: "linear-gradient(145deg, rgba(109,40,217,0.08) 0%, var(--bg-card) 100%)" }}>
-          <h3 style={{ fontSize: "var(--text-md)", fontWeight: 700, color: "var(--text-primary)", marginBottom: "16px" }}>Register New Vendor</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <h3 style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "16px" }}>Register New Vendor</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
             {[
               { label: "Vendor Name *", key: "vendorName", type: "text" },
               { label: "Account Manager *", key: "accountManager", type: "text" },
@@ -259,30 +259,30 @@ export const VendorView: React.FC = () => {
       )}
 
       {/* Vendor Cards */}
-      <div className="space-y-3">
+      <div className="space-y-6">
         {filtered.map(vendor => {
           const isEx = expandedId === vendor.id;
           const overdueCount = vendor.deliverables.filter(d => d.status === "Overdue").length;
           return (
             <div key={vendor.id} className={`glass-card overflow-hidden ${overdueCount > 0 ? "border-[var(--pink)]" : ""}`}>
-              <div className="flex items-center justify-between p-5 cursor-pointer hover:bg-[var(--bg-card)] gap-4" onClick={() => setExpandedId(isEx ? null : vendor.id)}>
-                <div className="flex items-center gap-4">
+              <div className="flex items-center justify-between p-5 cursor-pointer hover:bg-[var(--bg-card)] gap-6" onClick={() => setExpandedId(isEx ? null : vendor.id)}>
+                <div className="flex items-center gap-6">
                   <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "var(--accent-glow)", border: "1px solid var(--accent-border)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--accent)", fontWeight: 900, fontSize: "var(--text-md)" }}>
                     {vendor.vendorName.charAt(0)}
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-0.5">
                       <span className="font-bold text-[var(--text-primary)]">{vendor.vendorName}</span>
-                      <span className="text-[10px] font-mono bg-[var(--bg-card-hover)] text-[var(--text-secondary)] px-1.5 py-0.5 rounded">{vendor.vendorCode}</span>
+                      <span className="text-[12px] font-mono bg-[var(--bg-card-hover)] text-[var(--text-secondary)] px-2.5 py-1 rounded">{vendor.vendorCode}</span>
                       {overdueCount > 0 && <span className="badge-red flex items-center gap-1"><AlertTriangle className="w-3 h-3" />{overdueCount} Overdue</span>}
                     </div>
-                    <div className="text-[10px] text-[var(--text-secondary)]">{vendor.category} · {vendor.contractType} · Manager: {vendor.accountManager}</div>
+                    <div className="text-[12px] text-[var(--text-secondary)]">{vendor.category} · {vendor.contractType} · Manager: {vendor.accountManager}</div>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-6">
                   <div className="text-right hidden md:block">
                     <div className="text-sm font-extrabold font-mono text-[var(--text-primary)]">${vendor.contractValue.toLocaleString()}</div>
-                    <div className="text-[10px] text-[var(--text-muted)]">Contract Value</div>
+                    <div className="text-[12px] text-[var(--text-muted)]">Contract Value</div>
                   </div>
                   <div className="flex items-center gap-1">
                     {[1,2,3,4,5].map(s => (
@@ -294,28 +294,28 @@ export const VendorView: React.FC = () => {
                 </div>
               </div>
               {isEx && (
-                <div className="border-t border-[var(--border)] p-5 bg-[var(--bg-card)]/50 space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                <div className="border-t border-[var(--border)] p-5 bg-[var(--bg-card)]/50 space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
                     <div className="space-y-2">
                       <div><span className="text-[var(--text-secondary)]">Contract Period</span><div className="font-bold text-[var(--text-primary)]">{vendor.startDate} → {vendor.endDate}</div></div>
                       <div><span className="text-[var(--text-secondary)]">Payment Terms</span><div className="font-bold text-[var(--text-primary)]">{vendor.paymentTerms}</div></div>
                       <ScoreMeter score={vendor.performanceScore} />
                     </div>
                     <div className="md:col-span-2">
-                      <div className="mb-2"><span className="text-[10px] font-bold text-[var(--text-secondary)] uppercase">SLA Terms</span><p className="text-xs text-[var(--text-primary)] mt-1">{vendor.slaTerms}</p></div>
-                      {vendor.notes && <div><span className="text-[10px] font-bold text-[var(--text-secondary)] uppercase">Notes</span><p className="text-xs text-[var(--text-primary)] mt-1 italic">{vendor.notes}</p></div>}
+                      <div className="mb-2"><span className="text-[12px] font-bold text-[var(--text-secondary)] uppercase">SLA Terms</span><p className="text-xs text-[var(--text-primary)] mt-1">{vendor.slaTerms}</p></div>
+                      {vendor.notes && <div><span className="text-[12px] font-bold text-[var(--text-secondary)] uppercase">Notes</span><p className="text-xs text-[var(--text-primary)] mt-1 italic">{vendor.notes}</p></div>}
                     </div>
                   </div>
                   <div>
-                    <h4 className="text-[10px] font-bold text-[var(--text-secondary)] uppercase mb-2">Deliverable Milestones</h4>
+                    <h4 className="text-[12px] font-bold text-[var(--text-secondary)] uppercase mb-2">Deliverable Milestones</h4>
                     <div className="space-y-2">
                       {vendor.deliverables.map(del => (
                         <div key={del.id} className="flex items-center justify-between p-3 bg-[var(--bg-card)] rounded-lg border border-[var(--border)]">
                           <div>
                             <div className="text-xs font-bold text-[var(--text-primary)]">{del.title}</div>
-                            <div className="text-[10px] text-[var(--text-muted)]">Due: {del.dueDate} · Value: ${del.amount.toLocaleString()}</div>
+                            <div className="text-[12px] text-[var(--text-muted)]">Due: {del.dueDate} · Value: ${del.amount.toLocaleString()}</div>
                           </div>
-                          <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${deliverableStatusConfig[del.status]}`}>{del.status}</span>
+                          <span className={`text-[12px] font-bold px-2.5 py-1 rounded-full border ${deliverableStatusConfig[del.status]}`}>{del.status}</span>
                         </div>
                       ))}
                     </div>

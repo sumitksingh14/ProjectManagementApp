@@ -98,11 +98,11 @@ export const GovernanceView: React.FC = () => {
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
             <span
               className="badge-violet"
-              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+              style={{ fontSize: "12px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
             >
               Module 15
             </span>
-            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>PMO Governance Framework</span>
+            <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)" }}>PMO Governance Framework</span>
           </div>
           <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
             Governance, RACI & Decision Log
@@ -133,14 +133,14 @@ export const GovernanceView: React.FC = () => {
 
       {/* RACI */}
       {activeTab === "raci" && (
-        <div className="glass-card rounded-2xl p-6 shadow-sm space-y-4">
+        <div className="glass-card rounded-2xl p-6 shadow-sm space-y-6">
           <h3 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-[var(--accent)]" /> Governance RACI Accountability Matrix
           </h3>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="border-b border-[var(--border)] text-[var(--text-secondary)] font-bold uppercase tracking-wider text-[10px]">
+                <tr className="border-b border-[var(--border)] text-[var(--text-secondary)] font-bold uppercase tracking-wider text-[12px]">
                   <th className="p-3">Governance Activity</th>
                   <th className="p-3 text-[var(--accent)]">Responsible (R)</th>
                   <th className="p-3 text-[var(--pink)]">Accountable (A)</th>
@@ -152,8 +152,8 @@ export const GovernanceView: React.FC = () => {
                 {raciTasks.map((r, idx) => (
                   <tr key={idx} className="hover:bg-[var(--bg-card)] transition-colors">
                     <td className="p-3 font-bold text-[var(--text-primary)]">{r.activity}</td>
-                    <td className="p-3"><span className="bg-[var(--accent-glow)] text-[var(--accent)] border border-[var(--accent-border)] px-2 py-0.5 rounded text-[10px] font-bold">{r.responsible}</span></td>
-                    <td className="p-3"><span className="bg-[var(--pink-dim)] text-[var(--pink)] border border-red-200 px-2 py-0.5 rounded text-[10px] font-bold">{r.accountable}</span></td>
+                    <td className="p-3"><span className="bg-[var(--accent-glow)] text-[var(--accent)] border border-[var(--accent-border)] px-2 py-0.5 rounded text-[12px] font-bold">{r.responsible}</span></td>
+                    <td className="p-3"><span className="bg-[var(--pink-dim)] text-[var(--pink)] border border-red-200 px-2 py-0.5 rounded text-[12px] font-bold">{r.accountable}</span></td>
                     <td className="p-3 text-[var(--text-secondary)]">{r.consulted}</td>
                     <td className="p-3 text-[var(--text-muted)]">{r.informed}</td>
                   </tr>
@@ -166,7 +166,7 @@ export const GovernanceView: React.FC = () => {
 
       {/* DECISION LOG */}
       {activeTab === "decisions" && (
-        <div className="space-y-3">
+        <div className="space-y-6">
           {decisionLog.map(dec => {
             const isEx = expandedDec === dec.id;
             const statusColor = dec.status === "Approved" ? "bg-[var(--green-dim)] text-[var(--green)] border-[var(--border)]" : dec.status === "Rejected" ? "bg-[var(--pink-dim)] text-[var(--pink)] border-[rgba(236,72,153,0.25)]" : "bg-[var(--amber-dim)] text-[var(--amber)] border-[rgba(245,158,11,0.25)]";
@@ -174,24 +174,24 @@ export const GovernanceView: React.FC = () => {
               <div key={dec.id} className="glass-card rounded-xl shadow-sm overflow-hidden">
                 <div className="flex items-center justify-between p-4 cursor-pointer hover:bg-[var(--bg-card)]" onClick={() => setExpandedDec(isEx ? null : dec.id)}>
                   <div className="flex items-center gap-3">
-                    <div className="text-[10px] font-mono text-[var(--text-muted)]">{dec.decisionDate}</div>
+                    <div className="text-[12px] font-mono text-[var(--text-muted)]">{dec.decisionDate}</div>
                     <div>
                       <div className="text-sm font-bold text-[var(--text-primary)]">{dec.title}</div>
-                      <div className="text-[10px] text-[var(--text-secondary)]">Decision Maker: {dec.decisionMaker}</div>
+                      <div className="text-[12px] text-[var(--text-secondary)]">Decision Maker: {dec.decisionMaker}</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${statusColor}`}>{dec.status}</span>
+                    <span className={`text-[12px] font-bold px-2.5 py-1 rounded-full border ${statusColor}`}>{dec.status}</span>
                     {isEx ? <ChevronUp className="w-4 h-4 text-[var(--text-muted)]" /> : <ChevronDown className="w-4 h-4 text-[var(--text-muted)]" />}
                   </div>
                 </div>
                 {isEx && (
-                  <div className="border-t border-[var(--border)] p-4 bg-[var(--bg-card)]/50 space-y-3 text-xs">
+                  <div className="border-t border-[var(--border)] p-4 bg-[var(--bg-card)]/50 space-y-6 text-xs">
                     <p className="text-[var(--text-primary)]">{dec.description}</p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      <div><span className="font-bold text-[var(--text-secondary)] uppercase text-[10px]">Participants</span><p className="mt-1 text-[var(--text-primary)]">{dec.participants.join(", ")}</p></div>
-                      <div><span className="font-bold text-[var(--text-secondary)] uppercase text-[10px]">Impact</span><p className="mt-1 text-[var(--text-primary)]">{dec.impact}</p></div>
-                      <div className="md:col-span-2"><span className="font-bold text-[var(--green)] uppercase text-[10px]">Rationale</span><p className="mt-1 text-[var(--text-primary)] bg-[var(--green-dim)] border border-[var(--border)] rounded p-2">{dec.rationale}</p></div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div><span className="font-bold text-[var(--text-secondary)] uppercase text-[12px]">Participants</span><p className="mt-1 text-[var(--text-primary)]">{dec.participants.join(", ")}</p></div>
+                      <div><span className="font-bold text-[var(--text-secondary)] uppercase text-[12px]">Impact</span><p className="mt-1 text-[var(--text-primary)]">{dec.impact}</p></div>
+                      <div className="md:col-span-2"><span className="font-bold text-[var(--green)] uppercase text-[12px]">Rationale</span><p className="mt-1 text-[var(--text-primary)] bg-[var(--green-dim)] border border-[var(--border)] rounded p-2">{dec.rationale}</p></div>
                     </div>
                   </div>
                 )}
@@ -203,7 +203,7 @@ export const GovernanceView: React.FC = () => {
 
       {/* ESCALATION */}
       {activeTab === "escalation" && (
-        <div className="space-y-4">
+        <div className="space-y-6">
           {escalationLevels.map((lvl, i) => (
             <div key={i} className={`bg-[var(--bg-card)] border-l-4 border border-[var(--border)] rounded-xl p-5 shadow-sm ${lvl.color}`}>
               <div className="flex items-start justify-between">
@@ -216,22 +216,22 @@ export const GovernanceView: React.FC = () => {
                   <p className="text-xs text-[var(--text-secondary)]">{lvl.description}</p>
                 </div>
                 <div className="text-right shrink-0">
-                  <div className="text-[10px] text-[var(--text-secondary)]">Response Time</div>
+                  <div className="text-[12px] text-[var(--text-secondary)]">Response Time</div>
                   <div className="text-sm font-bold text-[var(--text-primary)]">{lvl.timeframe}</div>
                 </div>
               </div>
             </div>
           ))}
-          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-5 space-y-3">
+          <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-5 space-y-6">
             <h3 className="text-sm font-bold text-[var(--text-primary)]">Named Escalation Contacts</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
               {[
                 { label: "Level 1 — PM", value: governance.escalationLevel1 },
                 { label: "Level 2 — Program", value: governance.escalationLevel2 },
                 { label: "Level 3 — Executive", value: governance.escalationLevel3 }
               ].map((c, i) => (
                 <div key={i} className="glass-card rounded-lg p-3">
-                  <div className="text-[10px] font-bold text-[var(--text-secondary)] uppercase">{c.label}</div>
+                  <div className="text-[12px] font-bold text-[var(--text-secondary)] uppercase">{c.label}</div>
                   <div className="font-bold text-[var(--text-primary)] mt-1">{c.value}</div>
                 </div>
               ))}
@@ -242,10 +242,10 @@ export const GovernanceView: React.FC = () => {
 
       {/* STEERING COMMITTEE */}
       {activeTab === "steering" && (
-        <div className="space-y-4">
-          <div className="glass-card rounded-xl p-5 shadow-sm space-y-4">
+        <div className="space-y-6">
+          <div className="glass-card rounded-xl p-5 shadow-sm space-y-6">
             <h3 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2"><Users className="w-4 h-4 text-[var(--accent)]" />Steering Committee Members</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {governance.steeringCommitteeMembers.map((member, i) => (
                 <div key={i} className="flex items-center gap-3 p-3 bg-[var(--bg-card)] rounded-lg border border-[var(--border)]">
                   <div className="w-8 h-8 rounded-full bg-[var(--accent-glow)] border border-[var(--accent-border)] flex items-center justify-center font-bold text-[var(--accent)] text-sm">{member.charAt(0)}</div>
@@ -254,9 +254,9 @@ export const GovernanceView: React.FC = () => {
               ))}
             </div>
           </div>
-          <div className="glass-card rounded-xl p-5 shadow-sm space-y-4">
+          <div className="glass-card rounded-xl p-5 shadow-sm space-y-6">
             <h3 className="text-sm font-bold text-[var(--text-primary)] flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-[var(--amber)]" />Change Control Board (CCB)</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {governance.changeControlBoardMembers.map((member, i) => (
                 <div key={i} className="flex items-center gap-3 p-3 bg-[var(--amber-dim)] rounded-lg border border-amber-100">
                   <div className="w-8 h-8 rounded-full bg-[var(--amber-dim)] border border-[rgba(245,158,11,0.25)] flex items-center justify-center font-bold text-[var(--amber)] text-sm">{member.charAt(0)}</div>

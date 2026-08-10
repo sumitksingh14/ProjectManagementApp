@@ -109,23 +109,23 @@ export const DashboardView: React.FC = () => {
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
             <span
               className="badge-violet"
-              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+              style={{ fontSize: "12px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
             >
               {activeProject?.code || "PRJ"}
             </span>
             {(() => {
               const c = healthColor(health.overallHealth);
               return (
-                <span style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", background: c.bg, color: c.text, border: `1px solid ${c.border}` }}>
+                <span style={{ fontSize: "12px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", background: c.bg, color: c.text, border: `1px solid ${c.border}` }}>
                   ● {health.overallHealth} Health
                 </span>
               );
             })()}
-            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>
+            <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)" }}>
               Role: <strong style={{ color: "rgba(255,255,255,0.85)" }}>{currentRole}</strong>
             </span>
           </div>
-          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px" }}>
+          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "10px" }}>
             {activeProject?.name || "Project Dashboard"}
           </h1>
           <p style={{ fontSize: "var(--text-base)", color: "rgba(255,255,255,0.65)", maxWidth: "580px", lineHeight: 1.6 }}>
@@ -136,7 +136,7 @@ export const DashboardView: React.FC = () => {
           <button
             onClick={() => setActiveTab("edit-project")}
             style={{
-              display: "flex", alignItems: "center", gap: "6px",
+              display: "flex", alignItems: "center", gap: "10px",
               background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.20)",
               color: "#fff", borderRadius: "10px", padding: "8px 16px",
               fontSize: "12px", fontWeight: 600, cursor: "pointer",
@@ -149,7 +149,7 @@ export const DashboardView: React.FC = () => {
           <button
             onClick={() => setActiveTab("ai-planner")}
             className="btn-accent"
-            style={{ display: "flex", alignItems: "center", gap: "6px" }}
+            style={{ display: "flex", alignItems: "center", gap: "10px" }}
           >
             <Sparkles style={{ width: "13px", height: "13px", color: "#FCD34D" }} />
             AI WBS Generator
@@ -158,7 +158,7 @@ export const DashboardView: React.FC = () => {
       </div>
 
       {/* ── KPI Cards ────────────────────────────────────────────────────────── */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px", marginBottom: "24px" }} className="animate-fadeIn">
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "24px", marginBottom: "24px" }} className="animate-fadeIn">
         {kpis.map((kpi, i) => {
           const Icon = kpi.icon;
           return (
@@ -181,7 +181,7 @@ export const DashboardView: React.FC = () => {
                 </div>
               </div>
               <div className="kpi-value" style={{ marginBottom: "4px" }}>{kpi.value}</div>
-              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 {kpi.up
                   ? <ArrowUpRight style={{ width: "13px", height: "13px", color: "var(--green)" }} />
                   : <ArrowDownRight style={{ width: "13px", height: "13px", color: "var(--pink)" }} />
@@ -195,7 +195,7 @@ export const DashboardView: React.FC = () => {
       </div>
 
       {/* ── Main Body: Gantt + Resources | AI Panel ────────────────────────── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: "20px" }}>
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
 
         {/* Left column */}
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
@@ -206,13 +206,13 @@ export const DashboardView: React.FC = () => {
               display: "flex", justifyContent: "space-between", alignItems: "center",
               padding: "14px 18px", borderBottom: "1px solid var(--border)"
             }}>
-              <h3 style={{ fontSize: "11px", fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+              <h3 style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
                 Project Schedule
               </h3>
-              <div style={{ display: "flex", gap: "6px" }}>
+              <div style={{ display: "flex", gap: "10px" }}>
                 {["Day", "Week"].map((t) => (
                   <button key={t} style={{
-                    fontSize: "10px", fontWeight: 600, padding: "4px 10px", borderRadius: "6px", cursor: "pointer",
+                    fontSize: "12px", fontWeight: 600, padding: "4px 10px", borderRadius: "6px", cursor: "pointer",
                     background: t === "Week" ? "var(--grad-primary)" : "rgba(255,255,255,0.05)",
                     color: t === "Week" ? "#fff" : "var(--text-muted)",
                     border: t === "Week" ? "none" : "1px solid var(--border)",
@@ -232,7 +232,7 @@ export const DashboardView: React.FC = () => {
               <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                 {ganttBars.map((bar, i) => (
                   <div key={i} style={{ display: "grid", gridTemplateColumns: "150px 1fr", alignItems: "center", gap: "12px", opacity: bar.opacity || 1 }}>
-                    <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--text-secondary)", truncate: "true", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{bar.label}</span>
+                    <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--text-secondary)", truncate: "true", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{bar.label}</span>
                     <div style={{ position: "relative", height: "14px", background: "rgba(255,255,255,0.04)", borderRadius: "4px", overflow: "hidden" }}>
                       <div style={{
                         position: "absolute", left: bar.left, width: bar.width, height: "100%",
@@ -249,16 +249,16 @@ export const DashboardView: React.FC = () => {
           {/* Resource Allocation Table */}
           <div className="glass-card" style={{ overflow: "hidden" }}>
             <div style={{ padding: "14px 18px", borderBottom: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <h3 style={{ fontSize: "11px", fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+              <h3 style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
                 Portfolio Resource Allocation
               </h3>
-              <span style={{ fontSize: "9px", color: "var(--text-muted)", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase" }}>Heatmap View</span>
+              <span style={{ fontSize: "12px", color: "var(--text-muted)", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase" }}>Heatmap View</span>
             </div>
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
                 <tr style={{ borderBottom: "1px solid var(--border)" }}>
                   {["Resource Name", "Role", "Capacity", "Projects", "Status"].map(h => (
-                    <th key={h} className="section-label" style={{ padding: "10px 18px", textAlign: "left" }}>{h}</th>
+                    <th key={h} className="section-label" style={{ padding: "14px 20px", textAlign: "left" }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -269,10 +269,10 @@ export const DashboardView: React.FC = () => {
                   { name: "Priya Sharma",   role: "Program Manager",  dots: ["cyan","cyan","dim"],   projects: "2 Active", status: "Optimal",    statusColor: "badge-cyan" },
                 ].map((row, i) => (
                   <tr key={i} className="table-row-dark">
-                    <td style={{ padding: "12px 18px", fontSize: "12px", fontWeight: 700, color: "var(--text-primary)" }}>{row.name}</td>
-                    <td style={{ padding: "12px 18px", fontSize: "11px", color: "var(--text-secondary)" }}>{row.role}</td>
-                    <td style={{ padding: "12px 18px" }}>
-                      <div style={{ display: "flex", gap: "4px" }}>
+                    <td style={{ padding: "14px 20px", fontSize: "12px", fontWeight: 700, color: "var(--text-primary)" }}>{row.name}</td>
+                    <td style={{ padding: "14px 20px", fontSize: "12px", color: "var(--text-secondary)" }}>{row.role}</td>
+                    <td style={{ padding: "14px 20px" }}>
+                      <div style={{ display: "flex", gap: "8px" }}>
                         {row.dots.map((d, di) => (
                           <div key={di} style={{
                             width: "12px", height: "12px", borderRadius: "3px",
@@ -281,9 +281,9 @@ export const DashboardView: React.FC = () => {
                         ))}
                       </div>
                     </td>
-                    <td style={{ padding: "12px 18px", fontSize: "11px", color: "var(--text-secondary)" }}>{row.projects}</td>
-                    <td style={{ padding: "12px 18px" }}>
-                      <span className={row.statusColor} style={{ fontSize: "9px", fontWeight: 700, padding: "3px 8px", borderRadius: "6px", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                    <td style={{ padding: "14px 20px", fontSize: "12px", color: "var(--text-secondary)" }}>{row.projects}</td>
+                    <td style={{ padding: "14px 20px" }}>
+                      <span className={row.statusColor} style={{ fontSize: "12px", fontWeight: 700, padding: "3px 8px", borderRadius: "6px", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                         {row.status}
                       </span>
                     </td>
@@ -295,7 +295,7 @@ export const DashboardView: React.FC = () => {
         </div>
 
         {/* Right column — AI Copilot + Health Matrix */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
 
           {/* AI Copilot Card */}
           <div
@@ -315,23 +315,23 @@ export const DashboardView: React.FC = () => {
                 }}>
                   <Sparkles style={{ width: "14px", height: "14px", color: "#fff" }} />
                 </div>
-                <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--text-primary)", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+                <span style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-primary)", letterSpacing: "0.08em", textTransform: "uppercase" }}>
                   Copilot Predictive AI
                 </span>
               </div>
-              <span style={{ fontSize: "9px", background: "var(--accent-glow)", color: "var(--accent)", border: "1px solid var(--accent-border)", padding: "2px 8px", borderRadius: "6px", fontFamily: "monospace" }}>
+              <span style={{ fontSize: "12px", background: "var(--accent-glow)", color: "var(--accent)", border: "1px solid var(--accent-border)", padding: "2px 8px", borderRadius: "6px", fontFamily: "monospace" }}>
                 v4.2
               </span>
             </div>
 
-            <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: "10px", padding: "12px", marginBottom: "10px" }}>
-              <p className="section-label" style={{ marginBottom: "6px" }}>Predictive Risk Analysis</p>
-              <p style={{ fontSize: "11px", color: "var(--text-secondary)", lineHeight: 1.7 }}>
+            <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: "10px", padding: "16px", marginBottom: "10px" }}>
+              <p className="section-label" style={{ marginBottom: "10px" }}>Predictive Risk Analysis</p>
+              <p style={{ fontSize: "12px", color: "var(--text-secondary)", lineHeight: 1.7 }}>
                 {health.aiHealthCommentary || "AI is analyzing your project data. Run the AI WBS Generator to get predictive insights."}
               </p>
             </div>
-            <div style={{ background: "rgba(139,92,246,0.08)", borderRadius: "10px", padding: "10px", border: "1px solid var(--accent-border)" }}>
-              <p style={{ fontSize: "11px", color: "var(--accent)", fontStyle: "italic", lineHeight: 1.6 }}>
+            <div style={{ background: "rgba(139,92,246,0.08)", borderRadius: "10px", padding: "16px", border: "1px solid var(--accent-border)" }}>
+              <p style={{ fontSize: "12px", color: "var(--accent)", fontStyle: "italic", lineHeight: 1.6 }}>
                 "Generate a mitigation plan for the Resource Gap identified in {activeProject?.name || "this project"}."
               </p>
             </div>
@@ -339,7 +339,7 @@ export const DashboardView: React.FC = () => {
 
           {/* Health Matrix */}
           <div className="glass-card" style={{ padding: "20px" }}>
-            <h3 style={{ fontSize: "11px", fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "14px" }}>
+            <h3 style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "14px" }}>
               Executive AI Health Matrix
             </h3>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
@@ -354,13 +354,13 @@ export const DashboardView: React.FC = () => {
                 const c = healthColor(item.status);
                 return (
                   <div key={idx} style={{
-                    padding: "10px", borderRadius: "10px",
+                    padding: "16px", borderRadius: "10px",
                     background: "rgba(255,255,255,0.03)",
                     border: "1px solid var(--border)",
-                    display: "flex", flexDirection: "column", gap: "4px"
+                    display: "flex", flexDirection: "column", gap: "8px"
                   }}>
-                    <span style={{ fontSize: "10px", color: "var(--text-muted)", fontWeight: 500 }}>{item.label}</span>
-                    <span style={{ fontSize: "10px", fontWeight: 700, padding: "2px 8px", borderRadius: "6px", background: c.bg, color: c.text, border: `1px solid ${c.border}`, alignSelf: "flex-start" }}>
+                    <span style={{ fontSize: "12px", color: "var(--text-muted)", fontWeight: 500 }}>{item.label}</span>
+                    <span style={{ fontSize: "12px", fontWeight: 700, padding: "2px 8px", borderRadius: "6px", background: c.bg, color: c.text, border: `1px solid ${c.border}`, alignSelf: "flex-start" }}>
                       {item.status}
                     </span>
                   </div>
@@ -372,7 +372,7 @@ export const DashboardView: React.FC = () => {
           {/* Progress Card */}
           <div className="glass-card" style={{ padding: "20px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
-              <h3 style={{ fontSize: "11px", fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+              <h3 style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
                 Overall Progress
               </h3>
               <span className="kpi-value" style={{ fontSize: "22px", color: "var(--accent)" }}>{overallProgress}%</span>
@@ -386,13 +386,13 @@ export const DashboardView: React.FC = () => {
               }} />
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <CheckCircle2 style={{ width: "12px", height: "12px", color: "var(--green)" }} />
-                <span style={{ fontSize: "10px", color: "var(--text-muted)" }}>{completedTasks} tasks done</span>
+                <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>{completedTasks} tasks done</span>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                 <Clock style={{ width: "12px", height: "12px", color: "var(--amber)" }} />
-                <span style={{ fontSize: "10px", color: "var(--text-muted)" }}>{totalTasks - completedTasks} remaining</span>
+                <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>{totalTasks - completedTasks} remaining</span>
               </div>
             </div>
           </div>

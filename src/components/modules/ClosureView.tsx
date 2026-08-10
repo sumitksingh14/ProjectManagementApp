@@ -128,11 +128,11 @@ export const ClosureView: React.FC = () => {
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
             <span
               className="badge-violet"
-              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+              style={{ fontSize: "12px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
             >
               Project Closure
             </span>
-            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>Enterprise PMO</span>
+            <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)" }}>Enterprise PMO</span>
           </div>
           <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
             Project Closure & Lessons Learned
@@ -147,7 +147,7 @@ export const ClosureView: React.FC = () => {
       </div>
 
       {/* KPI bar */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {[
           { label: "Deliverables Accepted", value: `${acceptedDeliverables}/${deliverables.length}`, color: acceptedDeliverables === deliverables.length ? "text-[var(--green)]" : "text-[var(--amber)]" },
           { label: "Lessons Captured", value: lessons.length, color: "text-[var(--accent)]" },
@@ -155,7 +155,7 @@ export const ClosureView: React.FC = () => {
           { label: "Project Phase", value: closureStatus.phase, color: "text-[var(--text-primary)]" }
         ].map((kpi, i) => (
           <div key={i} className="glass-card rounded-xl p-4 shadow-sm">
-            <p className="text-[10px] text-[var(--text-secondary)] uppercase font-bold tracking-wide">{kpi.label}</p>
+            <p className="text-[12px] text-[var(--text-secondary)] uppercase font-bold tracking-wide">{kpi.label}</p>
             <div className={`text-xl font-extrabold mt-1 ${kpi.color}`}>{kpi.value}</div>
           </div>
         ))}
@@ -180,41 +180,41 @@ export const ClosureView: React.FC = () => {
 
       {/* DELIVERABLES */}
       {activeTab === "deliverables" && (
-        <div className="space-y-3">
+        <div className="space-y-6">
           {deliverables.map(del => (
             <div key={del.id} className="glass-card rounded-xl p-5 shadow-sm">
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex items-start justify-between gap-6">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-[10px] bg-[var(--accent-glow)] text-[var(--accent)] border border-[var(--accent-border)] px-2 py-0.5 rounded font-bold">{del.phase}</span>
+                    <span className="text-[12px] bg-[var(--accent-glow)] text-[var(--accent)] border border-[var(--accent-border)] px-2 py-0.5 rounded font-bold">{del.phase}</span>
                     <span className="font-bold text-[var(--text-primary)] text-sm">{del.title}</span>
                   </div>
                   <p className="text-xs text-[var(--text-secondary)] mb-2">{del.description}</p>
                   <div className="flex flex-wrap gap-1">
                     {del.acceptanceCriteria.map((ac, i) => (
-                      <span key={i} className="text-[10px] bg-[var(--bg-card-hover)] text-[var(--text-secondary)] px-2 py-0.5 rounded-full">✓ {ac}</span>
+                      <span key={i} className="text-[12px] bg-[var(--bg-card-hover)] text-[var(--text-secondary)] px-2 py-0.5 rounded-full">✓ {ac}</span>
                     ))}
                   </div>
                   {del.signedOffBy && (
-                    <div className="mt-2 text-[10px] text-[var(--green)] font-bold">
+                    <div className="mt-2 text-[12px] text-[var(--green)] font-bold">
                       Signed off by: {del.signedOffBy} on {del.signOffDate}
                     </div>
                   )}
                 </div>
                 <div className="flex flex-col items-end gap-2 shrink-0">
-                  <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full border ${deliverableStatusColor[del.status]}`}>{del.status}</span>
+                  <span className={`text-[12px] font-bold px-2.5 py-1 rounded-full border ${deliverableStatusColor[del.status]}`}>{del.status}</span>
                   <div className="flex gap-1">
                     {(["Accepted", "Rejected"] as ProjectDeliverable["status"][]).map(s => (
                       <button
                         key={s}
                         onClick={() => updateDeliverableStatus(del.id, s)}
-                        className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all ${s === "Accepted" ? "border-[var(--border)] text-[var(--green)] hover:bg-[var(--green-dim)]" : "border-[var(--border)] text-[var(--pink)] hover:bg-[var(--pink-dim)]"}`}
+                        className={`text-[12px] font-bold px-2.5 py-1 rounded-lg border transition-all ${s === "Accepted" ? "border-[var(--border)] text-[var(--green)] hover:bg-[var(--green-dim)]" : "border-[var(--border)] text-[var(--pink)] hover:bg-[var(--pink-dim)]"}`}
                       >
                         {s === "Accepted" ? "Accept ✓" : "Reject ✗"}
                       </button>
                     ))}
                   </div>
-                  <div className="text-[10px] text-[var(--text-muted)]">Owner: {del.owner} | Due: {del.dueDate}</div>
+                  <div className="text-[12px] text-[var(--text-muted)]">Owner: {del.owner} | Due: {del.dueDate}</div>
                 </div>
               </div>
             </div>
@@ -224,16 +224,16 @@ export const ClosureView: React.FC = () => {
 
       {/* LESSONS LEARNED */}
       {activeTab === "lessons" && (
-        <div className="space-y-3">
+        <div className="space-y-6">
           <div className="flex justify-end">
             <button onClick={() => setShowLessonForm(!showLessonForm)} className="flex items-center gap-2 bg-[var(--accent)] hover:bg-[var(--accent-2)] text-white text-xs font-bold px-4 py-2 rounded-lg transition-all">
               <PlusCircle className="w-4 h-4" /> Add Lesson
             </button>
           </div>
           {showLessonForm && (
-            <div className="bg-[var(--bg-card)] border border-[var(--accent-border)] rounded-xl p-5 shadow-sm space-y-4">
+            <div className="bg-[var(--bg-card)] border border-[var(--accent-border)] rounded-xl p-5 shadow-sm space-y-6">
               <h3 className="text-sm font-bold text-[var(--text-primary)]">Capture New Lesson</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
                 {[
                   { label: "Title *", key: "title", type: "text" },
                   { label: "Phase", key: "phase", type: "text", placeholder: "e.g. Planning" },
@@ -280,11 +280,11 @@ export const ClosureView: React.FC = () => {
                     </div>
                     <div>
                       <div className="text-sm font-bold text-[var(--text-primary)]">{lesson.title}</div>
-                      <div className="text-[10px] text-[var(--text-secondary)]">{lesson.category} · {lesson.phase} · Captured by: {lesson.capturedBy}</div>
+                      <div className="text-[12px] text-[var(--text-secondary)]">{lesson.category} · {lesson.phase} · Captured by: {lesson.capturedBy}</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className={`text-[10px] font-bold px-2.5 py-1 rounded border ${lesson.impact === "High" ? "badge-red" : lesson.impact === "Medium" ? "badge-amber" : "badge-slate"}`}>{lesson.impact} Impact</span>
+                    <span className={`text-[12px] font-bold px-2.5 py-1 rounded border ${lesson.impact === "High" ? "badge-red" : lesson.impact === "Medium" ? "badge-amber" : "badge-slate"}`}>{lesson.impact} Impact</span>
                     <span className="badge-violet">{lesson.status}</span>
                     {isEx ? <ChevronUp className="w-4 h-4 text-[var(--text-muted)]" /> : <ChevronDown className="w-4 h-4 text-[var(--text-muted)]" />}
                   </div>
@@ -292,12 +292,12 @@ export const ClosureView: React.FC = () => {
                 {isEx && (
                   <div className="border-t border-[var(--border)] p-4 bg-[var(--bg-card)]/50 space-y-2">
                     <div>
-                      <span className="text-[10px] font-bold text-[var(--text-secondary)] uppercase">Description</span>
+                      <span className="text-[12px] font-bold text-[var(--text-secondary)] uppercase">Description</span>
                       <p className="text-xs text-[var(--text-primary)] mt-1">{lesson.description}</p>
                     </div>
                     {lesson.recommendation && (
                       <div>
-                        <span className="text-[10px] font-bold text-[var(--green)] uppercase">Recommendation</span>
+                        <span className="text-[12px] font-bold text-[var(--green)] uppercase">Recommendation</span>
                         <p className="text-xs text-[var(--text-primary)] mt-1 bg-[var(--green-dim)] border border-[var(--border)] rounded-lg p-2">{lesson.recommendation}</p>
                       </div>
                     )}
@@ -311,7 +311,7 @@ export const ClosureView: React.FC = () => {
 
       {/* CLOSURE CHECKLIST */}
       {activeTab === "checklist" && (
-        <div className="glass-card rounded-xl p-6 shadow-sm space-y-4">
+        <div className="glass-card rounded-xl p-6 shadow-sm space-y-6">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-bold text-[var(--text-primary)]">Formal Project Closure Checklist</h3>
             <span className={`text-xs font-bold px-3 py-1 rounded-full border ${closureReadiness === 100 ? "badge-green" : "badge-amber"}`}>
@@ -321,12 +321,12 @@ export const ClosureView: React.FC = () => {
           <div className="h-2 w-full bg-[var(--bg-card-hover)] rounded-full overflow-hidden mb-4">
             <div className="h-full rounded-full transition-all" style={{ width: `${closureReadiness}%`, background: "var(--grad-primary)" }} />
           </div>
-          <div className="space-y-3">
+          <div className="space-y-6">
             {closureChecklist.map(item => (
               <div
                 key={item.key}
                 onClick={() => toggleChecklistItem(item.key)}
-                className={`flex items-center gap-4 p-4 rounded-xl border cursor-pointer transition-all ${item.done ? "bg-[var(--green-dim)] border-[var(--border)]" : "bg-[var(--bg-card)] border-[var(--border)] hover:border-[var(--accent-border)]"}`}
+                className={`flex items-center gap-6 p-4 rounded-xl border cursor-pointer transition-all ${item.done ? "bg-[var(--green-dim)] border-[var(--border)]" : "bg-[var(--bg-card)] border-[var(--border)] hover:border-[var(--accent-border)]"}`}
               >
                 {item.done
                   ? <CheckCircle2 className="w-5 h-5 text-[var(--green)] shrink-0" />

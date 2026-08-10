@@ -51,8 +51,14 @@ export const StakeholderView: React.FC = () => {
   const keepInformed = stakeholders.filter((s) => s.influence !== "High" && s.interest === "High");
   const monitorOnly = stakeholders.filter((s) => s.influence !== "High" && s.interest !== "High");
 
+  const kpis = [
+    { label: "Total Mapped Stakeholders", value: String(stakeholders.length), delta: `${keyPlayers.length} Key Players`, up: true, sub: "Registered stakeholder directory", accentColor: "var(--accent)", glowColor: "rgba(139,92,246,0.15)" },
+    { label: "High Influence / High Interest", value: String(keyPlayers.length), delta: "Manage Closely", up: true, sub: "Executive Steering focus", accentColor: "var(--pink)", glowColor: "rgba(236,72,153,0.15)" },
+    { label: "Engagement Alignment", value: "Optimal", delta: "Strategy Active", up: true, sub: "Communication matrix active", accentColor: "var(--cyan)", glowColor: "rgba(6,182,212,0.15)" },
+  ];
+
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
+    <div style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", fontFamily: "Inter, sans-serif" }} className="space-y-6 animate-fadeIn">
       {/* Header */}
       <div
         className="hero-banner animate-fadeIn"
@@ -62,29 +68,50 @@ export const StakeholderView: React.FC = () => {
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
             <span
               className="badge-violet"
-              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+              style={{ fontSize: "12px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
             >
-              Module 2
+              Module 7
             </span>
-            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>PMO Stakeholder Governance</span>
+            <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)" }}>PMP Stakeholder Engagement Standard</span>
           </div>
-          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
-            Stakeholder Management
+          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "10px", display: "flex", alignItems: "center", gap: "8px" }}>
+            Stakeholder Power / Interest Matrix
           </h1>
           <p style={{ fontSize: "var(--text-base)", color: "rgba(255,255,255,0.65)", maxWidth: "580px", lineHeight: 1.6 }}>
-            Analyze influence &amp; interest power dynamics, engagement strategies, and communication protocols.
+            Map key decision makers, communication preferences, influence/interest quadrants, and engagement strategies.
           </p>
         </div>
         <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
           <button
             onClick={() => setShowForm(!showForm)}
-            className="btn-accent flex items-center gap-1.5"
-            style={{ padding: "8px 16px" }}
+            className="flex items-center gap-1.5 rounded-xl transition-all cursor-pointer"
+            style={{
+              background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.20)",
+              color: "#fff", padding: "8px 14px", fontSize: "12px", fontWeight: 600, backdropFilter: "blur(10px)"
+            }}
           >
             <Plus style={{ width: "14px", height: "14px" }} />
             Add Stakeholder
           </button>
         </div>
+      </div>
+
+      {/* KPI Cards */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px" }} className="animate-fadeIn">
+        {kpis.map((kpi, i) => (
+          <div
+            key={i}
+            className="glass-card"
+            style={{
+              padding: "20px",
+              background: `linear-gradient(135deg, ${kpi.glowColor} 0%, var(--bg-card) 60%)`,
+            }}
+          >
+            <p className="section-label" style={{ marginBottom: "12px" }}>{kpi.label}</p>
+            <div className="kpi-value" style={{ marginBottom: "10px" }}>{kpi.value}</div>
+            <p style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>{kpi.sub}</p>
+          </div>
+        ))}
       </div>
 
       {/* Add Stakeholder Form */}
@@ -98,17 +125,17 @@ export const StakeholderView: React.FC = () => {
             background: "linear-gradient(145deg, rgba(109,40,217,0.08) 0%, var(--bg-card) 100%)"
           }}
         >
-          <h3 style={{ fontSize: "var(--text-md)", fontWeight: 700, color: "var(--text-primary)", marginBottom: "16px" }}>
+          <h3 style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "16px" }}>
             New Stakeholder Record
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               { label: "Name *", key: "name", type: "text", required: true },
               { label: "Position / Title", key: "position", type: "text" },
               { label: "Department", key: "department", type: "text" },
             ].map(field => (
               <div key={field.key}>
-                <label className="section-label" style={{ display: "block", marginBottom: "6px" }}>{field.label}</label>
+                <label className="section-label" style={{ display: "block", marginBottom: "10px" }}>{field.label}</label>
                 <input
                   type={field.type}
                   required={field.required}
@@ -124,7 +151,7 @@ export const StakeholderView: React.FC = () => {
               { label: "Communication Channel", key: "communicationPreference", options: ["Weekly Steering", "Bi-Weekly Email", "Ad-hoc Dashboard", "Slack/Teams"] },
             ].map(field => (
               <div key={field.key}>
-                <label className="section-label" style={{ display: "block", marginBottom: "6px" }}>{field.label}</label>
+                <label className="section-label" style={{ display: "block", marginBottom: "10px" }}>{field.label}</label>
                 <select
                   value={(newStk as any)[field.key] || ""}
                   onChange={(e) => setNewStk({ ...newStk, [field.key]: e.target.value as any })}
@@ -159,24 +186,24 @@ export const StakeholderView: React.FC = () => {
           Stakeholder Power / Interest Grid (2×2 Matrix)
         </h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Key Players (High Power, High Interest) */}
           <div style={{ background: "rgba(139,92,246,0.08)", border: "1px solid rgba(139,92,246,0.25)", padding: "16px", borderRadius: "12px" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid rgba(139,92,246,0.20)", paddingBottom: "8px", marginBottom: "12px" }}>
               <span style={{ fontSize: "var(--text-xs)", fontWeight: 700, color: "var(--accent)", textTransform: "uppercase", letterSpacing: "0.08em" }}>Key Players (Manage Closely)</span>
               <span className="badge-violet" style={{ fontFamily: "monospace" }}>High Power / High Interest</span>
             </div>
-            <div className="space-y-2 text-xs">
+            <div className="space-y-6 text-sm">
               {keyPlayers.length > 0 ? keyPlayers.map((s) => (
-                <div key={s.id} style={{ background: "var(--bg-card)", padding: "10px", borderRadius: "8px", border: "1px solid rgba(139,92,246,0.20)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div key={s.id} style={{ background: "var(--bg-card)", padding: "16px", borderRadius: "8px", border: "1px solid rgba(139,92,246,0.20)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                   <div>
                     <p style={{ fontWeight: 700, color: "var(--text-primary)", fontSize: "var(--text-sm)" }}>{s.name}</p>
-                    <p style={{ fontSize: "10px", color: "var(--text-muted)" }}>{s.position} ({s.department})</p>
+                    <p style={{ fontSize: "12px", color: "var(--text-muted)" }}>{s.position} ({s.department})</p>
                   </div>
                   <span className="badge-violet" style={{ fontFamily: "monospace" }}>{s.communicationPreference}</span>
                 </div>
               )) : (
-                <p style={{ fontSize: "11px", color: "var(--text-secondary)", fontStyle: "italic" }}>No stakeholders mapped in this quadrant.</p>
+                <p style={{ fontSize: "12px", color: "var(--text-secondary)", fontStyle: "italic" }}>No stakeholders mapped in this quadrant.</p>
               )}
             </div>
           </div>
@@ -187,16 +214,16 @@ export const StakeholderView: React.FC = () => {
               <span style={{ fontSize: "var(--text-xs)", fontWeight: 700, color: "var(--amber)", textTransform: "uppercase", letterSpacing: "0.08em" }}>Keep Satisfied</span>
               <span className="badge-amber" style={{ fontFamily: "monospace" }}>High Power / Low-Med Interest</span>
             </div>
-            <div className="space-y-2 text-xs">
+            <div className="space-y-6 text-sm">
               {keepSatisfied.length > 0 ? (
                 keepSatisfied.map((s) => (
-                  <div key={s.id} style={{ background: "var(--bg-card)", padding: "10px", borderRadius: "8px", border: "1px solid rgba(245,158,11,0.20)" }}>
+                  <div key={s.id} style={{ background: "var(--bg-card)", padding: "16px", borderRadius: "8px", border: "1px solid rgba(245,158,11,0.20)" }}>
                     <p style={{ fontWeight: 700, color: "var(--text-primary)", fontSize: "var(--text-sm)" }}>{s.name}</p>
-                    <p style={{ fontSize: "10px", color: "var(--text-muted)" }}>{s.position}</p>
+                    <p style={{ fontSize: "12px", color: "var(--text-muted)" }}>{s.position}</p>
                   </div>
                 ))
               ) : (
-                <p style={{ fontSize: "11px", color: "var(--text-secondary)", fontStyle: "italic" }}>No stakeholders currently mapped in this quadrant.</p>
+                <p style={{ fontSize: "12px", color: "var(--text-secondary)", fontStyle: "italic" }}>No stakeholders currently mapped in this quadrant.</p>
               )}
             </div>
           </div>
@@ -207,14 +234,14 @@ export const StakeholderView: React.FC = () => {
               <span style={{ fontSize: "var(--text-xs)", fontWeight: 700, color: "var(--green)", textTransform: "uppercase", letterSpacing: "0.08em" }}>Keep Informed</span>
               <span className="badge-green" style={{ fontFamily: "monospace" }}>Low Power / High Interest</span>
             </div>
-            <div className="space-y-2 text-xs">
+            <div className="space-y-6 text-sm">
               {keepInformed.length > 0 ? keepInformed.map((s) => (
-                <div key={s.id} style={{ background: "var(--bg-card)", padding: "10px", borderRadius: "8px", border: "1px solid rgba(16,185,129,0.20)" }}>
+                <div key={s.id} style={{ background: "var(--bg-card)", padding: "16px", borderRadius: "8px", border: "1px solid rgba(16,185,129,0.20)" }}>
                   <p style={{ fontWeight: 700, color: "var(--text-primary)", fontSize: "var(--text-sm)" }}>{s.name}</p>
-                  <p style={{ fontSize: "10px", color: "var(--text-muted)" }}>{s.position}</p>
+                  <p style={{ fontSize: "12px", color: "var(--text-muted)" }}>{s.position}</p>
                 </div>
               )) : (
-                <p style={{ fontSize: "11px", color: "var(--text-secondary)", fontStyle: "italic" }}>No stakeholders currently mapped in this quadrant.</p>
+                <p style={{ fontSize: "12px", color: "var(--text-secondary)", fontStyle: "italic" }}>No stakeholders currently mapped in this quadrant.</p>
               )}
             </div>
           </div>
@@ -225,15 +252,15 @@ export const StakeholderView: React.FC = () => {
               <span style={{ fontSize: "var(--text-xs)", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.08em" }}>Monitor (Minimal Effort)</span>
               <span className="badge-slate" style={{ fontFamily: "monospace" }}>Low Power / Low Interest</span>
             </div>
-            <div className="space-y-2 text-xs">
+            <div className="space-y-6 text-sm">
               {monitorOnly.length > 0 ? (
                 monitorOnly.map((s) => (
-                  <div key={s.id} style={{ background: "var(--bg-card)", padding: "10px", borderRadius: "8px", border: "1px solid var(--border)" }}>
+                  <div key={s.id} style={{ background: "var(--bg-card)", padding: "16px", borderRadius: "8px", border: "1px solid var(--border)" }}>
                     <p style={{ fontWeight: 700, color: "var(--text-primary)", fontSize: "var(--text-sm)" }}>{s.name}</p>
                   </div>
                 ))
               ) : (
-                <p style={{ fontSize: "11px", color: "var(--text-secondary)", fontStyle: "italic" }}>No stakeholders currently mapped in this quadrant.</p>
+                <p style={{ fontSize: "12px", color: "var(--text-secondary)", fontStyle: "italic" }}>No stakeholders currently mapped in this quadrant.</p>
               )}
             </div>
           </div>
@@ -243,7 +270,7 @@ export const StakeholderView: React.FC = () => {
       {/* Stakeholder Register Table */}
       <div className="glass-card" style={{ overflow: "hidden" }}>
         <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border)" }}>
-          <h3 style={{ fontSize: "var(--text-md)", fontWeight: 700, color: "var(--text-primary)" }}>
+          <h3 style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
             Stakeholder Register &amp; Engagement Strategy
           </h3>
         </div>
@@ -252,28 +279,28 @@ export const StakeholderView: React.FC = () => {
             <thead>
               <tr style={{ borderBottom: "1px solid var(--border)" }}>
                 {["Stakeholder", "Role & Dept", "Power / Interest", "Comm Channel", "Engagement Strategy"].map(h => (
-                  <th key={h} className="section-label" style={{ padding: "10px 16px", textAlign: "left" }}>{h}</th>
+                  <th key={h} className="section-label" style={{ padding: "14px 20px", textAlign: "left" }}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {stakeholders.map((s) => (
                 <tr key={s.id} className="table-row-dark">
-                  <td style={{ padding: "12px 16px" }}>
+                  <td style={{ padding: "14px 20px" }}>
                     <div style={{ fontWeight: 700, color: "var(--text-primary)", fontSize: "var(--text-sm)" }}>{s.name}</div>
-                    <div style={{ fontSize: "10px", color: "var(--text-muted)" }}>{s.position}</div>
+                    <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>{s.position}</div>
                   </td>
-                  <td style={{ padding: "12px 16px" }}>
+                  <td style={{ padding: "14px 20px" }}>
                     <div style={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)" }}>{s.role}</div>
-                    <div style={{ fontSize: "10px", color: "var(--text-muted)" }}>{s.department}</div>
+                    <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>{s.department}</div>
                   </td>
-                  <td style={{ padding: "12px 16px", fontFamily: "monospace" }}>
+                  <td style={{ padding: "14px 20px", fontFamily: "monospace" }}>
                     <span style={{ color: "var(--accent)" }}>{s.influence} Influence</span>
                     {" / "}
                     <span style={{ color: "var(--green)" }}>{s.interest} Interest</span>
                   </td>
-                  <td style={{ padding: "12px 16px", fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>{s.communicationPreference}</td>
-                  <td style={{ padding: "12px 16px", fontSize: "var(--text-sm)", color: "var(--text-muted)", maxWidth: "240px", lineHeight: 1.6 }}>{s.engagementStrategy}</td>
+                  <td style={{ padding: "14px 20px", fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>{s.communicationPreference}</td>
+                  <td style={{ padding: "14px 20px", fontSize: "var(--text-sm)", color: "var(--text-muted)", maxWidth: "240px", lineHeight: 1.6 }}>{s.engagementStrategy}</td>
                 </tr>
               ))}
             </tbody>

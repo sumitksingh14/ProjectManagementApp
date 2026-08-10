@@ -66,21 +66,18 @@ export const IntakeView: React.FC = () => {
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
             <span
               className="badge-violet"
-              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+              style={{ fontSize: "12px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
             >
               Module 1
             </span>
-            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>Enterprise PMO Intake Framework</span>
+            <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)" }}>Enterprise PMO Intake Framework</span>
           </div>
-          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
+          <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "10px", display: "flex", alignItems: "center", gap: "8px" }}>
             Project Intake Wizard
           </h1>
           <p style={{ fontSize: "var(--text-base)", color: "rgba(255,255,255,0.65)", maxWidth: "580px", lineHeight: 1.6 }}>
             Capture strategic requirements, business case, KPIs, and scope boundaries for PMO review & AI plan generation.
           </p>
-        </div>
-        <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
-          <FileText style={{ width: "32px", height: "32px", color: "#fff" }} />
         </div>
       </div>
 
@@ -108,14 +105,14 @@ export const IntakeView: React.FC = () => {
               }`}
             >
               <div
-                className={`w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 ${
+                className={`w-7 h-7 rounded-lg flex items-center justify-center font-bold text-sm shrink-0 ${
                   isActive ? "bg-[var(--bg-card)] text-[var(--accent)]" : "bg-[var(--bg-card-hover)] text-[var(--text-secondary)]"
                 }`}
               >
                 {isDone ? <CheckCircle2 className="w-4 h-4 text-[var(--green)]" /> : s.num}
               </div>
               <div className="hidden sm:block truncate">
-                <p className="text-[10px] font-semibold uppercase tracking-wider opacity-80">Step {s.num}</p>
+                <p className="text-[12px] font-semibold uppercase tracking-wider opacity-80">Step {s.num}</p>
                 <p className="text-xs font-bold truncate">{s.label}</p>
               </div>
             </button>
@@ -126,9 +123,9 @@ export const IntakeView: React.FC = () => {
       {/* Form Container */}
       <form onSubmit={handleSubmit} className="glass-card rounded-xl p-6 shadow-sm space-y-6">
         {step === 1 && (
-          <div className="space-y-4">
+          <div className="space-y-6">
             <h3 className="section-label border-b border-[var(--border)] pb-2">1. General Project Information</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
               <div>
                 <label className="block text-[var(--text-secondary)] mb-1 font-semibold">Project Name *</label>
                 <input
@@ -232,7 +229,7 @@ export const IntakeView: React.FC = () => {
         )}
 
         {step === 2 && (
-          <div className="space-y-4 text-xs">
+          <div className="space-y-6 text-sm">
             <h3 className="section-label border-b border-[var(--border)] pb-2">2. Business Case & ROI Alignment</h3>
             <div>
               <label className="block text-[var(--text-secondary)] mb-1 font-semibold">Problem Statement</label>
@@ -256,7 +253,7 @@ export const IntakeView: React.FC = () => {
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-[var(--text-secondary)] mb-1 font-semibold">Expected Business Benefits (One per line)</label>
                 <textarea
@@ -283,7 +280,7 @@ export const IntakeView: React.FC = () => {
         )}
 
         {step === 3 && (
-          <div className="space-y-4 text-xs">
+          <div className="space-y-6 text-sm">
             <h3 className="section-label border-b border-[var(--border)] pb-2">3. Primary Objectives & KPIs</h3>
             <div>
               <label className="block text-[var(--text-secondary)] mb-1 font-semibold">Primary Strategic Objective</label>
@@ -310,9 +307,9 @@ export const IntakeView: React.FC = () => {
         )}
 
         {step === 4 && (
-          <div className="space-y-4 text-xs">
+          <div className="space-y-6 text-sm">
             <h3 className="section-label border-b border-[var(--border)] pb-2">4. Scope Boundaries & Assumptions</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-[var(--text-secondary)] mb-1 font-semibold">In Scope Items (One per line)</label>
                 <textarea
@@ -366,7 +363,7 @@ export const IntakeView: React.FC = () => {
             type="button"
             disabled={step === 1}
             onClick={() => setStep(step - 1)}
-            className="bg-[var(--bg-card)] hover:bg-[var(--bg-card)] disabled:opacity-40 text-[var(--text-primary)] text-xs font-semibold px-4 py-2 rounded-md border border-[var(--border)] shadow-sm flex items-center gap-2 transition-all"
+            className="bg-[var(--bg-card)] hover:bg-[var(--bg-card)] disabled:opacity-40 text-[var(--text-primary)] text-sm font-semibold px-4 py-2 rounded-md border border-[var(--border)] shadow-sm flex items-center gap-2 transition-all"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Previous Step</span>
@@ -376,7 +373,7 @@ export const IntakeView: React.FC = () => {
             <button
               type="button"
               onClick={() => setStep(step + 1)}
-              className="bg-[var(--accent)] hover:bg-[var(--accent-2)] text-white text-xs font-bold px-5 py-2 rounded-md shadow-sm flex items-center gap-2 transition-all"
+              className="bg-[var(--accent)] hover:bg-[var(--accent-2)] text-white text-sm font-bold px-5 py-2 rounded-md shadow-sm flex items-center gap-2 transition-all"
             >
               <span>Next Step</span>
               <ArrowRight className="w-4 h-4" />
@@ -384,7 +381,7 @@ export const IntakeView: React.FC = () => {
           ) : (
             <button
               type="submit"
-              className="bg-[var(--accent)] hover:bg-[var(--accent-2)] text-white text-xs font-bold px-6 py-2 rounded-md shadow-sm flex items-center gap-2 transition-all"
+              className="bg-[var(--accent)] hover:bg-[var(--accent-2)] text-white text-sm font-bold px-6 py-2 rounded-md shadow-sm flex items-center gap-2 transition-all"
             >
               <Sparkles className="w-4 h-4 text-amber-300" />
               <span>Submit Intake & Generate AI Plan</span>

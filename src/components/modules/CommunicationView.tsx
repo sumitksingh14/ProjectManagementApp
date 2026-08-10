@@ -119,11 +119,11 @@ export const CommunicationView: React.FC = () => {
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
             <span
               className="badge-violet"
-              style={{ fontSize: "10px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+              style={{ fontSize: "12px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
             >
               Module 14
             </span>
-            <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.55)" }}>Communication & Status Reporting</span>
+            <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)" }}>Communication & Status Reporting</span>
           </div>
           <h1 style={{ fontSize: "var(--text-2xl)", fontWeight: 800, color: "#fff", letterSpacing: "-0.3px", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px" }}>
             Communication Management
@@ -153,7 +153,7 @@ export const CommunicationView: React.FC = () => {
 
       {/* STATUS REPORT */}
       {activeTab === "report" && (
-        <div className="space-y-4">
+        <div className="space-y-6">
           <div className="flex gap-2">
             {[{ id: "weekly", label: "Weekly PMO Status Report" }, { id: "executive", label: "Executive 1-Pager Brief" }].map(r => (
               <button key={r.id} onClick={() => setReportType(r.id as any)}
@@ -162,16 +162,16 @@ export const CommunicationView: React.FC = () => {
               </button>
             ))}
           </div>
-          <div className="glass-card p-6 space-y-4 text-xs">
+          <div className="glass-card p-6 space-y-6 text-xs">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <h3 className="text-sm font-bold text-white uppercase tracking-wider">
                 {reportType === "weekly" ? "Weekly Project Status Summary" : "Executive Steering Brief"} — {activeProject?.name}
               </h3>
               <span className="text-[var(--text-muted)] font-mono">Date: {new Date().toLocaleDateString()}</span>
             </div>
-            <div className="space-y-4 text-[var(--text-muted)] leading-relaxed">
+            <div className="space-y-6 text-[var(--text-muted)] leading-relaxed">
               <div>
-                <span className="font-bold text-white uppercase tracking-wider text-[10px]">Overall Health</span>
+                <span className="font-bold text-white uppercase tracking-wider text-[12px]">Overall Health</span>
                 <div className="flex gap-3 mt-2">
                   {[
                     { label: "Schedule", val: activeProject?.health?.scheduleHealth || "Green" },
@@ -182,14 +182,14 @@ export const CommunicationView: React.FC = () => {
                   ].map(h => (
                     <div key={h.label} className="text-center">
                       <div className={`w-6 h-6 rounded-full mx-auto mb-1 ${h.val === "Green" ? "bg-[var(--green-dim)]0" : h.val === "Amber" ? "bg-[var(--amber-dim)]0" : "bg-[var(--pink-dim)]0"}`} />
-                      <div className="text-[10px] text-[var(--text-muted)]">{h.label}</div>
+                      <div className="text-[12px] text-[var(--text-muted)]">{h.label}</div>
                     </div>
                   ))}
                 </div>
               </div>
               <div>
-                <span className="font-bold text-white uppercase tracking-wider text-[10px]">EVM Performance</span>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
+                <span className="font-bold text-white uppercase tracking-wider text-[12px]">EVM Performance</span>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-2">
                   {[
                     { label: "CPI", value: activeProject?.evm?.CPI?.toFixed(2) || "1.00" },
                     { label: "SPI", value: activeProject?.evm?.SPI?.toFixed(2) || "1.00" },
@@ -197,14 +197,14 @@ export const CommunicationView: React.FC = () => {
                     { label: "VAC", value: `$${(activeProject?.evm?.VAC || 0).toLocaleString()}` }
                   ].map(m => (
                     <div key={m.label} className="rounded-lg p-3 text-center">
-                      <div className="text-[10px] text-[var(--text-muted)]">{m.label}</div>
+                      <div className="text-[12px] text-[var(--text-muted)]">{m.label}</div>
                       <div className="text-lg font-extrabold text-white font-mono">{m.value}</div>
                     </div>
                   ))}
                 </div>
               </div>
               <div className="p-3 rounded-lg border border-[var(--border)]">
-                <span className="font-bold text-white uppercase tracking-wider text-[10px]">Open Risks & Issues</span>
+                <span className="font-bold text-white uppercase tracking-wider text-[12px]">Open Risks & Issues</span>
                 <div className="mt-2 space-y-1">
                   <div className="flex justify-between"><span>Open Risks:</span><span className="text-rose-400 font-bold">{(activeProject?.risks || []).filter(r => r.status === "Open").length}</span></div>
                   <div className="flex justify-between"><span>Active Issues:</span><span className="text-amber-400 font-bold">{(activeProject?.issues || []).filter(i => i.status !== "Resolved").length}</span></div>
@@ -218,16 +218,16 @@ export const CommunicationView: React.FC = () => {
 
       {/* ACTION ITEMS */}
       {activeTab === "actions" && (
-        <div className="space-y-4">
+        <div className="space-y-6">
           <div className="flex justify-end">
             <button onClick={() => setShowAddAction(!showAddAction)} className="flex items-center gap-2 bg-[var(--accent)] hover:bg-[var(--accent-2)] text-white text-xs font-bold px-4 py-2 rounded-lg">
               <PlusCircle className="w-4 h-4" /> Add Action Item
             </button>
           </div>
           {showAddAction && (
-            <div className="bg-[var(--bg-card)] border border-[var(--accent-border)] rounded-xl p-5 shadow-sm space-y-4">
+            <div className="bg-[var(--bg-card)] border border-[var(--accent-border)] rounded-xl p-5 shadow-sm space-y-6">
               <h3 className="text-sm font-bold text-[var(--text-primary)]">New Action Item</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
                 {[
                   { label: "Description *", key: "description", type: "text" },
                   { label: "Owner *", key: "owner", type: "text" },
@@ -265,7 +265,7 @@ export const CommunicationView: React.FC = () => {
           <div className="glass-card rounded-xl shadow-sm overflow-hidden">
             <table className="w-full text-xs border-collapse">
               <thead>
-                <tr className="border-b border-[var(--border)] text-[var(--text-secondary)] font-bold uppercase text-[10px] tracking-wide bg-[var(--bg-card)]">
+                <tr className="border-b border-[var(--border)] text-[var(--text-secondary)] font-bold uppercase text-[12px] tracking-wide bg-[var(--bg-card)]">
                   <th className="p-3 text-left">Action Item</th>
                   <th className="p-3 text-left">Owner</th>
                   <th className="p-3 text-left">Due Date</th>
@@ -284,18 +284,18 @@ export const CommunicationView: React.FC = () => {
                       <td className="p-3 font-semibold text-[var(--text-primary)] max-w-xs">{item.description}</td>
                       <td className="p-3 text-[var(--text-secondary)]">{item.owner}</td>
                       <td className={`p-3 font-mono ${isOverdue ? "text-[var(--pink)] font-bold" : "text-[var(--text-secondary)]"}`}>{item.dueDate}{isOverdue && " ⚠️"}</td>
-                      <td className="p-3 text-center"><span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${priorityConfig[item.priority]}`}>{item.priority}</span></td>
-                      <td className="p-3 text-center"><span className="text-[10px] bg-[var(--bg-card-hover)] text-[var(--text-secondary)] px-2 py-0.5 rounded">{item.sourceType}</span></td>
+                      <td className="p-3 text-center"><span className={`text-[12px] font-bold px-2 py-0.5 rounded-full border ${priorityConfig[item.priority]}`}>{item.priority}</span></td>
+                      <td className="p-3 text-center"><span className="text-[12px] bg-[var(--bg-card-hover)] text-[var(--text-secondary)] px-2 py-0.5 rounded">{item.sourceType}</span></td>
                       <td className={`p-3 text-center font-bold text-xs ${cfg.color}`}>
                         <span className="flex items-center justify-center gap-1">{cfg.icon} {item.status}</span>
                       </td>
                       <td className="p-3 text-center">
                         <div className="flex justify-center gap-1">
                           {item.status !== "Completed" && (
-                            <button onClick={() => toggleActionStatus(item.id, "Completed")} className="text-[10px] text-[var(--green)] font-bold hover:bg-[var(--green-dim)] px-2 py-0.5 rounded">Done</button>
+                            <button onClick={() => toggleActionStatus(item.id, "Completed")} className="text-[12px] text-[var(--green)] font-bold hover:bg-[var(--green-dim)] px-2 py-0.5 rounded">Done</button>
                           )}
                           {item.status === "Open" && (
-                            <button onClick={() => toggleActionStatus(item.id, "In Progress")} className="text-[10px] text-[var(--cyan)] font-bold hover:bg-[var(--cyan-dim)] px-2 py-0.5 rounded">Start</button>
+                            <button onClick={() => toggleActionStatus(item.id, "In Progress")} className="text-[12px] text-[var(--cyan)] font-bold hover:bg-[var(--cyan-dim)] px-2 py-0.5 rounded">Start</button>
                           )}
                         </div>
                       </td>
@@ -310,7 +310,7 @@ export const CommunicationView: React.FC = () => {
 
       {/* MEETING MINUTES */}
       {activeTab === "meetings" && (
-        <div className="space-y-3">
+        <div className="space-y-6">
           {meetings.map(meeting => {
             const isEx = expandedMeeting === meeting.id;
             return (
@@ -322,32 +322,32 @@ export const CommunicationView: React.FC = () => {
                     </div>
                     <div>
                       <div className="text-sm font-bold text-[var(--text-primary)]">{meeting.title}</div>
-                      <div className="text-[10px] text-[var(--text-secondary)]">{meeting.meetingType} · {meeting.date} · Facilitated by {meeting.facilitator}</div>
+                      <div className="text-[12px] text-[var(--text-secondary)]">{meeting.meetingType} · {meeting.date} · Facilitated by {meeting.facilitator}</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] bg-[var(--accent-glow)] text-[var(--accent)] border border-[var(--accent-border)] font-bold px-2 py-0.5 rounded">{meeting.attendees.length} Attendees</span>
-                    <span className="text-[10px] bg-[var(--amber-dim)] text-[var(--amber)] border border-amber-200 font-bold px-2 py-0.5 rounded">{meeting.keyDecisions.length} Decisions</span>
+                    <span className="text-[12px] bg-[var(--accent-glow)] text-[var(--accent)] border border-[var(--accent-border)] font-bold px-2 py-0.5 rounded">{meeting.attendees.length} Attendees</span>
+                    <span className="text-[12px] bg-[var(--amber-dim)] text-[var(--amber)] border border-amber-200 font-bold px-2 py-0.5 rounded">{meeting.keyDecisions.length} Decisions</span>
                     {isEx ? <ChevronUp className="w-4 h-4 text-[var(--text-muted)]" /> : <ChevronDown className="w-4 h-4 text-[var(--text-muted)]" />}
                   </div>
                 </div>
                 {isEx && (
-                  <div className="border-t border-[var(--border)] p-4 bg-[var(--bg-card)]/50 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                  <div className="border-t border-[var(--border)] p-4 bg-[var(--bg-card)]/50 grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
                     <div>
-                      <span className="font-bold text-[var(--text-secondary)] uppercase text-[10px]">Attendees</span>
+                      <span className="font-bold text-[var(--text-secondary)] uppercase text-[12px]">Attendees</span>
                       <div className="flex flex-wrap gap-1 mt-1">{meeting.attendees.map((a, i) => <span key={i} className="bg-[var(--bg-card-hover)] text-[var(--text-primary)] px-2 py-0.5 rounded-full">{a}</span>)}</div>
                     </div>
                     <div>
-                      <span className="font-bold text-[var(--text-secondary)] uppercase text-[10px]">Agenda</span>
+                      <span className="font-bold text-[var(--text-secondary)] uppercase text-[12px]">Agenda</span>
                       <ul className="mt-1 space-y-0.5 list-disc list-inside text-[var(--text-primary)]">{meeting.agenda.map((a, i) => <li key={i}>{a}</li>)}</ul>
                     </div>
                     <div>
-                      <span className="font-bold text-[var(--green)] uppercase text-[10px]">Key Decisions</span>
+                      <span className="font-bold text-[var(--green)] uppercase text-[12px]">Key Decisions</span>
                       <ul className="mt-1 space-y-1">{meeting.keyDecisions.map((d, i) => <li key={i} className="flex items-start gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" /><span className="text-[var(--text-primary)]">{d}</span></li>)}</ul>
                     </div>
                     {meeting.nextMeetingDate && (
                       <div className="bg-[var(--accent-glow)] border border-indigo-100 rounded-lg p-3">
-                        <span className="font-bold text-[var(--accent)] uppercase text-[10px]">Next Meeting</span>
+                        <span className="font-bold text-[var(--accent)] uppercase text-[12px]">Next Meeting</span>
                         <div className="font-bold text-indigo-800 mt-1">{meeting.nextMeetingDate}</div>
                       </div>
                     )}

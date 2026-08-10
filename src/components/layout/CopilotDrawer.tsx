@@ -38,7 +38,7 @@ export const CopilotDrawer: React.FC = () => {
           </div>
           <div>
             <span className="font-bold text-sm tracking-tight text-white block">Copilot Intelligence</span>
-            <span className="text-[10px] text-indigo-200">v4.2 AI Engine • Gemini 3.6</span>
+            <span className="text-[12px] text-indigo-200">v4.2 AI Engine • Gemini 3.6</span>
           </div>
         </div>
         <button
@@ -57,7 +57,7 @@ export const CopilotDrawer: React.FC = () => {
             className={`flex gap-2.5 ${msg.sender === "user" ? "flex-row-reverse" : ""}`}
           >
             <div
-              className={`w-6 h-6 rounded flex items-center justify-center shrink-0 text-[10px] font-bold ${
+              className={`w-6 h-6 rounded flex items-center justify-center shrink-0 text-[12px] font-bold ${
                 msg.sender === "user"
                   ? "bg-white text-indigo-900"
                   : "bg-indigo-700 text-white border border-indigo-500/40"
@@ -66,7 +66,7 @@ export const CopilotDrawer: React.FC = () => {
               {msg.sender === "user" ? <User className="w-3.5 h-3.5" /> : <Bot className="w-3.5 h-3.5" />}
             </div>
             <div
-              className={`p-3 rounded-lg max-w-[85%] text-[11px] leading-relaxed ${
+              className={`p-3 rounded-lg max-w-[85%] text-[12px] leading-relaxed ${
                 msg.sender === "user"
                   ? "bg-white/20 text-white rounded-tr-none border border-white/20"
                   : "bg-white/10 text-indigo-50 border border-white/10 rounded-tl-none space-y-1.5"
@@ -74,7 +74,7 @@ export const CopilotDrawer: React.FC = () => {
             >
               <div className="whitespace-pre-wrap">{msg.text}</div>
               <div
-                className={`text-[9px] ${
+                className={`text-[12px] ${
                   msg.sender === "user" ? "text-indigo-200" : "text-indigo-300/70"
                 } text-right mt-1 font-mono`}
               >
@@ -89,7 +89,7 @@ export const CopilotDrawer: React.FC = () => {
             <div className="w-6 h-6 rounded bg-indigo-700 text-white border border-indigo-500/40 flex items-center justify-center shrink-0">
               <Bot className="w-3.5 h-3.5" />
             </div>
-            <div className="bg-white/10 border border-white/10 p-3 rounded-lg rounded-tl-none text-indigo-100 flex items-center gap-2 text-[11px]">
+            <div className="bg-white/10 border border-white/10 p-3 rounded-lg rounded-tl-none text-indigo-100 flex items-center gap-2 text-[12px]">
               <Loader2 className="w-4 h-4 text-indigo-300 animate-spin shrink-0" />
               <span>Analyzing PMO context & generating recommendations...</span>
             </div>
@@ -100,7 +100,7 @@ export const CopilotDrawer: React.FC = () => {
 
       {/* Presets */}
       <div className="p-3 bg-white/5 border-t border-white/10 space-y-1.5">
-        <span className="text-[10px] font-bold text-indigo-200 uppercase tracking-wider flex items-center gap-1">
+        <span className="text-[12px] font-bold text-indigo-200 uppercase tracking-wider flex items-center gap-1">
           <Zap className="w-3 h-3 text-amber-300" />
           Suggested Commands:
         </span>
@@ -113,7 +113,7 @@ export const CopilotDrawer: React.FC = () => {
                 sendCopilotQuery(query);
               }}
               disabled={isAiLoading}
-              className="text-left text-[11px] text-indigo-100 bg-white/10 hover:bg-white/20 border border-white/10 rounded px-2.5 py-1.5 flex items-center justify-between transition-colors group"
+              className="text-left text-[12px] text-indigo-100 bg-white/10 hover:bg-white/20 border border-white/10 rounded px-2.5 py-1.5 flex items-center justify-between transition-colors group"
             >
               <span className="truncate">{query}</span>
               <ArrowRight className="w-3 h-3 text-indigo-300 group-hover:text-white shrink-0 ml-1" />
@@ -130,7 +130,7 @@ export const CopilotDrawer: React.FC = () => {
             value={inputQuery}
             onChange={(e) => setInputQuery(e.target.value)}
             placeholder="Command Copilot..."
-            className="bg-transparent border-none text-[11px] text-white placeholder-white/40 flex-1 focus:outline-none"
+            className="bg-transparent border-none text-[12px] text-white placeholder-white/40 flex-1 focus:outline-none"
           />
         </div>
         <button
