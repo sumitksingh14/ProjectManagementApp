@@ -8,7 +8,7 @@ interface IdeaFormProps {
 
 export const IdeaForm: React.FC<IdeaFormProps> = ({ onClose }) => {
   const { addIdea } = useProject();
-  
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("Process Improvement");
@@ -23,97 +23,239 @@ export const IdeaForm: React.FC<IdeaFormProps> = ({ onClose }) => {
       description,
       category,
       expectedBenefits,
-      authorId: "", // Will be filled by context using authUser
-      authorName: "", // Will be filled by context using authUser
+      authorId: "",   // filled by context using authUser
+      authorName: "", // filled by context using authUser
     });
-    
+
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-[#120F1D] border border-white/[0.1] rounded-2xl w-full max-w-2xl shadow-2xl flex flex-col max-h-[90vh]">
-        <div className="flex items-center justify-between p-5 border-b border-white/[0.06]">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400">
-              <Sparkles className="w-4 h-4" />
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0,0,0,0.65)",
+        backdropFilter: "blur(8px)",
+        zIndex: 50,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "16px",
+      }}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="idea-form-title"
+    >
+      <div
+        className="card-dark animate-fadeIn"
+        style={{
+          width: "100%",
+          maxWidth: "640px",
+          display: "flex",
+          flexDirection: "column",
+          maxHeight: "90vh",
+          boxShadow: "0 24px 80px rgba(0,0,0,0.55)",
+        }}
+      >
+        {/* Modal Header */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "18px 20px",
+            borderBottom: "1px solid var(--border)",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <div
+              style={{
+                width: "32px",
+                height: "32px",
+                borderRadius: "10px",
+                background: "var(--grad-primary)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Sparkles style={{ width: "15px", height: "15px", color: "#fff" }} />
             </div>
-            <h2 className="text-lg font-semibold text-white">Submit New Idea</h2>
+            <h2
+              id="idea-form-title"
+              style={{
+                fontSize: "var(--text-lg)",
+                fontWeight: "var(--fw-semibold)",
+                color: "var(--text-primary)",
+              }}
+            >
+              Submit New Idea
+            </h2>
           </div>
-          <button onClick={onClose} className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors">
-            <X className="w-5 h-5" />
+          <button
+            onClick={onClose}
+            aria-label="Close form"
+            style={{
+              padding: "6px",
+              borderRadius: "8px",
+              background: "transparent",
+              border: "none",
+              color: "var(--text-muted)",
+              cursor: "pointer",
+              transition: "all 0.15s",
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = "rgba(255,255,255,0.06)";
+              e.currentTarget.style.color = "var(--text-primary)";
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.color = "var(--text-muted)";
+            }}
+          >
+            <X style={{ width: "18px", height: "18px" }} />
           </button>
         </div>
 
-        <div className="p-6 overflow-y-auto">
-          <form id="idea-form" onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label className="block text-[13px] font-medium text-slate-300 mb-1.5">Idea Title</label>
-              <input
-                type="text"
-                required
-                value={title}
-                onChange={e => setTitle(e.target.value)}
-                placeholder="e.g. Implement AI-driven task estimation"
-                className="w-full bg-[#1A1726] border border-white/[0.06] rounded-xl px-4 py-2.5 text-[14px] text-white placeholder-slate-500 focus:outline-none focus:border-purple-500/50 transition-colors"
-              />
-            </div>
+        {/* Form Body */}
+        <div style={{ padding: "20px 24px", overflowY: "auto", display: "flex", flexDirection: "column", gap: "18px" }}>
+          <form id="idea-form" onSubmit={handleSubmit}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
 
-            <div>
-              <label className="block text-[13px] font-medium text-slate-300 mb-1.5">Category</label>
-              <select
-                value={category}
-                onChange={e => setCategory(e.target.value)}
-                className="w-full bg-[#1A1726] border border-white/[0.06] rounded-xl px-4 py-2.5 text-[14px] text-white focus:outline-none focus:border-purple-500/50 transition-colors appearance-none cursor-pointer"
-              >
-                <option value="Process Improvement">Process Improvement</option>
-                <option value="New Feature">New Feature</option>
-                <option value="Cost Reduction">Cost Reduction</option>
-                <option value="AI Integration">AI Integration</option>
-                <option value="Culture & Wellness">Culture & Wellness</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
+              {/* Title */}
+              <div>
+                <label
+                  htmlFor="idea-title"
+                  className="section-label"
+                  style={{ display: "block", marginBottom: "8px" }}
+                >
+                  Idea Title *
+                </label>
+                <input
+                  id="idea-title"
+                  type="text"
+                  required
+                  value={title}
+                  onChange={e => setTitle(e.target.value)}
+                  placeholder="e.g. Implement AI-driven task estimation"
+                  className="input-dark"
+                />
+              </div>
 
-            <div>
-              <label className="block text-[13px] font-medium text-slate-300 mb-1.5">Description</label>
-              <textarea
-                required
-                value={description}
-                onChange={e => setDescription(e.target.value)}
-                placeholder="Describe your idea in detail..."
-                rows={4}
-                className="w-full bg-[#1A1726] border border-white/[0.06] rounded-xl px-4 py-2.5 text-[14px] text-white placeholder-slate-500 focus:outline-none focus:border-purple-500/50 transition-colors resize-none"
-              />
-            </div>
+              {/* Category */}
+              <div>
+                <label
+                  htmlFor="idea-category"
+                  className="section-label"
+                  style={{ display: "block", marginBottom: "8px" }}
+                >
+                  Category
+                </label>
+                <select
+                  id="idea-category"
+                  value={category}
+                  onChange={e => setCategory(e.target.value)}
+                  className="input-dark"
+                  style={{ cursor: "pointer" }}
+                >
+                  <option value="Process Improvement">Process Improvement</option>
+                  <option value="New Feature">New Feature</option>
+                  <option value="Cost Reduction">Cost Reduction</option>
+                  <option value="AI Integration">AI Integration</option>
+                  <option value="Culture & Wellness">Culture &amp; Wellness</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
 
-            <div>
-              <label className="block text-[13px] font-medium text-slate-300 mb-1.5">Expected Benefits</label>
-              <textarea
-                value={expectedBenefits}
-                onChange={e => setExpectedBenefits(e.target.value)}
-                placeholder="What value will this bring? (e.g., save 5 hrs/week, increase revenue)"
-                rows={2}
-                className="w-full bg-[#1A1726] border border-white/[0.06] rounded-xl px-4 py-2.5 text-[14px] text-white placeholder-slate-500 focus:outline-none focus:border-purple-500/50 transition-colors resize-none"
-              />
+              {/* Description */}
+              <div>
+                <label
+                  htmlFor="idea-description"
+                  className="section-label"
+                  style={{ display: "block", marginBottom: "8px" }}
+                >
+                  Description *
+                </label>
+                <textarea
+                  id="idea-description"
+                  required
+                  value={description}
+                  onChange={e => setDescription(e.target.value)}
+                  placeholder="Describe your idea in detail..."
+                  rows={4}
+                  className="input-dark"
+                  style={{ resize: "none" }}
+                />
+              </div>
+
+              {/* Expected Benefits */}
+              <div>
+                <label
+                  htmlFor="idea-benefits"
+                  className="section-label"
+                  style={{ display: "block", marginBottom: "8px" }}
+                >
+                  Expected Benefits
+                </label>
+                <textarea
+                  id="idea-benefits"
+                  value={expectedBenefits}
+                  onChange={e => setExpectedBenefits(e.target.value)}
+                  placeholder="What value will this bring? (e.g., save 5 hrs/week, increase revenue)"
+                  rows={2}
+                  className="input-dark"
+                  style={{ resize: "none" }}
+                />
+              </div>
+
             </div>
           </form>
         </div>
 
-        <div className="p-5 border-t border-white/[0.06] flex items-center justify-end gap-3 bg-[#120F1D] rounded-b-2xl">
+        {/* Modal Footer */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            gap: "12px",
+            padding: "16px 20px",
+            borderTop: "1px solid var(--border)",
+          }}
+        >
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-lg text-[13px] font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-colors"
+            style={{
+              padding: "8px 16px",
+              borderRadius: "10px",
+              background: "transparent",
+              border: "1px solid var(--border)",
+              color: "var(--text-secondary)",
+              fontSize: "var(--text-base)",
+              fontWeight: "var(--fw-medium)",
+              cursor: "pointer",
+              transition: "all 0.15s",
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.borderColor = "var(--border-accent)";
+              e.currentTarget.style.color = "var(--text-primary)";
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.borderColor = "var(--border)";
+              e.currentTarget.style.color = "var(--text-secondary)";
+            }}
           >
             Cancel
           </button>
           <button
             type="submit"
             form="idea-form"
-            className="px-4 py-2 rounded-lg text-[13px] font-medium bg-purple-600 hover:bg-purple-500 text-white transition-colors shadow-lg shadow-purple-500/25 flex items-center gap-2"
+            className="btn-accent"
+            style={{ display: "flex", alignItems: "center", gap: "8px" }}
           >
-            <Sparkles className="w-4 h-4" />
+            <Sparkles style={{ width: "14px", height: "14px", color: "#FCD34D" }} />
             Submit Idea
           </button>
         </div>

@@ -10,8 +10,7 @@ import {
   Activity,
   Users,
   CheckCircle2,
-  Clock,
-} from "lucide-react";
+  Clock } from "lucide-react";
 
 export const DashboardView: React.FC = () => {
   const { activeProject, currentRole, setActiveTab } = useProject();
@@ -24,8 +23,7 @@ export const DashboardView: React.FC = () => {
     },
     intake = { executiveSummary: "", strategicObjective: "" },
     risks = [],
-    lifecyclePhases = [],
-  } = activeProject || {};
+    lifecyclePhases = [] } = activeProject || {};
 
   const totalTasks = (lifecyclePhases || []).reduce(
     (acc, ph) => acc + (ph.workPackages || []).reduce((wpAcc, wp) => wpAcc + (wp.tasks || []).length, 0), 0
@@ -63,8 +61,7 @@ export const DashboardView: React.FC = () => {
       sub: "Overall project health",
       icon: Activity,
       accentColor: "var(--green)",
-      glowColor: "rgba(16,185,129,0.15)",
-    },
+      glowColor: "rgba(16,185,129,0.15)" },
     {
       label: "Cost Performance (CPI)",
       value: cpi.toFixed(2),
@@ -73,8 +70,7 @@ export const DashboardView: React.FC = () => {
       sub: `EAC: $${((evm.EAC || evm.BAC || 0) / 1000).toFixed(0)}k · BAC: $${((evm.BAC || 0) / 1000).toFixed(0)}k`,
       icon: TrendingUp,
       accentColor: cpi >= 1 ? "var(--green)" : "var(--pink)",
-      glowColor: cpi >= 1 ? "rgba(16,185,129,0.15)" : "rgba(236,72,153,0.15)",
-    },
+      glowColor: cpi >= 1 ? "rgba(16,185,129,0.15)" : "rgba(236,72,153,0.15)" },
     {
       label: "Schedule Risk",
       value: String(openRisks),
@@ -83,8 +79,7 @@ export const DashboardView: React.FC = () => {
       sub: "Predictively identified by AI",
       icon: AlertTriangle,
       accentColor: openRisks > 2 ? "var(--pink)" : "var(--amber)",
-      glowColor: openRisks > 2 ? "rgba(236,72,153,0.15)" : "rgba(245,158,11,0.15)",
-    },
+      glowColor: openRisks > 2 ? "rgba(236,72,153,0.15)" : "rgba(245,158,11,0.15)" },
     {
       label: "Resource Utilization",
       value: "92%",
@@ -93,12 +88,11 @@ export const DashboardView: React.FC = () => {
       sub: "Targeting capacity balance",
       icon: Users,
       accentColor: "var(--cyan)",
-      glowColor: "rgba(6,182,212,0.15)",
-    },
+      glowColor: "rgba(6,182,212,0.15)" },
   ];
 
   return (
-    <div style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", fontFamily: "Inter, sans-serif" }}>
+    <div style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto"}}>
 
       {/* ── Hero Banner ──────────────────────────────────────────────────────── */}
       <div
@@ -140,8 +134,7 @@ export const DashboardView: React.FC = () => {
               background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.20)",
               color: "#fff", borderRadius: "10px", padding: "8px 16px",
               fontSize: "12px", fontWeight: 600, cursor: "pointer",
-              backdropFilter: "blur(10px)",
-            }}
+              backdropFilter: "blur(10px)" }}
           >
             <Edit3 style={{ width: "13px", height: "13px" }} />
             Edit Project
@@ -167,8 +160,7 @@ export const DashboardView: React.FC = () => {
               className="glass-card"
               style={{
                 padding: "20px",
-                background: `linear-gradient(135deg, ${kpi.glowColor} 0%, var(--bg-card) 60%)`,
-              }}
+                background: `linear-gradient(135deg, ${kpi.glowColor} 0%, var(--bg-card) 60%)` }}
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
                 <p className="section-label">{kpi.label}</p>
@@ -215,8 +207,7 @@ export const DashboardView: React.FC = () => {
                     fontSize: "12px", fontWeight: 600, padding: "4px 10px", borderRadius: "6px", cursor: "pointer",
                     background: t === "Week" ? "var(--grad-primary)" : "rgba(255,255,255,0.05)",
                     color: t === "Week" ? "#fff" : "var(--text-muted)",
-                    border: t === "Week" ? "none" : "1px solid var(--border)",
-                  }}>{t}</button>
+                    border: t === "Week" ? "none" : "1px solid var(--border)" }}>{t}</button>
                 ))}
               </div>
             </div>
@@ -303,8 +294,7 @@ export const DashboardView: React.FC = () => {
             style={{
               padding: "20px",
               background: "linear-gradient(145deg, rgba(109,40,217,0.25) 0%, var(--bg-card) 100%)",
-              borderColor: "var(--accent-border)",
-            }}
+              borderColor: "var(--accent-border)" }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", paddingBottom: "12px", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -382,8 +372,7 @@ export const DashboardView: React.FC = () => {
                 height: "100%", width: `${overallProgress}%`,
                 background: "var(--grad-primary)", borderRadius: "99px",
                 boxShadow: "0 0 10px var(--accent-glow)",
-                transition: "width 1s ease",
-              }} />
+                transition: "width 1s ease" }} />
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>

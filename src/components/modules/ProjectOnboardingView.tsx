@@ -169,7 +169,7 @@ export const ProjectOnboardingView: React.FC = () => {
   };
 
   return (
-    <div style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", fontFamily: "Inter, sans-serif", display: "flex", flexDirection: "column", gap: "25px" }} className="animate-fadeIn">
+    <div style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "24px" }} className="animate-fadeIn">
       {/* Header */}
       <div
         className="hero-banner animate-fadeIn"
@@ -199,7 +199,7 @@ export const ProjectOnboardingView: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* STEP 1: Core Project Identity */}
           {step === 1 && (
-            <div className="animate-fadeIn" style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "24px", fontFamily: "Inter, sans-serif" }}>
+            <div className="animate-fadeIn" style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "24px"}}>
               <div className="border-b border-[var(--border)] pb-3 flex items-center gap-2">
                 <Building2 className="w-5 h-5 text-[var(--accent)]" />
                 <h2 className="text-base font-bold text-[var(--text-primary)]">Step 1: Core Project Identity</h2>
@@ -588,7 +588,7 @@ export const ProjectOnboardingView: React.FC = () => {
               </div>
 
               {/* Summary Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 text-sm" style={{ gap: "25px" }}>
+              <div className="grid grid-cols-1 md:grid-cols-2 text-sm" style={{ gap: "24px" }}>
                 <div className="bg-[var(--bg-card)] border border-[var(--border)] p-4 rounded-xl space-y-6">
                   <h4 className="font-bold text-[var(--text-primary)] text-sm flex items-center gap-1.5">
                     <Briefcase className="w-4 h-4 text-[var(--accent)]" /> Project Identity

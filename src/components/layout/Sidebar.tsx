@@ -139,8 +139,8 @@ export const Sidebar: React.FC = () => {
       className="shrink-0 flex flex-col h-screen overflow-hidden text-slate-200 select-none"
       style={{
         width: "256px",
-        background: "#0B0A12",
-        borderRight: "1px solid rgba(255, 255, 255, 0.06)",
+        background: "var(--bg-sidebar)",
+        borderRight: "1px solid var(--border)",
       }}
     >
       {/* Brand Header (Dashify Style) */}
@@ -156,18 +156,52 @@ export const Sidebar: React.FC = () => {
         </div>
       </div>
 
-      {/* Search Input Bar (Matching Dashify Screenshot) */}
+      {/* Search Input Bar */}
       <div className="px-3.5 mb-2 shrink-0">
-        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#1A1726] border border-white/[0.06] focus-within:border-purple-500/40 transition-all">
-          <Search className="w-4 h-4 text-slate-400 shrink-0" />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            padding: "8px 12px",
+            borderRadius: "12px",
+            background: "var(--bg-card)",
+            border: "1px solid var(--border)",
+            transition: "border-color 0.2s",
+          }}
+          onFocusCapture={e => (e.currentTarget.style.borderColor = "var(--accent-border)")}
+          onBlurCapture={e => (e.currentTarget.style.borderColor = "var(--border)")}
+        >
+          <Search style={{ width: "14px", height: "14px", color: "var(--text-muted)", flexShrink: 0 }} />
           <input
             type="text"
+            aria-label="Navigate modules"
             placeholder="Search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="bg-transparent border-none outline-none text-[13px] text-slate-200 placeholder-slate-400 w-full min-w-0"
+            style={{
+              background: "transparent",
+              border: "none",
+              outline: "none",
+              fontSize: "var(--text-sm)",
+              color: "var(--text-primary)",
+              width: "100%",
+              minWidth: 0,
+            }}
           />
-          <span className="text-[12px] font-mono font-medium text-slate-400 bg-white/[0.06] border border-white/10 px-1.5 py-0.5 rounded-md shrink-0">
+          <span
+            style={{
+              fontSize: "12px",
+              fontFamily: "monospace",
+              fontWeight: 500,
+              color: "var(--text-muted)",
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid var(--border)",
+              padding: "2px 6px",
+              borderRadius: "5px",
+              flexShrink: 0,
+            }}
+          >
             Ctrl+D
           </span>
         </div>
@@ -250,7 +284,7 @@ export const Sidebar: React.FC = () => {
             <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">
               {authUser?.avatarInitials || "SK"}
             </div>
-            <span className="absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-purple-500 ring-2 ring-[#0B0A12]" />
+            <span className="absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-purple-500" style={{ outline: "2px solid var(--bg-sidebar)" }} />
           </div>
           <div className="min-w-0">
             <p className="text-[13.5px] font-semibold text-white truncate leading-tight">

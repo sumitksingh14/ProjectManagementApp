@@ -7,37 +7,49 @@ interface IdeaCardProps {
   idea: Idea;
 }
 
-const statusColors: Record<string, string> = {
-  "Submitted": "bg-slate-500/20 text-slate-400 border-slate-500/30",
-  "Under Review": "bg-blue-500/20 text-blue-400 border-blue-500/30",
-  "Approved": "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-  "Rejected": "bg-rose-500/20 text-rose-400 border-rose-500/30",
-  "Implemented": "bg-purple-500/20 text-purple-400 border-purple-500/30"
+// Map idea statuses to design-system badge classes
+const statusBadgeClass: Record<string, string> = {
+  "Submitted":    "badge-slate",
+  "Under Review": "badge-blue",
+  "Approved":     "badge-green",
+  "Rejected":     "badge-red",
+  "Implemented":  "badge-violet",
 };
 
 export const IdeaCard: React.FC<IdeaCardProps> = ({ idea }) => {
   const { authUser, voteIdea, currentRole, updateIdeaStatus } = useProject();
   const hasVoted = authUser ? idea.voterIds.includes(authUser.userId) : false;
 
-  const handleVote = () => {
-    voteIdea(idea.id);
-  };
+  const handleVote = () => voteIdea(idea.id);
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     updateIdeaStatus(idea.id, e.target.value as any);
   };
 
   const canEditStatus = currentRole === "PMO Admin" || currentRole === "Executive Sponsor";
+  const badgeClass = statusBadgeClass[idea.status] ?? "badge-slate";
 
   return (
-    <div className="bg-[#1A1726] border border-white/[0.06] rounded-xl p-5 hover:border-purple-500/30 transition-colors flex flex-col h-full shadow-lg">
-      <div className="flex justify-between items-start mb-3">
-        <h3 className="text-[16px] font-semibold text-white leading-tight pr-4">{idea.title}</h3>
+    <div
+      className="glass-card"
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+      }}
+    >
+      {/* Title + Status */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "12px", marginBottom: "12px" }}>
+        <h3 style={{ fontSize: "var(--text-md)", fontWeight: "var(--fw-semibold)", color: "var(--text-primary)", lineHeight: "var(--lh-snug)" }}>
+          {idea.title}
+        </h3>
         {canEditStatus ? (
           <select
             value={idea.status}
             onChange={handleStatusChange}
-            className={`text-[12px] font-medium px-2.5 py-1 rounded-full border outline-none cursor-pointer appearance-none ${statusColors[idea.status]}`}
+            aria-label="Update idea status"
+            className={`${badgeClass}`}
+            style={{ cursor: "pointer", background: "transparent", flexShrink: 0 }}
           >
             <option value="Submitted">Submitted</option>
             <option value="Under Review">Under Review</option>
@@ -46,50 +58,84 @@ export const IdeaCard: React.FC<IdeaCardProps> = ({ idea }) => {
             <option value="Implemented">Implemented</option>
           </select>
         ) : (
-          <span className={`text-[12px] font-medium px-2.5 py-1 rounded-full border whitespace-nowrap ${statusColors[idea.status]}`}>
+          <span className={badgeClass} style={{ flexShrink: 0, whiteSpace: "nowrap" }}>
             {idea.status}
           </span>
         )}
       </div>
 
-      <div className="flex items-center gap-3 mb-4 text-xs text-slate-400">
-        <div className="flex items-center gap-1.5">
-          <User className="w-3.5 h-3.5" />
-          <span>{idea.authorName}</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <Tag className="w-3.5 h-3.5" />
-          <span>{idea.category}</span>
-        </div>
+      {/* Meta */}
+      <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "14px" }}>
+        <span className="helper-text" style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+          <User style={{ width: "13px", height: "13px" }} />
+          {idea.authorName}
+        </span>
+        <span className="helper-text" style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+          <Tag style={{ width: "13px", height: "13px" }} />
+          {idea.category}
+        </span>
       </div>
 
-      <p className="text-[13.5px] text-slate-300 mb-4 flex-grow line-clamp-3">
+      {/* Description */}
+      <p className="body-text" style={{ marginBottom: "14px", flex: 1, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
         {idea.description}
       </p>
 
-      <div className="bg-white/[0.02] p-3 rounded-lg border border-white/[0.04] mb-4">
-        <p className="text-[12px] text-slate-400 font-medium mb-1">Expected Benefits</p>
-        <p className="text-[13px] text-slate-200">{idea.expectedBenefits}</p>
+      {/* Expected Benefits */}
+      <div
+        style={{
+          background: "var(--bg-input)",
+          border: "1px solid var(--border)",
+          borderRadius: "10px",
+          padding: "12px 14px",
+          marginBottom: "14px",
+        }}
+      >
+        <p className="section-label" style={{ marginBottom: "6px" }}>Expected Benefits</p>
+        <p style={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)", lineHeight: "var(--lh-normal)" }}>
+          {idea.expectedBenefits}
+        </p>
       </div>
 
-      <div className="flex items-center justify-between mt-auto pt-4 border-t border-white/[0.06]">
+      {/* Footer: Vote + Comments */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          paddingTop: "14px",
+          borderTop: "1px solid var(--border)",
+          marginTop: "auto",
+        }}
+      >
         <button
           onClick={handleVote}
           disabled={hasVoted}
-          className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-[13px] font-medium transition-colors ${
-            hasVoted
-              ? "bg-purple-500/20 text-purple-400 cursor-default"
-              : "bg-white/[0.06] text-slate-300 hover:bg-white/[0.1] hover:text-white cursor-pointer"
-          }`}
+          aria-label={hasVoted ? "You voted for this idea" : "Vote for this idea"}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            padding: "7px 14px",
+            borderRadius: "8px",
+            fontSize: "var(--text-sm)",
+            fontWeight: "var(--fw-medium)",
+            cursor: hasVoted ? "default" : "pointer",
+            border: hasVoted ? "1px solid var(--accent-border)" : "1px solid var(--border)",
+            background: hasVoted ? "var(--accent-glow)" : "rgba(255,255,255,0.04)",
+            color: hasVoted ? "var(--accent)" : "var(--text-secondary)",
+            transition: "all 0.2s",
+            minHeight: "36px",
+          }}
         >
-          <ThumbsUp className={`w-4 h-4 ${hasVoted ? "fill-purple-400" : ""}`} />
+          <ThumbsUp style={{ width: "14px", height: "14px", fill: hasVoted ? "var(--accent)" : "none" }} />
           <span>{idea.voteCount} {idea.voteCount === 1 ? "Vote" : "Votes"}</span>
         </button>
-        
-        <div className="flex items-center gap-1.5 text-slate-400 text-[13px]">
-          <MessageSquare className="w-4 h-4" />
-          <span>{idea.comments.length}</span>
-        </div>
+
+        <span className="helper-text" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+          <MessageSquare style={{ width: "14px", height: "14px" }} />
+          {idea.comments.length}
+        </span>
       </div>
     </div>
   );

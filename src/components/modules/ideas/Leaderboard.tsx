@@ -6,58 +6,99 @@ export const Leaderboard: React.FC = () => {
   const { gamification, authUser, users } = useProject();
 
   const sortedGamification = [...gamification].sort((a, b) => b.points - a.points);
-  
-  // Get top 5 for the leaderboard
   const topUsers = sortedGamification.slice(0, 5);
 
   const getRankIcon = (index: number) => {
     switch (index) {
-      case 0: return <Trophy className="w-5 h-5 text-yellow-400" />;
-      case 1: return <Medal className="w-5 h-5 text-slate-300" />;
-      case 2: return <Medal className="w-5 h-5 text-amber-600" />;
-      default: return <span className="w-5 h-5 flex items-center justify-center font-bold text-slate-500 text-sm">{index + 1}</span>;
+      case 0:
+        return <Trophy style={{ width: "16px", height: "16px", color: "var(--amber)" }} />;
+      case 1:
+        return <Medal style={{ width: "16px", height: "16px", color: "#CBD5E1" }} />;
+      case 2:
+        return <Medal style={{ width: "16px", height: "16px", color: "#B45309" }} />;
+      default:
+        return (
+          <span
+            style={{
+              width: "16px",
+              height: "16px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "12px",
+              fontWeight: "var(--fw-bold)",
+              color: "var(--text-muted)",
+            }}
+          >
+            {index + 1}
+          </span>
+        );
     }
   };
 
   return (
-    <div className="bg-[#1A1726] border border-white/[0.06] rounded-xl p-5 h-full">
-      <div className="flex items-center gap-2 mb-4">
-        <Star className="w-5 h-5 text-purple-400" />
-        <h3 className="text-[15px] font-semibold text-white">Innovation Leaderboard</h3>
+    <div className="glass-card">
+      {/* Header */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          marginBottom: "16px",
+          paddingBottom: "14px",
+          borderBottom: "1px solid var(--border)",
+        }}
+      >
+        <Star style={{ width: "16px", height: "16px", color: "var(--accent)" }} />
+        <h3 style={{ fontSize: "var(--text-md)", fontWeight: "var(--fw-semibold)", color: "var(--text-primary)" }}>
+          Innovation Leaderboard
+        </h3>
       </div>
-      
-      <div className="space-y-3">
+
+      {/* Rankings */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
         {topUsers.map((g, index) => {
           const isCurrentUser = authUser?.userId === g.userId;
-          // In a real app we'd map g.userId to the actual user name, here we mock it or use what's in context if available.
-          // Since we might not have all users loaded correctly in our dummy context, we'll try to find or fallback
           const userObj = users.find(u => u.id === g.userId);
-          // Just using string manipulation to mock a name if userObj is missing (since we didn't add all to Users context)
-          const name = userObj?.name || (isCurrentUser ? authUser.displayName : `User ${g.userId}`);
+          const name = userObj?.name || (isCurrentUser ? authUser!.displayName : `User ${g.userId}`);
 
           return (
-            <div 
-              key={g.userId} 
-              className={`flex items-center justify-between p-3 rounded-lg border ${
-                isCurrentUser 
-                  ? "bg-purple-500/10 border-purple-500/30" 
-                  : "bg-white/[0.02] border-white/[0.04]"
-              }`}
+            <div
+              key={g.userId}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "10px 12px",
+                borderRadius: "10px",
+                border: isCurrentUser ? "1px solid var(--accent-border)" : "1px solid var(--border)",
+                background: isCurrentUser ? "var(--accent-glow)" : "rgba(255,255,255,0.02)",
+                transition: "border-color 0.2s",
+              }}
             >
-              <div className="flex items-center gap-3">
-                <div className="w-6 flex justify-center">
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <div style={{ width: "20px", display: "flex", justifyContent: "center", flexShrink: 0 }}>
                   {getRankIcon(index)}
                 </div>
                 <div>
-                  <p className="text-[13.5px] font-medium text-white">{name}</p>
-                  <p className="text-[11px] text-slate-400">
-                    {g.ideasSubmitted} Ideas • {g.votesReceived} Votes Rx
+                  <p style={{ fontSize: "var(--text-sm)", fontWeight: "var(--fw-medium)", color: "var(--text-primary)" }}>
+                    {name}
+                  </p>
+                  <p style={{ fontSize: "12px", color: "var(--text-muted)", lineHeight: "var(--lh-snug)" }}>
+                    {g.ideasSubmitted} Ideas · {g.votesReceived} Votes Rx
                   </p>
                 </div>
               </div>
-              <div className="text-right">
-                <p className="text-[15px] font-bold text-purple-400">{g.points}</p>
-                <p className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">PTS</p>
+              <div style={{ textAlign: "right", flexShrink: 0 }}>
+                <p style={{ fontSize: "var(--text-md)", fontWeight: "var(--fw-bold)", color: "var(--accent)" }}>
+                  {g.points}
+                </p>
+                <p
+                  className="section-label"
+                  style={{ fontSize: "12px", letterSpacing: "var(--ls-widest)" }}
+                >
+                  PTS
+                </p>
               </div>
             </div>
           );

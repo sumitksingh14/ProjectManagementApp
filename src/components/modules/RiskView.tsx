@@ -63,7 +63,7 @@ export const RiskView: React.FC = () => {
   ];
 
   return (
-    <div style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", fontFamily: "Inter, sans-serif", display: "flex", flexDirection: "column", gap: "25px" }} className="animate-fadeIn">
+    <div style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "24px" }} className="animate-fadeIn">
       {/* Header */}
       <div
         className="hero-banner animate-fadeIn"
@@ -118,8 +118,7 @@ export const RiskView: React.FC = () => {
             className="glass-card"
             style={{
               padding: "20px",
-              background: `linear-gradient(135deg, ${kpi.glowColor} 0%, var(--bg-card) 60%)`,
-            }}
+              background: `linear-gradient(135deg, ${kpi.glowColor} 0%, var(--bg-card) 60%)` }}
           >
             <p className="section-label" style={{ marginBottom: "12px" }}>{kpi.label}</p>
             <div className="kpi-value" style={{ marginBottom: "10px" }}>{kpi.value}</div>

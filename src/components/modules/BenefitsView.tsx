@@ -127,7 +127,7 @@ export const BenefitsView: React.FC = () => {
   };
 
   return (
-    <div className="animate-fadeIn" style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "24px", fontFamily: "Inter, sans-serif" }}>
+    <div className="animate-fadeIn" style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "24px"}}>
       {/* Header */}
       <div
         className="hero-banner animate-fadeIn"

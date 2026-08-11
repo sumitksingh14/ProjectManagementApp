@@ -61,7 +61,7 @@ export const ProgramHubView: React.FC = () => {
   ].filter(d => d.from && d.to && d.from !== d.to);
 
   return (
-    <div className="animate-fadeIn" style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "24px", fontFamily: "Inter, sans-serif" }}>
+    <div className="animate-fadeIn" style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "24px"}}>
       {/* Header */}
       <div
         className="hero-banner animate-fadeIn"
@@ -104,8 +104,7 @@ export const ProgramHubView: React.FC = () => {
             className="glass-card"
             style={{
               padding: "18px",
-              background: `linear-gradient(135deg, ${kpi.glowColor} 0%, var(--bg-card) 60%)`,
-            }}
+              background: `linear-gradient(135deg, ${kpi.glowColor} 0%, var(--bg-card) 60%)` }}
           >
             <p className="section-label" style={{ marginBottom: "8px" }}>{kpi.label}</p>
             <div className="kpi-value" style={{ fontSize: "1.5rem", marginBottom: "4px" }}>{kpi.value}</div>

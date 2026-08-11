@@ -17,8 +17,7 @@ export const FinancialEvmView: React.FC = () => {
       up: evm.CPI >= 1,
       sub: `Formula: EV / AC (${evm.CPI >= 1 ? "Under Budget" : "Cost Overrun"})`,
       accentColor: evm.CPI >= 1 ? "var(--green)" : "var(--pink)",
-      glowColor: evm.CPI >= 1 ? "rgba(16,185,129,0.15)" : "rgba(236,72,153,0.15)",
-    },
+      glowColor: evm.CPI >= 1 ? "rgba(16,185,129,0.15)" : "rgba(236,72,153,0.15)" },
     {
       label: "Schedule Performance Index (SPI)",
       value: evm.SPI.toFixed(2),
@@ -26,8 +25,7 @@ export const FinancialEvmView: React.FC = () => {
       up: evm.SPI >= 1,
       sub: `Formula: EV / PV (${evm.SPI >= 1 ? "Optimal Velocity" : "Schedule Delay"})`,
       accentColor: evm.SPI >= 1 ? "var(--green)" : "var(--amber)",
-      glowColor: evm.SPI >= 1 ? "rgba(16,185,129,0.15)" : "rgba(245,158,11,0.15)",
-    },
+      glowColor: evm.SPI >= 1 ? "rgba(16,185,129,0.15)" : "rgba(245,158,11,0.15)" },
     {
       label: "Estimate at Completion (EAC)",
       value: `$${((evm.EAC || 0) / 1000).toFixed(0)}k`,
@@ -35,8 +33,7 @@ export const FinancialEvmView: React.FC = () => {
       up: true,
       sub: `Baseline BAC: $${((evm.BAC || 0) / 1000).toFixed(0)}k`,
       accentColor: "var(--accent)",
-      glowColor: "rgba(139,92,246,0.15)",
-    },
+      glowColor: "rgba(139,92,246,0.15)" },
     {
       label: "Variance at Completion (VAC)",
       value: `+ $${((evm.VAC || 0) / 1000).toFixed(0)}k`,
@@ -44,12 +41,11 @@ export const FinancialEvmView: React.FC = () => {
       up: true,
       sub: "Formula: BAC - EAC (Cost Savings)",
       accentColor: "var(--cyan)",
-      glowColor: "rgba(6,182,212,0.15)",
-    },
+      glowColor: "rgba(6,182,212,0.15)" },
   ];
 
   return (
-    <div style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", fontFamily: "Inter, sans-serif", display: "flex", flexDirection: "column", gap: "25px" }} className="animate-fadeIn">
+    <div style={{ padding: "24px", maxWidth: "1400px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "24px" }} className="animate-fadeIn">
       {/* Header */}
       <div
         className="hero-banner animate-fadeIn"
@@ -82,8 +78,7 @@ export const FinancialEvmView: React.FC = () => {
             className="glass-card"
             style={{
               padding: "20px",
-              background: `linear-gradient(135deg, ${kpi.glowColor} 0%, var(--bg-card) 60%)`,
-            }}
+              background: `linear-gradient(135deg, ${kpi.glowColor} 0%, var(--bg-card) 60%)` }}
           >
             <p className="section-label" style={{ marginBottom: "12px" }}>{kpi.label}</p>
             <div className="kpi-value" style={{ marginBottom: "10px" }}>{kpi.value}</div>
@@ -113,8 +108,8 @@ export const FinancialEvmView: React.FC = () => {
           {/* Planned Value */}
           <div className="space-y-1.5">
             <div className="flex justify-between">
-              <span className="font-semibold text-cyan-400">Planned Value (PV)</span>
-              <span className="font-mono text-slate-200 font-bold">${(evm.PV || 0).toLocaleString()}</span>
+              <span style={{ fontWeight: "var(--fw-semibold)", color: "var(--cyan)" }}>Planned Value (PV)</span>
+              <span style={{ fontFamily: "monospace", color: "var(--text-primary)", fontWeight: "var(--fw-bold)" }}>${(evm.PV || 0).toLocaleString()}</span>
             </div>
             <div className="w-full h-3 rounded-full overflow-hidden bg-white/[0.04]">
               <div className="bg-gradient-to-r from-cyan-500 to-cyan-400 h-full rounded-full shadow-sm" style={{ width: "65%" }}></div>
@@ -124,8 +119,8 @@ export const FinancialEvmView: React.FC = () => {
           {/* Earned Value */}
           <div className="space-y-1.5">
             <div className="flex justify-between">
-              <span className="font-semibold text-emerald-400">Earned Value (EV)</span>
-              <span className="font-mono text-slate-200 font-bold">${(evm.EV || 0).toLocaleString()}</span>
+              <span style={{ fontWeight: "var(--fw-semibold)", color: "var(--green)" }}>Earned Value (EV)</span>
+              <span style={{ fontFamily: "monospace", color: "var(--text-primary)", fontWeight: "var(--fw-bold)" }}>${(evm.EV || 0).toLocaleString()}</span>
             </div>
             <div className="w-full h-3 rounded-full overflow-hidden bg-white/[0.04]">
               <div className="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full shadow-sm" style={{ width: "68%" }}></div>
@@ -135,8 +130,8 @@ export const FinancialEvmView: React.FC = () => {
           {/* Actual Cost */}
           <div className="space-y-1.5">
             <div className="flex justify-between">
-              <span className="font-semibold text-violet-400">Actual Cost (AC)</span>
-              <span className="font-mono text-slate-200 font-bold">${(evm.AC || 0).toLocaleString()}</span>
+              <span style={{ fontWeight: "var(--fw-semibold)", color: "var(--accent)" }}>Actual Cost (AC)</span>
+              <span style={{ fontFamily: "monospace", color: "var(--text-primary)", fontWeight: "var(--fw-bold)" }}>${(evm.AC || 0).toLocaleString()}</span>
             </div>
             <div className="w-full h-3 rounded-full overflow-hidden bg-white/[0.04]">
               <div className="bg-gradient-to-r from-violet-600 to-purple-500 h-full rounded-full shadow-sm" style={{ width: "60%" }}></div>

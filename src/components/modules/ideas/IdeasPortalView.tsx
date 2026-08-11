@@ -13,57 +13,148 @@ export const IdeasPortalView: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState("All");
 
   const filteredIdeas = ideas.filter(idea => {
-    const matchesSearch = idea.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          idea.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch =
+      idea.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      idea.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === "All" || idea.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
   return (
-    <div className="p-6 max-w-[1600px] mx-auto animate-fade-in">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400">
-              <Sparkles className="w-4 h-4" />
-            </div>
-            <h1 className="text-2xl font-bold text-white tracking-tight">Innovation Portal</h1>
+    <div
+      className="animate-fadeIn"
+      style={{
+        padding: "24px",
+        maxWidth: "1400px",
+        margin: "0 auto",
+        display: "flex",
+        flexDirection: "column",
+        gap: "24px",
+      }}
+    >
+      {/* ── Hero Banner ─────────────────────────────────────────────────── */}
+      <div
+        className="hero-banner animate-fadeIn"
+        style={{
+          padding: "24px 28px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: "16px",
+        }}
+      >
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+            <span
+              className="badge-violet"
+              style={{ fontSize: "12px", fontWeight: 700, padding: "3px 10px", borderRadius: "99px", letterSpacing: "0.06em" }}
+            >
+              Innovation
+            </span>
+            <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.55)" }}>
+              Enterprise Ideas &amp; Innovation Portal
+            </span>
           </div>
-          <p className="text-sm text-slate-400">Submit, collaborate, and vote on new ideas to improve our processes.</p>
+          <h1
+            style={{
+              fontSize: "var(--text-2xl)",
+              fontWeight: 800,
+              color: "#fff",
+              letterSpacing: "-0.3px",
+              marginBottom: "10px",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+            }}
+          >
+            <Sparkles style={{ width: "22px", height: "22px", color: "#FCD34D" }} />
+            Innovation Portal
+          </h1>
+          <p
+            style={{
+              fontSize: "var(--text-base)",
+              color: "rgba(255,255,255,0.65)",
+              maxWidth: "580px",
+              lineHeight: 1.6,
+            }}
+          >
+            Submit, collaborate, and vote on new ideas to improve processes, drive innovation,
+            and unlock strategic opportunities.
+          </p>
         </div>
-        
+
         <button
           onClick={() => setIsFormOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-[13px] font-medium rounded-xl transition-all shadow-lg shadow-purple-500/25"
+          className="btn-accent"
+          style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}
         >
-          <Plus className="w-4 h-4" />
+          <Plus style={{ width: "15px", height: "15px" }} />
           Submit New Idea
         </button>
       </div>
 
+      {/* ── Stats Dashboard ──────────────────────────────────────────────── */}
       <IdeasDashboard />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Main Ideas Feed */}
-        <div className="lg:col-span-2 space-y-4">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#1A1726] border border-white/[0.06] rounded-xl p-3">
-            <div className="relative w-full sm:w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+      {/* ── Main Grid ───────────────────────────────────────────────────── */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 320px",
+          gap: "24px",
+          alignItems: "start",
+        }}
+        className="ideas-grid"
+      >
+        {/* Left — Ideas Feed */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+          {/* Search & Filter Bar */}
+          <div
+            className="glass-card"
+            style={{
+              padding: "12px 16px",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: "12px",
+              flexWrap: "wrap",
+            }}
+          >
+            {/* Search */}
+            <div style={{ position: "relative", minWidth: "200px", flex: 1, maxWidth: "300px" }}>
+              <Search
+                style={{
+                  position: "absolute",
+                  left: "10px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  width: "14px",
+                  height: "14px",
+                  color: "var(--text-muted)",
+                  flexShrink: 0,
+                }}
+              />
               <input
                 type="text"
+                aria-label="Search ideas"
                 placeholder="Search ideas..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="w-full bg-[#120F1D] border border-white/[0.06] rounded-lg pl-9 pr-4 py-2 text-[13px] text-white placeholder-slate-500 focus:outline-none focus:border-purple-500/40 transition-colors"
+                className="input-dark"
+                style={{ paddingLeft: "34px" }}
               />
             </div>
-            <div className="flex items-center gap-2 w-full sm:w-auto">
-              <Filter className="w-4 h-4 text-slate-400" />
+
+            {/* Status Filter */}
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <Filter style={{ width: "14px", height: "14px", color: "var(--text-muted)", flexShrink: 0 }} />
               <select
+                aria-label="Filter by status"
                 value={statusFilter}
                 onChange={e => setStatusFilter(e.target.value)}
-                className="bg-[#120F1D] border border-white/[0.06] rounded-lg px-3 py-2 text-[13px] text-white focus:outline-none focus:border-purple-500/40 transition-colors appearance-none cursor-pointer"
+                className="input-dark"
+                style={{ width: "auto", padding: "8px 12px", cursor: "pointer" }}
               >
                 <option value="All">All Statuses</option>
                 <option value="Submitted">Submitted</option>
@@ -75,24 +166,36 @@ export const IdeasPortalView: React.FC = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Cards Grid */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+              gap: "16px",
+            }}
+          >
             {filteredIdeas.length > 0 ? (
-              filteredIdeas.map(idea => (
-                <IdeaCard key={idea.id} idea={idea} />
-              ))
+              filteredIdeas.map(idea => <IdeaCard key={idea.id} idea={idea} />)
             ) : (
-              <div className="col-span-full p-8 text-center bg-[#1A1726] border border-white/[0.06] rounded-xl text-slate-400">
+              <div
+                className="glass-card"
+                style={{
+                  gridColumn: "1 / -1",
+                  padding: "40px",
+                  textAlign: "center",
+                  color: "var(--text-muted)",
+                  fontSize: "var(--text-base)",
+                }}
+              >
                 No ideas found matching your criteria.
               </div>
             )}
           </div>
         </div>
 
-        {/* Sidebar - Gamification */}
-        <div className="lg:col-span-1">
-          <div className="sticky top-6">
-            <Leaderboard />
-          </div>
+        {/* Right — Leaderboard */}
+        <div style={{ position: "sticky", top: "24px" }}>
+          <Leaderboard />
         </div>
       </div>
 

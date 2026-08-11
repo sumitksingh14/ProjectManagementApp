@@ -77,6 +77,7 @@ export const Header: React.FC = () => {
         <Search style={{ width: "13px", height: "13px", color: "var(--text-muted)", flexShrink: 0 }} />
         <input
           type="text"
+          aria-label="Search projects, tasks, risks"
           placeholder="Search projects, tasks, risks…"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
