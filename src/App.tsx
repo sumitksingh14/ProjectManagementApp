@@ -32,6 +32,7 @@ import { ProgramHubView } from "./components/modules/ProgramHubView";
 import { BenefitsView } from "./components/modules/BenefitsView";
 import { ClosureView } from "./components/modules/ClosureView";
 import { VendorView } from "./components/modules/VendorView";
+import { IdeasPortalView } from "./components/modules/ideas/IdeasPortalView";
 
 const MainContent: React.FC = () => {
   const { activeTab, isAuthenticated } = useProject();
@@ -95,6 +96,8 @@ const MainContent: React.FC = () => {
         return <DocumentGenView />;
       case "portfolio":
         return <PortfolioView />;
+      case "ideas-portal":
+        return <IdeasPortalView />;
       default:
         return <DashboardView />;
     }

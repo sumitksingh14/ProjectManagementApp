@@ -125,6 +125,12 @@ export const Sidebar: React.FC = () => {
         { id: "vendors",     label: "Vendor Management", icon: Package,  badge: "VND" },
         { id: "closure",     label: "Project Closure",   icon: Archive,  badge: "CLO" },
       ]
+    },
+    {
+      title: "Innovation",
+      items: [
+        { id: "ideas-portal", label: "Ideas Portal", icon: Sparkles, badge: "NEW" },
+      ]
     }
   ];
 

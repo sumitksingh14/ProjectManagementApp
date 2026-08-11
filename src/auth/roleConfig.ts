@@ -113,7 +113,7 @@ const ALL_MODULES = [
   "stakeholders","requirements","ai-planner","scheduling","resources",
   "estimation","budget","evm","financial-evm","risks","issues","quality",
   "change-management","communication","kpis","documents",
-  "program-hub","benefits","vendors","closure",
+  "program-hub","benefits","vendors","closure","ideas-portal"
 ];
 
 export const ROLE_MODULES: Record<UserRole, string[]> = {
@@ -121,33 +121,33 @@ export const ROLE_MODULES: Record<UserRole, string[]> = {
     "dashboard","portfolio","governance","stakeholders",
     "scheduling","resources","budget","evm","risks",
     "change-management","communication","kpis","documents",
-    "program-hub","benefits",
+    "program-hub","benefits","ideas-portal"
   ],
   "PMO Admin": ALL_MODULES,
   "Portfolio Manager": [
     "dashboard","onboarding","edit-project","portfolio","intake","governance",
     "stakeholders","scheduling","resources","budget","evm",
     "risks","change-management","communication","kpis","documents",
-    "program-hub","benefits",
+    "program-hub","benefits","ideas-portal"
   ],
   "Program Manager": [
     "dashboard","onboarding","edit-project","intake","governance",
     "stakeholders","requirements","ai-planner","scheduling","resources",
     "estimation","budget","evm","risks","issues",
     "change-management","communication","kpis","documents",
-    "program-hub","benefits","vendors","closure",
+    "program-hub","benefits","vendors","closure","ideas-portal"
   ],
   "Project Manager": [
     "dashboard","onboarding","edit-project","intake","governance",
     "stakeholders","requirements","ai-planner","scheduling","resources",
     "estimation","budget","evm","risks","issues","quality",
-    "change-management","communication","kpis","documents","benefits","vendors","closure",
+    "change-management","communication","kpis","documents","benefits","vendors","closure","ideas-portal"
   ],
   "Team Member": [
-    "requirements","scheduling","estimation","risks","issues","quality","communication",
+    "requirements","scheduling","estimation","risks","issues","quality","communication","ideas-portal"
   ],
   "Stakeholder": [
-    "stakeholders","scheduling","communication","kpis","benefits",
+    "stakeholders","scheduling","communication","kpis","benefits","ideas-portal"
   ],
 };
 

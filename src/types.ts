@@ -542,3 +542,37 @@ export interface CopilotMessage {
   timestamp: string;
   actionType?: "PLAN_GENERATED" | "RISKS_GENERATED" | "INFO_SUMMARY";
 }
+
+// --- NEW: Ideas Management Portal ---
+export type IdeaStatus = "Submitted" | "Under Review" | "Approved" | "Rejected" | "Implemented";
+
+export interface IdeaComment {
+  id: string;
+  authorId: string;
+  authorName: string;
+  content: string;
+  timestamp: string;
+}
+
+export interface Idea {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  expectedBenefits: string;
+  authorId: string;
+  authorName: string;
+  status: IdeaStatus;
+  submittedAt: string;
+  voterIds: string[]; // List of userIds who voted
+  voteCount: number;
+  comments: IdeaComment[];
+}
+
+export interface UserGamification {
+  userId: string;
+  points: number;
+  ideasSubmitted: number;
+  votesReceived: number;
+  votesGiven: number;
+}

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { Project, UserRole, Portfolio, Program, User, CopilotMessage, HealthStatus } from "../types";
+import { Project, UserRole, Portfolio, Program, User, CopilotMessage, HealthStatus, Idea, IdeaStatus, UserGamification } from "../types";
 import { AuthUser, findAuthUser } from "../auth/roleConfig";
 
 
@@ -40,6 +40,11 @@ interface ProjectContextType {
   generateAiRisks: () => Promise<boolean>;
   sendCopilotQuery: (query: string) => Promise<void>;
   createProjectFromIntake: (intakeData: any) => Project;
+  ideas: Idea[];
+  gamification: UserGamification[];
+  addIdea: (idea: Omit<Idea, "id" | "submittedAt" | "voterIds" | "voteCount" | "comments" | "status">) => void;
+  voteIdea: (ideaId: string) => void;
+  updateIdeaStatus: (ideaId: string, status: IdeaStatus) => void;
 }
 
 
@@ -72,6 +77,45 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [copilotOpen, setCopilotOpen] = useState<boolean>(false);
   const [isAiLoading, setIsAiLoading] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const [ideas, setIdeas] = useState<Idea[]>([
+    {
+      id: "idea-1",
+      title: "AI Automated Risk Generation",
+      description: "Use LLM to predict risks based on project scope and historical data.",
+      category: "AI Integration",
+      expectedBenefits: "Reduce manual risk identification time by 80%.",
+      authorId: "usr-4",
+      authorName: "David Chen",
+      status: "Implemented",
+      submittedAt: "2026-08-01T10:00:00Z",
+      voterIds: ["usr-2", "usr-3", "usr-5"],
+      voteCount: 3,
+      comments: [],
+    },
+    {
+      id: "idea-2",
+      title: "Vendor Performance Scorecard",
+      description: "Create a dashboard to track vendor KPIs and SLAs in real-time.",
+      category: "Analytics",
+      expectedBenefits: "Improve vendor accountability and reduce SLA breaches.",
+      authorId: "usr-2",
+      authorName: "Marcus Vance",
+      status: "Under Review",
+      submittedAt: "2026-08-05T14:30:00Z",
+      voterIds: ["usr-4", "usr-8"],
+      voteCount: 2,
+      comments: [],
+    }
+  ]);
+
+  const [gamification, setGamification] = useState<UserGamification[]>([
+    { userId: "usr-4", points: 150, ideasSubmitted: 1, votesReceived: 3, votesGiven: 1 },
+    { userId: "usr-2", points: 120, ideasSubmitted: 1, votesReceived: 2, votesGiven: 1 },
+    { userId: "usr-3", points: 10, ideasSubmitted: 0, votesReceived: 0, votesGiven: 1 },
+    { userId: "usr-5", points: 10, ideasSubmitted: 0, votesReceived: 0, votesGiven: 1 },
+    { userId: "usr-8", points: 10, ideasSubmitted: 0, votesReceived: 0, votesGiven: 1 },
+  ]);
 
   // Fetch initial data from SQLite DB
   useEffect(() => {
@@ -384,6 +428,70 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   };
 
+  const addIdea = (idea: Omit<Idea, "id" | "submittedAt" | "voterIds" | "voteCount" | "comments" | "status">) => {
+    if (!authUser) return;
+    const newIdea: Idea = {
+      ...idea,
+      id: `idea-${Date.now()}`,
+      status: "Submitted",
+      submittedAt: new Date().toISOString(),
+      voterIds: [],
+      voteCount: 0,
+      comments: [],
+    };
+    setIdeas([newIdea, ...ideas]);
+
+    setGamification(prev => {
+      const existing = prev.find(g => g.userId === authUser.userId);
+      if (existing) {
+        return prev.map(g => g.userId === authUser.userId ? { ...g, points: g.points + 50, ideasSubmitted: g.ideasSubmitted + 1 } : g);
+      }
+      return [...prev, { userId: authUser.userId, points: 50, ideasSubmitted: 1, votesReceived: 0, votesGiven: 0 }];
+    });
+  };
+
+  const voteIdea = (ideaId: string) => {
+    if (!authUser) return;
+    setIdeas(prev => prev.map(idea => {
+      if (idea.id === ideaId) {
+        if (idea.voterIds.includes(authUser.userId)) return idea;
+        return {
+          ...idea,
+          voterIds: [...idea.voterIds, authUser.userId],
+          voteCount: idea.voteCount + 1
+        };
+      }
+      return idea;
+    }));
+
+    setGamification(prev => {
+      let newState = [...prev];
+      const voter = newState.find(g => g.userId === authUser.userId);
+      if (voter) {
+        voter.points += 10;
+        voter.votesGiven += 1;
+      } else {
+        newState.push({ userId: authUser.userId, points: 10, ideasSubmitted: 0, votesReceived: 0, votesGiven: 1 });
+      }
+
+      const idea = ideas.find(i => i.id === ideaId);
+      if (idea) {
+        const author = newState.find(g => g.userId === idea.authorId);
+        if (author) {
+          author.points += 20;
+          author.votesReceived += 1;
+        } else {
+          newState.push({ userId: idea.authorId, points: 20, ideasSubmitted: 0, votesReceived: 1, votesGiven: 0 });
+        }
+      }
+      return newState;
+    });
+  };
+
+  const updateIdeaStatus = (ideaId: string, status: IdeaStatus) => {
+    setIdeas(prev => prev.map(idea => idea.id === ideaId ? { ...idea, status } : idea));
+  };
+
   const createProjectFromIntake = (intakeData: any): Project => {
     const newId = `prj-${Date.now()}`;
     const newProject: Project = {
@@ -551,7 +659,12 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({ child
         generateAiProjectPlan,
         generateAiRisks,
         sendCopilotQuery,
-        createProjectFromIntake
+        createProjectFromIntake,
+        ideas,
+        gamification,
+        addIdea,
+        voteIdea,
+        updateIdeaStatus
       }}
     >
       {children}
